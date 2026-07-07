@@ -21,6 +21,7 @@
         <nav class="flex-1 p-4 space-y-2">
             <button onclick="switchTab('dashboard')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-home mr-2"></i> Dashboard</button>
             <button onclick="switchTab('tasks')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-tasks mr-2"></i> Task Page</button>
+            <button onclick="switchTab('calendar')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-calendar mr-2"></i> Calendar</button>
             <button onclick="switchTab('log')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-history mr-2"></i> Log Page</button>
             <button onclick="switchTab('products')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-box mr-2"></i> Products</button>
             <button onclick="switchTab('users')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-users mr-2"></i> Users</button>
@@ -30,8 +31,8 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen">
-        <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+    <main class="flex-1 flex flex-col h-screen relative">
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center z-10">
             <div class="flex items-center w-1/3">
                 <i class="fas fa-search text-gray-400 mr-2"></i>
                 <input type="text" placeholder="Global search..." class="w-full bg-gray-100 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -45,7 +46,7 @@
             </div>
         </header>
 
-        <div class="p-6 overflow-y-auto flex-1">
+        <div class="p-6 overflow-y-auto flex-1 relative z-0">
             
             <section id="dashboard" class="tab-content active">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6">Overview</h1>
@@ -125,31 +126,150 @@
                 </div>
             </section>
 
+            <section id="calendar" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Marketing Calendar</h1>
+                        <p class="text-gray-500 text-sm mt-1">Plan campaigns for Exact Extract, Biseka, and others.</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="changeMonth(-1)" class="bg-white border border-gray-300 text-gray-600 px-3 py-2 rounded hover:bg-gray-50 transition"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="currentMonthYear" class="text-xl font-bold text-gray-800 px-4 py-1">April 2026</h2>
+                        <button onclick="changeMonth(1)" class="bg-white border border-gray-300 text-gray-600 px-3 py-2 rounded hover:bg-gray-50 transition"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200 text-center font-semibold text-gray-600 text-sm py-3">
+                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    </div>
+                    <div id="calendarGrid" class="grid grid-cols-7 auto-rows-fr bg-gray-200 gap-px">
+                        </div>
+                </div>
+            </section>
+
             <section id="log" class="tab-content hidden"><h1 class="text-3xl font-bold">Log Page (WIP)</h1></section>
             <section id="products" class="tab-content hidden"><h1 class="text-3xl font-bold">Product Management (WIP)</h1></section>
             <section id="users" class="tab-content hidden"><h1 class="text-3xl font-bold">User Management (WIP)</h1></section>
 
         </div>
+
+        <div id="taskModal" class="absolute inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
+                <h3 id="modalTitle" class="text-xl font-bold mb-2">Create Tasks</h3>
+                <p id="modalDesc" class="text-sm text-gray-600 mb-4">Assign content for this event.</p>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-1">Select Brand</label>
+                    <select class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
+                        <option>Exact Extract</option>
+                        <option>Biseka</option>
+                        <option>Love&Lab</option>
+                        <option>OLA Tangalle</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">Cancel</button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Assign to Team</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
-        // Simple Single Page Application Navigation Logic
+        // --- Navigation Logic ---
         function switchTab(tabId) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('active');
             });
-            // Show selected tab
             const selected = document.getElementById(tabId);
             selected.classList.remove('hidden');
             selected.classList.add('active');
+            
+            // Re-render calendar if switching to it, to ensure proper layout
+            if (tabId === 'calendar') {
+                renderCalendar();
+            }
         }
 
-        // Example of how frontend will eventually communicate with Google Apps Script
+        // --- Marketing Calendar Logic ---
+        let currentDate = new Date(2026, 3, 1); // Starting at April 2026
+
+        const marketingEvents = {
+            "2026-03-01": { title: "April Fool's Day", type: "global", desc: "Lighthearted pranks" },
+            "2026-03-02": { title: "Bak Full Moon Poya", type: "sl", desc: "Religious observance" },
+            "2026-03-13": { title: "Sinhala & Tamil New Year", type: "sl", desc: "Major Avurudu Sales!" },
+            "2026-03-14": { title: "Avurudu Day 2", type: "sl", desc: "Festive greetings" },
+            "2026-03-22": { title: "Earth Day", type: "global", desc: "Eco-friendly campaigns (Yatadola)" }
+        };
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth(); 
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('currentMonthYear').innerText = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = ''; 
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const blankCell = document.createElement('div');
+                blankCell.className = "bg-white min-h-[120px] p-2 opacity-50";
+                grid.appendChild(blankCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                cell.className = "bg-white min-h-[120px] p-2 relative hover:bg-gray-50 transition border-b border-r border-gray-100";
+                
+                const dayNumber = document.createElement('span');
+                dayNumber.className = "text-gray-500 font-medium text-sm";
+                dayNumber.innerText = day;
+                cell.appendChild(dayNumber);
+
+                const dateKey = `${year}-0${month}-${day < 10 ? '0'+day : day}`; 
+                if (marketingEvents[dateKey]) {
+                    const ev = marketingEvents[dateKey];
+                    const eventDiv = document.createElement('div');
+                    
+                    const bgClass = ev.type === 'sl' ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-blue-100 text-blue-800 border-blue-200';
+                    
+                    eventDiv.className = `mt-1 p-1 text-xs rounded border cursor-pointer font-semibold ${bgClass} truncate`;
+                    eventDiv.innerText = ev.title;
+                    
+                    eventDiv.onclick = () => openTaskModal(ev.title, ev.desc);
+                    
+                    cell.appendChild(eventDiv);
+                }
+
+                grid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        // --- Modal Functions ---
+        function openTaskModal(eventTitle, eventDesc) {
+            document.getElementById('modalTitle').innerText = eventTitle;
+            document.getElementById('modalDesc').innerText = "Assign campaigns: " + eventDesc;
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').classList.add('hidden');
+        }
+
+        // Initialize Calendar on load
+        renderCalendar();
+
         function fetchTasksFromSheet() {
-            // In Google Apps Script, this calls the backend Code.gs function
-            // google.script.run.withSuccessHandler(updateTable).getIncompleteTasks();
             console.log("Fetching tasks from Google Sheets...");
         }
     </script>
