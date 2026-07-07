@@ -1,277 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContentOs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Custom scrollbar for a cleaner OS feel */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContentOS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c; --ink-soft:#3c4249; --paper:#f1f3f0; --surface:#ffffff; --line:#dfe2dc;
+    --accent:#2f6f5e; --accent-dark:#204f42; --accent-soft:#e2ede8;
+    --amber:#e2a542; --amber-soft:#faecd6; --coral:#d1503f; --coral-soft:#f7e2de;
+    --blue:#3d6fa8; --blue-soft:#e1ebf4; --radius:10px;
+    --shadow: 0 1px 2px rgba(20,23,28,.04), 0 6px 20px -8px rgba(20,23,28,.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:#d4d7d0;border-radius:8px;}
+  a{text-decoration:none;color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  input,select,textarea{font-family:inherit;}
+
+  /* ---------- APP SHELL & MOBILE ---------- */
+  #login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:100;}
+  .login-card{background:var(--surface);width:380px;max-width:90vw;border-radius:16px;padding:36px 32px;}
+  
+  #app{display:none;height:100vh;}
+  .shell{display:flex;height:100vh;position:relative;}
+  
+  .dock{width:220px;background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;flex-shrink:0;transition:transform 0.3s ease;z-index:50;}
+  .main-col{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;}
+  
+  .dock-logo{display:flex;align-items:center;gap:9px;padding:6px 10px 22px;}
+  .dock-logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(47,111,94,.35);}
+  .dock-logo span{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13.5px;font-weight:500;color:#b7bdb9;margin-bottom:2px;cursor:pointer;}
+  .nav-item:hover{background:#1e2229;color:#fff;}
+  .nav-item.active{background:var(--accent);color:#fff;}
+  .nav-item svg{width:16px;height:16px;flex-shrink:0;}
+  .dock-foot{margin-top:auto;padding:10px;border-top:1px solid #262b31;}
+  
+  .topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:14px;background:var(--surface);flex-shrink:0;}
+  .menu-btn{display:none;background:none;border:none;color:var(--ink);cursor:pointer;}
+  
+  .view{flex:1;overflow-y:auto;padding:24px 28px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;}
+  .kpi{padding:16px 18px;}
+  .kpi .num{font-family:'Space Grotesk';font-size:26px;font-weight:700;}
+  
+  table{width:100%;border-collapse:collapse;font-size:13px;text-align:left;}
+  th{font-size:11px;text-transform:uppercase;color:var(--ink-soft);padding:10px 14px;border-bottom:1px solid var(--line);background:#f9f9f7;}
+  td{padding:11px 14px;border-bottom:1px solid #ececE7;}
+  
+  .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.5);display:none;align-items:flex-start;justify-content:center;z-index:90;padding:6vh 20px;overflow-y:auto;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:14px;width:600px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);}
+  
+  .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;z-index:200;display:none;}
+  .toast.show{display:flex;}
+  
+  /* Timeline & Comments */
+  .timeline{border-left:2px solid var(--line);margin-left:10px;padding-left:16px;}
+  .tl-item{position:relative;margin-bottom:16px;font-size:12.5px;}
+  .tl-item::before{content:'';position:absolute;left:-23px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);}
+  .comment-box{background:#f9f9f7;border-radius:8px;padding:12px;margin-bottom:10px;font-size:13px;}
+  
+  /* Mobile Queries */
+  @media(max-width:980px){
+    .shell{flex-direction:column;}
+    .dock{position:absolute;left:-220px;height:100%;box-shadow:2px 0 10px rgba(0,0,0,0.2);}
+    .dock.open{transform:translateX(220px);}
+    .menu-btn{display:block;}
+    .grid-2, .grid-3{grid-template-columns:1fr;}
+    .view{padding:16px;}
+    table{display:block;overflow-x:auto;}
+  }
+</style>
 </head>
-<body class="bg-gray-100 flex h-screen overflow-hidden">
+<body>
 
-    <aside class="w-64 bg-slate-900 text-white flex flex-col">
-        <div class="p-6 text-2xl font-bold border-b border-slate-700 tracking-wider">
-            ContentOs <span class="text-blue-400 text-sm">v1.0</span>
-        </div>
-        <nav class="flex-1 p-4 space-y-2">
-            <button onclick="switchTab('dashboard')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-home mr-2"></i> Dashboard</button>
-            <button onclick="switchTab('tasks')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-tasks mr-2"></i> Task Page</button>
-            <button onclick="switchTab('calendar')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-calendar mr-2"></i> Calendar</button>
-            <button onclick="switchTab('log')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-history mr-2"></i> Log Page</button>
-            <button onclick="switchTab('products')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-box mr-2"></i> Products</button>
-            <button onclick="switchTab('users')" class="w-full text-left p-3 rounded hover:bg-slate-800 transition"><i class="fas fa-users mr-2"></i> Users</button>
-        </nav>
-        <div class="p-4 border-t border-slate-700 text-sm text-slate-400">
-            Role: Admin (Full Access)
-        </div>
-    </aside>
+<div id="login-screen">
+  <div class="login-card">
+    <div style="font-family:'Space Grotesk';font-size:24px;font-weight:700;margin-bottom:20px;color:white;">ContentOS</div>
+    <select id="login-user" class="w-full p-2 mb-4 rounded text-sm text-black">
+      </select>
+    <button class="w-full bg-teal-600 hover:bg-teal-700 text-white p-2 rounded text-sm font-bold transition" onclick="doLogin()">Enter Workspace</button>
+  </div>
+</div>
 
-    <main class="flex-1 flex flex-col h-screen relative">
-        <header class="bg-white shadow-sm p-4 flex justify-between items-center z-10">
-            <div class="flex items-center w-1/3">
-                <i class="fas fa-search text-gray-400 mr-2"></i>
-                <input type="text" placeholder="Global search..." class="w-full bg-gray-100 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+<div id="app">
+<div class="shell">
+  <div class="dock" id="sidebar">
+    <div class="dock-logo"><span class="dot"></span><span>ContentOS</span></div>
+    <div id="nav-list" class="flex-1 overflow-y-auto"></div>
+    <div class="dock-foot text-sm">
+      <div id="user-name-tag" class="font-bold text-white mb-1"></div>
+      <div id="user-role-tag" class="text-xs text-gray-400 mb-2"></div>
+      <a class="text-xs text-gray-500 hover:text-white cursor-pointer" onclick="doLogout()">Sign out</a>
+    </div>
+  </div>
+
+  <div class="main-col">
+    <div class="topbar">
+      <button class="menu-btn mr-2" onclick="toggleSidebar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="flex-1 relative max-w-md">
+        <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="global-search" class="w-full bg-gray-100 border border-gray-200 rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-teal-500" placeholder="Global search... (/)" onfocus="openCmdk()" readonly>
+      </div>
+      <div class="ml-auto flex items-center gap-4">
+        <button class="relative text-gray-500 hover:text-gray-800" onclick="toggleNotif()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <span id="notif-dot" class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full hidden"></span>
+        </button>
+      </div>
+    </div>
+    <div class="view" id="view"></div>
+  </div>
+</div>
+</div>
+
+<div id="notif-panel" class="absolute top-14 right-4 w-80 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-50 flex flex-col max-h-96">
+  <div class="p-3 border-b flex justify-between items-center bg-gray-50 rounded-t-lg">
+    <span class="font-bold text-sm">Notifications</span>
+    <button class="text-xs text-teal-600 font-semibold" onclick="markAllRead()">Mark all read</button>
+  </div>
+  <div id="notif-list" class="overflow-y-auto flex-1"></div>
+</div>
+
+<div id="cmdk" class="fixed inset-0 bg-black/50 z-[100] hidden flex-col items-center pt-[10vh]" onclick="if(event.target===this)closeCmdk()">
+  <div class="bg-white w-[600px] max-w-[90vw] rounded-xl shadow-2xl overflow-hidden flex flex-col">
+    <input id="cmdk-input" class="w-full p-4 text-base border-b outline-none" placeholder="Search tasks, brands, products, logs..." oninput="renderCmdkResults(this.value)">
+    <div id="cmdk-results" class="max-h-96 overflow-y-auto"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal flex flex-col max-h-[85vh]" id="modal-box"></div>
+</div>
+
+<div class="toast flex items-center gap-2" id="toast"></div>
+
+<script>
+/* =========================================================
+   CORE ARCHITECTURE & DATA LAYER
+========================================================= */
+const ROLES_MATRIX = {
+  'Admin': { tasks: {view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, products: {view:true, create:true, edit:true, del:true}, brands: {view:true, edit:true}, reports: {view:true, export:true}, analytics: {view:true}, settings: {view:true, edit:true}, users: {view:true, create:true, edit:true, del:true}, audit: {view:true}, trash: {view:true, restore:true, del:true} },
+  'General Manager': { tasks: {view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, products: {view:true, create:true, edit:true, del:false}, brands: {view:true, edit:true}, reports: {view:true, export:true}, analytics: {view:true}, settings: {view:false, edit:false}, users: {view:true, create:false, edit:false, del:false}, audit: {view:true}, trash: {view:false, restore:false, del:false} },
+  'Content Creator': { tasks: {view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, products: {view:true, create:false, edit:false, del:false}, brands: {view:true, edit:false}, reports: {view:false, export:false}, analytics: {view:true}, settings: {view:false, edit:false}, users: {view:false, create:false, edit:false, del:false}, audit: {view:false}, trash: {view:false, restore:false, del:false} },
+  'Viewer': { tasks: {view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, products: {view:true, create:false, edit:false, del:false}, brands: {view:true, edit:false}, reports: {view:true, export:false}, analytics: {view:true}, settings: {view:false, edit:false}, users: {view:false, create:false, edit:false, del:false}, audit: {view:false}, trash: {view:false, restore:false, del:false} }
+};
+
+const DB = {
+  key: 'contentos_db_v2',
+  data: null,
+  load() {
+    const raw = localStorage.getItem(this.key);
+    if(raw) {
+      this.data = JSON.parse(raw);
+      this.migrate();
+    } else {
+      this.data = this.seed();
+      this.save();
+    }
+  },
+  migrate() {
+    // Migrate old architecture to Phase 2 (Multiple Links, Audit, etc)
+    if(!this.data.brands) this.data.brands = [...window._defaultBrands];
+    if(!this.data.settings) this.data.settings = { postTypes:['Story','Post','Status','Video','Animation','Other'], taskStatuses:['Pending','In Progress','In Review','Done'], productStatuses:['New Product','Active','Out of Stock','Discontinued'], googleDrive:{}, googleSheets:{} };
+    if(!this.data.comments) this.data.comments = [];
+    if(!this.data.history) this.data.history = [];
+    if(!this.data.audit) this.data.audit = [];
+    if(!this.data.trash) this.data.trash = [];
+    
+    // Migrate Tasks driveLink to links array
+    this.data.tasks.forEach(t => {
+      if(t.driveLink !== undefined) {
+        t.links = t.driveLink ? [{id:uid('lnk'), name:'Initial Link', url:t.driveLink}] : [];
+        delete t.driveLink;
+      }
+      if(!t.deleted) t.deleted = false;
+    });
+    // Migrate Logs driveLink to links array
+    this.data.logs.forEach(l => {
+      if(l.driveLink !== undefined) {
+        l.links = l.driveLink ? [{id:uid('lnk'), name:'Final Work', url:l.driveLink}] : [];
+        delete l.driveLink;
+      }
+    });
+    this.data.products.forEach(p => { if(p.deleted===undefined) p.deleted=false; });
+    this.save();
+  },
+  save() { localStorage.setItem(this.key, JSON.stringify(this.data)); },
+  seed() {
+    return {
+      users: [
+        {id:'u1', name:'Sanduni Fernando', role:'Admin', email:'sanduni@agency.lk'},
+        {id:'u2', name:'Ruwan Jayasinghe', role:'General Manager', email:'ruwan@agency.lk'},
+        {id:'u3', name:'Nadeesha Perera', role:'Content Creator', email:'nadeesha@agency.lk'}
+      ],
+      brands: [
+        {id:'exact', name:'Exact Extract', color:'#2f6f5e', priority:true},
+        {id:'biseka', name:'Biseka', color:'#3d6fa8', priority:true},
+        {id:'lovelab', name:'Love&Lab', color:'#d1503f', priority:true},
+        {id:'ola', name:'OLA Tangalle', color:'#e2a542', priority:false}
+      ],
+      settings: {
+        postTypes: ['Story','Post','Status','Video','Animation','Other'],
+        taskStatuses: ['Pending','In Progress','In Review','Done'],
+        productStatuses: ['New Product','Active','Out of Stock','Discontinued'],
+        googleDrive: { rootFolder: '' }, googleSheets: { sheetId: '' }
+      },
+      products: [
+        {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active', deleted:false}
+      ],
+      tasks: [
+        {id:'t1', brand:'exact', title:'Instagram Reel Launch', type:'Video', product:'p1', assignee:'u3', addedBy:'u2', date:new Date().toISOString().slice(0,10), status:'Pending', notes:'Focus on glow', links:[], deleted:false}
+      ],
+      logs: [], notifications: [], comments: [], history: [], audit: [], trash: []
+    };
+  }
+};
+window._defaultBrands = [{id:'exact',name:'Exact Extract',color:'#2f6f5e',priority:true}]; // Fallback
+
+function uid(prefix){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
+function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function brandOf(id){ return DB.data.brands.find(b=>b.id===id) || {name:'Unknown',color:'#999'}; }
+
+let SESSION = null;
+let currentView = 'dashboard';
+
+/* =========================================================
+   SYSTEM LOGGING (Audit, History, Activity, Notifications)
+========================================================= */
+function logAudit(module, action, oldVal, newVal) {
+  DB.data.audit.unshift({ id: uid('aud'), user: SESSION.id, module, action, oldVal: JSON.stringify(oldVal), newVal: JSON.stringify(newVal), ts: Date.now() });
+}
+function logTaskHistory(taskId, action) {
+  DB.data.history.unshift({ id: uid('hist'), taskId, user: SESSION.id, action, ts: Date.now() });
+}
+function addNotif(text, roleFilter='all') {
+  DB.data.notifications.unshift({ id: uid('n'), text, ts: Date.now(), read: false, forRole: roleFilter });
+  refreshNotifDot();
+}
+function softDelete(module, id, itemObj) {
+  itemObj.deleted = true;
+  DB.data.trash.unshift({ id: uid('trsh'), module, itemId: id, itemData: itemObj, deletedBy: SESSION.id, ts: Date.now() });
+  logAudit(module, 'Delete', itemObj, null);
+  DB.save();
+}
+
+/* =========================================================
+   AUTHENTICATION & BOOTSTRAP
+========================================================= */
+function doLogin(){
+  const userId = document.getElementById('login-user').value;
+  const user = DB.data.users.find(u=>u.id===userId);
+  SESSION = { id: user.id, name: user.name, role: user.role };
+  localStorage.setItem('contentos_session', JSON.stringify(SESSION));
+  boot();
+}
+function doLogout(){ localStorage.removeItem('contentos_session'); location.reload(); }
+function perms(){ return ROLES_MATRIX[SESSION.role] || ROLES_MATRIX['Viewer']; }
+
+function boot(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('user-name-tag').textContent = SESSION.name;
+  document.getElementById('user-role-tag').textContent = SESSION.role;
+  buildNav();
+  renderView('dashboard');
+  refreshNotifDot();
+}
+
+/* =========================================================
+   NAVIGATION & LAYOUT
+========================================================= */
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+function buildNav(){
+  const p = perms();
+  const menu = [
+    {id:'dashboard', label:'Dashboard', icon:'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z', show:true},
+    {id:'tasks', label:'Tasks', icon:'M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11', show:p.tasks.view},
+    {id:'products', label:'Products', icon:'M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z', show:p.products.view},
+    {id:'analytics', label:'Analytics', icon:'M4 19h16M7 15v4M12 9v10M17 5v14', show:p.analytics.view},
+    {id:'reports', label:'Reports', icon:'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.reports.view},
+    {id:'settings', label:'Settings', icon:'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', show:p.settings.view},
+  ];
+  document.getElementById('nav-list').innerHTML = menu.filter(m=>m.show).map(m=>`
+    <a class="nav-item ${currentView===m.id?'active':''}" onclick="renderView('${m.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${m.icon}"/></svg>
+      <span>${m.label}</span>
+    </a>`).join('');
+}
+function renderView(id) {
+  currentView = id;
+  buildNav();
+  if(window.innerWidth <= 980) document.getElementById('sidebar').classList.remove('open');
+  const el = document.getElementById('view');
+  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, analytics:renderAnalytics, settings:renderSettings, reports:renderReports};
+  if(renders[id]) renders[id](el);
+}
+
+/* =========================================================
+   VIEWS (Abbreviated implementations fitting requirements)
+========================================================= */
+
+function renderDash(el) {
+  const activeTasks = DB.data.tasks.filter(t=>!t.deleted && t.status!=='Done');
+  const feed = DB.data.history.slice(0,8); // Recent activity
+  
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+    <div class="grid-2 mb-6">
+      <div class="card p-5"><h3 class="font-bold text-sm mb-4 text-gray-500 uppercase tracking-wide">Open Tasks</h3>
+        <div class="text-4xl font-bold font-mono">${activeTasks.length}</div>
+      </div>
+      <div class="card p-5"><h3 class="font-bold text-sm mb-4 text-gray-500 uppercase tracking-wide">Recent Activity</h3>
+        <div class="space-y-3">
+          ${feed.length ? feed.map(h=>{
+            const u = DB.data.users.find(x=>x.id===h.user);
+            return `<div class="text-sm"><span class="font-semibold">${u?u.name:'Someone'}</span> ${h.action} <span class="text-xs text-gray-400 ml-2">${timeAgo(h.ts)}</span></div>`
+          }).join('') : '<div class="text-gray-400 text-sm">No recent activity</div>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* TASKS & COMMENTS & HISTORY */
+function renderTasks(el) {
+  const tasks = DB.data.tasks.filter(t=>!t.deleted);
+  el.innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Tasks</h1>
+      ${perms().tasks.create ? `<button class="bg-teal-600 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-teal-700" onclick="openTaskModal()">+ New Task</button>` : ''}
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b"><tr><th class="p-3 text-left">Task</th><th class="p-3 text-left">Brand</th><th class="p-3 text-left">Status</th><th class="p-3 text-left">Date</th></tr></thead>
+        <tbody>
+          ${tasks.map(t=>`
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="openTaskDetail('${t.id}')">
+              <td class="p-3 font-medium">${escapeHtml(t.title)}</td>
+              <td class="p-3"><span class="px-2 py-1 rounded text-xs text-white" style="background:${brandOf(t.brand).color}">${brandOf(t.brand).name}</span></td>
+              <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs border">${t.status}</span></td>
+              <td class="p-3 text-gray-500 font-mono">${fmtDate(t.date)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openTaskModal() {
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="p-4 border-b flex justify-between items-center bg-gray-50"><h3 class="font-bold">Create Task</h3><button onclick="closeModal()">✕</button></div>
+    <div class="p-5 space-y-4">
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">TITLE</label><input id="nt-title" class="w-full border rounded p-2 text-sm"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">BRAND</label><select id="nt-brand" class="w-full border rounded p-2 text-sm">${DB.data.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">PRODUCT</label><select id="nt-product" class="w-full border rounded p-2 text-sm"><option value="">General</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div>
+      </div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">TYPE</label><select id="nt-type" class="w-full border rounded p-2 text-sm">${DB.data.settings.postTypes.map(pt=>`<option>${pt}</option>`).join('')}</select></div>
+    </div>
+    <div class="p-4 border-t flex justify-end gap-2">
+      <button class="px-4 py-2 border rounded text-sm hover:bg-gray-50" onclick="closeModal()">Cancel</button>
+      <button class="px-4 py-2 bg-teal-600 text-white rounded text-sm hover:bg-teal-700" onclick="saveNewTask()">Create</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function saveNewTask() {
+  const title = document.getElementById('nt-title').value.trim();
+  const brand = document.getElementById('nt-brand').value;
+  const product = document.getElementById('nt-product').value;
+  const type = document.getElementById('nt-type').value;
+  if(!title) return toast('Title required');
+
+  // Phase 2: Duplicate Content Warning
+  if(product) {
+    const exist = DB.data.tasks.filter(t=>!t.deleted && t.product===product && t.type===type);
+    if(exist.length > 0 && !confirm(`Warning: This product already has ${exist.length} open ${type} tasks. Continue?`)) return;
+  }
+
+  const t = { id: uid('t'), title, brand, product, type, status: 'Pending', date: todayISO(), links: [], deleted: false, addedBy: SESSION.id };
+  DB.data.tasks.unshift(t);
+  logTaskHistory(t.id, 'Created task');
+  logAudit('Tasks', 'Create', null, t);
+  DB.save();
+  closeModal();
+  renderTasks(document.getElementById('view'));
+}
+
+function openTaskDetail(id) {
+  const t = DB.data.tasks.find(x=>x.id===id);
+  const comments = DB.data.comments.filter(c=>c.taskId===id).sort((a,b)=>a.ts-b.ts);
+  const hist = DB.data.history.filter(h=>h.taskId===id).sort((a,b)=>b.ts-a.ts);
+  
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+      <h3 class="font-bold text-lg truncate pr-4">${escapeHtml(t.title)}</h3>
+      <div class="flex gap-2">
+        ${perms().tasks.del ? `<button class="text-red-500 text-sm hover:underline" onclick="deleteTask('${id}')">Delete</button>` : ''}
+        <button onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto bg-gray-100 p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div class="text-xs font-bold text-gray-500 mb-2">STATUS & TYPE</div>
+          <select id="td-status" class="w-full border rounded p-2 text-sm mb-2" onchange="updateTaskStatus('${id}', this.value)" ${perms().tasks.edit?'':'disabled'}>
+            ${DB.data.settings.taskStatuses.map(s=>`<option ${t.status===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+          <div class="text-sm"><span class="font-semibold">Type:</span> ${t.type}</div>
+        </div>
+        
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div class="flex justify-between items-center mb-3">
+            <div class="text-xs font-bold text-gray-500">DRIVE LINKS (${t.links.length})</div>
+            ${perms().tasks.edit ? `<button class="text-teal-600 text-xs font-bold" onclick="addLinkPrompt('${id}')">+ Add</button>` : ''}
+          </div>
+          ${t.links.length ? t.links.map(l=>`
+            <div class="flex justify-between items-center bg-gray-50 p-2 rounded mb-1 text-sm border">
+              <a href="${l.url}" target="_blank" class="text-blue-600 truncate flex-1 hover:underline">${escapeHtml(l.name)} ↗</a>
+              ${perms().tasks.edit ? `<button class="text-red-500 ml-2 text-xs" onclick="removeLink('${id}','${l.id}')">✕</button>` : ''}
             </div>
-            <div class="flex items-center space-x-4">
-                <button class="relative text-gray-600 hover:text-blue-600">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                </button>
-                <div class="h-8 w-8 bg-blue-500 rounded-full text-white flex items-center justify-center font-bold">NK</div>
-            </div>
-        </header>
-
-        <div class="p-6 overflow-y-auto flex-1 relative z-0">
-            
-            <section id="dashboard" class="tab-content active">
-                <h1 class="text-3xl font-bold text-gray-800 mb-6">Overview</h1>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <h3 class="text-gray-500 text-sm font-semibold">Total Content (This Month)</h3>
-                        <p class="text-3xl font-bold mt-2">142</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <h3 class="text-gray-500 text-sm font-semibold">Pending Tasks</h3>
-                        <p class="text-3xl font-bold mt-2 text-orange-500">18</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <h3 class="text-gray-500 text-sm font-semibold">Upcoming SL Events</h3>
-                        <p class="text-sm mt-2 text-gray-700">Poya Day (Next Week)</p>
-                    </div>
-                </div>
-                
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Brand Breakdown</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded border border-blue-100">
-                        <h4 class="font-bold text-blue-800">Exact Extract</h4>
-                        <p class="text-sm text-blue-600">Posts: 45 | Videos: 12</p>
-                    </div>
-                    <div class="bg-pink-50 p-4 rounded border border-pink-100">
-                        <h4 class="font-bold text-pink-800">Biseka</h4>
-                        <p class="text-sm text-pink-600">Posts: 30 | Stories: 25</p>
-                    </div>
-                    <div class="bg-teal-50 p-4 rounded border border-teal-100">
-                        <h4 class="font-bold text-teal-800">OLA Tangalle</h4>
-                        <p class="text-sm text-teal-600">Posts: 15 | Videos: 5</p>
-                    </div>
-                    <div class="bg-purple-50 p-4 rounded border border-purple-100">
-                        <h4 class="font-bold text-purple-800">Love&Lab</h4>
-                        <p class="text-sm text-purple-600">Posts: 20 | Animations: 3</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="tasks" class="tab-content hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-3xl font-bold text-gray-800">Task Manager</h1>
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">+ New Task</button>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 text-gray-600 text-sm border-b">
-                                <th class="p-4">Brand</th>
-                                <th class="p-4">Task Details</th>
-                                <th class="p-4">Type</th>
-                                <th class="p-4">Assigned To</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="p-4 font-semibold text-gray-800">Exact Extract</td>
-                                <td class="p-4">Hair Oil Promo Reel</td>
-                                <td class="p-4"><span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">Video</span></td>
-                                <td class="p-4">Content Creator 1</td>
-                                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">In Progress</span></td>
-                                <td class="p-4"><button class="text-blue-600 hover:underline">Complete</button></td>
-                            </tr>
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="p-4 font-semibold text-gray-800">Biseka</td>
-                                <td class="p-4">New Cream Launch Post</td>
-                                <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Post</span></td>
-                                <td class="p-4">Content Creator 2</td>
-                                <td class="p-4"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Pending</span></td>
-                                <td class="p-4"><button class="text-blue-600 hover:underline">Complete</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="calendar" class="tab-content hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-800">Marketing Calendar</h1>
-                        <p class="text-gray-500 text-sm mt-1">Plan campaigns for Exact Extract, Biseka, and others.</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="changeMonth(-1)" class="bg-white border border-gray-300 text-gray-600 px-3 py-2 rounded hover:bg-gray-50 transition"><i class="fas fa-chevron-left"></i></button>
-                        <h2 id="currentMonthYear" class="text-xl font-bold text-gray-800 px-4 py-1">April 2026</h2>
-                        <button onclick="changeMonth(1)" class="bg-white border border-gray-300 text-gray-600 px-3 py-2 rounded hover:bg-gray-50 transition"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-200 text-center font-semibold text-gray-600 text-sm py-3">
-                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-                    </div>
-                    <div id="calendarGrid" class="grid grid-cols-7 auto-rows-fr bg-gray-200 gap-px">
-                        </div>
-                </div>
-            </section>
-
-            <section id="log" class="tab-content hidden"><h1 class="text-3xl font-bold">Log Page (WIP)</h1></section>
-            <section id="products" class="tab-content hidden"><h1 class="text-3xl font-bold">Product Management (WIP)</h1></section>
-            <section id="users" class="tab-content hidden"><h1 class="text-3xl font-bold">User Management (WIP)</h1></section>
-
+          `).join('') : '<div class="text-gray-400 text-sm">No links added.</div>'}
         </div>
+      </div>
 
-        <div id="taskModal" class="absolute inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg p-6 w-96 shadow-xl">
-                <h3 id="modalTitle" class="text-xl font-bold mb-2">Create Tasks</h3>
-                <p id="modalDesc" class="text-sm text-gray-600 mb-4">Assign content for this event.</p>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold mb-1">Select Brand</label>
-                    <select class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
-                        <option>Exact Extract</option>
-                        <option>Biseka</option>
-                        <option>Love&Lab</option>
-                        <option>OLA Tangalle</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">Cancel</button>
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Assign to Team</button>
-                </div>
-            </div>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col" style="max-height: 400px;">
+        <div class="p-3 border-b bg-gray-50 text-xs font-bold text-gray-500">COMMENTS & ACTIVITY</div>
+        <div class="flex-1 overflow-y-auto p-3" id="td-thread">
+          ${hist.map(h=>`<div class="text-xs text-gray-400 mb-2 text-center">-- ${h.action} (${timeAgo(h.ts)}) --</div>`).join('')}
+          ${comments.map(c=>{
+            const u = DB.data.users.find(x=>x.id===c.userId);
+            return `<div class="comment-box">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="font-bold text-teal-800">${u?u.name:'Unknown'} <span class="text-gray-400 font-normal ml-1">(${u?u.role:''})</span></span>
+                <span class="text-xs text-gray-400">${timeAgo(c.ts)}</span>
+              </div>
+              <div class="text-gray-700">${escapeHtml(c.text)}</div>
+            </div>`;
+          }).join('')}
         </div>
-    </main>
+        ${perms().tasks.comment ? `
+        <div class="p-3 border-t bg-gray-50 flex gap-2">
+          <input id="td-comment" class="flex-1 border rounded px-2 py-1 text-sm" placeholder="Add a comment...">
+          <button class="bg-teal-600 text-white px-3 py-1 rounded text-sm hover:bg-teal-700" onclick="addComment('${id}')">Post</button>
+        </div>` : ''}
+      </div>
 
-    <script>
-        // --- Navigation Logic ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('active');
-            });
-            const selected = document.getElementById(tabId);
-            selected.classList.remove('hidden');
-            selected.classList.add('active');
-            
-            // Re-render calendar if switching to it, to ensure proper layout
-            if (tabId === 'calendar') {
-                renderCalendar();
-            }
-        }
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+  const thread = document.getElementById('td-thread');
+  if(thread) thread.scrollTop = thread.scrollHeight; // Auto-scroll Phase 2
+}
 
-        // --- Marketing Calendar Logic ---
-        let currentDate = new Date(2026, 3, 1); // Starting at April 2026
+function updateTaskStatus(id, newStatus) {
+  const t = DB.data.tasks.find(x=>x.id===id);
+  const old = t.status;
+  t.status = newStatus;
+  logTaskHistory(id, `Changed status to ${newStatus}`);
+  logAudit('Tasks', 'Update Status', old, newStatus);
+  DB.save();
+  toast('Status updated');
+  renderTasks(document.getElementById('view'));
+}
 
-        const marketingEvents = {
-            "2026-03-01": { title: "April Fool's Day", type: "global", desc: "Lighthearted pranks" },
-            "2026-03-02": { title: "Bak Full Moon Poya", type: "sl", desc: "Religious observance" },
-            "2026-03-13": { title: "Sinhala & Tamil New Year", type: "sl", desc: "Major Avurudu Sales!" },
-            "2026-03-14": { title: "Avurudu Day 2", type: "sl", desc: "Festive greetings" },
-            "2026-03-22": { title: "Earth Day", type: "global", desc: "Eco-friendly campaigns (Yatadola)" }
-        };
+function addLinkPrompt(id) {
+  const name = prompt("Link name (e.g. Final Video):");
+  if(!name) return;
+  const url = prompt("Google Drive URL:");
+  if(!url) return;
+  const t = DB.data.tasks.find(x=>x.id===id);
+  t.links.push({id:uid('lnk'), name, url});
+  logTaskHistory(id, `Added drive link: ${name}`);
+  DB.save();
+  openTaskDetail(id);
+}
+function removeLink(tid, lid) {
+  const t = DB.data.tasks.find(x=>x.id===tid);
+  t.links = t.links.filter(l=>l.id!==lid);
+  logTaskHistory(tid, `Removed a drive link`);
+  DB.save();
+  openTaskDetail(tid);
+}
 
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth(); 
-            
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('currentMonthYear').innerText = `${monthNames[month]} ${year}`;
+function addComment(id) {
+  const text = document.getElementById('td-comment').value.trim();
+  if(!text) return;
+  const c = { id:uid('cmt'), taskId:id, userId:SESSION.id, text, ts:Date.now() };
+  DB.data.comments.push(c);
+  logTaskHistory(id, 'Added a comment');
+  DB.save();
+  openTaskDetail(id);
+}
 
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = ''; 
+function deleteTask(id) {
+  if(!confirm("Move task to trash?")) return;
+  const t = DB.data.tasks.find(x=>x.id===id);
+  softDelete('Tasks', id, t);
+  closeModal();
+  renderTasks(document.getElementById('view'));
+}
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+/* PRODUCTS DASHBOARD & PREVIEW */
+function renderProducts(el) {
+  const products = DB.data.products.filter(p=>!p.deleted);
+  el.innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Products</h1>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      ${products.map(p=>{
+        // Phase 2: Dynamic content counters
+        const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===p.id);
+        return `
+        <div class="card p-4 hover:shadow-md cursor-pointer transition border-t-4" style="border-top-color:${brandOf(p.brand).color}" onclick="openProductDetail('${p.id}')">
+          <div class="text-xs font-bold text-gray-500 mb-1 uppercase">${brandOf(p.brand).name}</div>
+          <div class="font-bold text-lg truncate">${escapeHtml(p.name)}</div>
+          <div class="flex justify-between mt-4 border-t pt-3 text-sm text-gray-600">
+            <span>Status: ${p.status}</span>
+            <span class="font-bold">${tasks.length} contents</span>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
 
-            for (let i = 0; i < firstDay; i++) {
-                const blankCell = document.createElement('div');
-                blankCell.className = "bg-white min-h-[120px] p-2 opacity-50";
-                grid.appendChild(blankCell);
-            }
+function openProductDetail(id) {
+  const p = DB.data.products.find(x=>x.id===id);
+  const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===id);
+  
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+      <div>
+        <div class="text-xs font-bold" style="color:${brandOf(p.brand).color}">${brandOf(p.brand).name}</div>
+        <h3 class="font-bold text-lg">${escapeHtml(p.name)}</h3>
+      </div>
+      <button onclick="closeModal()">✕</button>
+    </div>
+    <div class="bg-white p-6 overflow-y-auto" style="max-height:60vh;">
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-gray-50 p-3 rounded text-center border"><div class="text-xs text-gray-500">TOTAL TASKS</div><div class="font-bold text-2xl">${tasks.length}</div></div>
+        <div class="bg-gray-50 p-3 rounded text-center border"><div class="text-xs text-gray-500">STATUS</div><div class="font-bold text-sm mt-1">${p.status}</div></div>
+        <div class="bg-gray-50 p-3 rounded text-center border"><div class="text-xs text-gray-500">SKU</div><div class="font-bold text-sm mt-1 mono">${p.sku||'N/A'}</div></div>
+      </div>
+      
+      <h4 class="font-bold text-sm mb-3">Content Library Preview</h4>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        ${tasks.map(t=>`
+          <div class="bg-gray-100 aspect-square flex flex-col items-center justify-center rounded border p-2 text-center cursor-pointer hover:bg-gray-200" onclick="openTaskDetail('${t.id}')">
+            <svg class="w-6 h-6 text-gray-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <div class="text-xs font-semibold truncate w-full">${t.type}</div>
+            <div class="text-[10px] text-gray-500">${fmtDate(t.date)}</div>
+          </div>
+        `).join('')}
+        ${tasks.length===0?'<div class="col-span-4 text-center text-sm text-gray-400 py-4">No content created yet.</div>':''}
+      </div>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const cell = document.createElement('div');
-                cell.className = "bg-white min-h-[120px] p-2 relative hover:bg-gray-50 transition border-b border-r border-gray-100";
-                
-                const dayNumber = document.createElement('span');
-                dayNumber.className = "text-gray-500 font-medium text-sm";
-                dayNumber.innerText = day;
-                cell.appendChild(dayNumber);
+/* SETTINGS (Phase 2 Google Config & Setup) */
+function renderSettings(el) {
+  if(!perms().settings.view) return;
+  const s = DB.data.settings;
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Settings</h1>
+    <div class="grid-2">
+      <div class="card p-5 space-y-4">
+        <h3 class="font-bold border-b pb-2">Google Integrations (Pending API Setup)</h3>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">DRIVE ROOT FOLDER ID</label><input class="w-full border rounded p-2 text-sm" value="${s.googleDrive.rootFolder||''}" placeholder="e.g. 1A2b3C4d..."></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">MASTER SHEET ID</label><input class="w-full border rounded p-2 text-sm" value="${s.googleSheets.sheetId||''}" placeholder="e.g. 1xY..."></div>
+        <button class="bg-gray-100 text-gray-600 px-3 py-1 rounded text-sm border hover:bg-gray-200" onclick="toast('API connect placeholder')">Test Connection</button>
+      </div>
+      <div class="card p-5 space-y-4">
+        <h3 class="font-bold border-b pb-2">System Config</h3>
+        <p class="text-sm text-gray-500">Edit Post Types, Statuses, and Brand Colors here in future updates.</p>
+        <button class="bg-red-50 text-red-600 px-3 py-1 rounded text-sm border border-red-200 hover:bg-red-100" onclick="if(confirm('Wipe local database?')) { localStorage.clear(); location.reload(); }">Reset Demo Data</button>
+      </div>
+    </div>
+  `;
+}
 
-                const dateKey = `${year}-0${month}-${day < 10 ? '0'+day : day}`; 
-                if (marketingEvents[dateKey]) {
-                    const ev = marketingEvents[dateKey];
-                    const eventDiv = document.createElement('div');
-                    
-                    const bgClass = ev.type === 'sl' ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-blue-100 text-blue-800 border-blue-200';
-                    
-                    eventDiv.className = `mt-1 p-1 text-xs rounded border cursor-pointer font-semibold ${bgClass} truncate`;
-                    eventDiv.innerText = ev.title;
-                    
-                    eventDiv.onclick = () => openTaskModal(ev.title, ev.desc);
-                    
-                    cell.appendChild(eventDiv);
-                }
+/* ANALYTICS & REPORTS */
+function renderAnalytics(el) {
+  const tasks = DB.data.tasks.filter(t=>!t.deleted && t.status==='Done');
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Analytics (Completed Content)</h1>
+    <div class="card p-5 mb-6">
+      <h3 class="font-bold mb-4">Content Production by Brand</h3>
+      <div class="space-y-3">
+        ${DB.data.brands.map(b=>{
+          const count = tasks.filter(t=>t.brand===b.id).length;
+          const max = Math.max(1, tasks.length);
+          const w = (count/max)*100;
+          return `<div class="flex items-center text-sm"><div class="w-32 truncate">${b.name}</div><div class="flex-1 bg-gray-100 h-3 rounded mx-3 overflow-hidden"><div class="h-full rounded" style="width:${w}%;background:${b.color}"></div></div><div class="w-8 text-right mono text-gray-500">${count}</div></div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
 
-                grid.appendChild(cell);
-            }
-        }
+function renderReports(el) {
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Reports Engine</h1>
+    <div class="card p-8 text-center text-gray-500">
+      <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <div class="font-bold text-gray-800">Ready for Google Sheets Export</div>
+      <div class="text-sm mt-1 max-w-md mx-auto">This module is prepared to pipe aggregate CSV data directly into your Google Sheets integration once authenticated.</div>
+      <button class="mt-4 bg-teal-600 text-white px-4 py-2 rounded text-sm hover:bg-teal-700" onclick="toast('Export triggered (Placeholder)')">Download Monthly CSV</button>
+    </div>
+  `;
+}
 
-        function changeMonth(direction) {
-            currentDate.setMonth(currentDate.getMonth() + direction);
-            renderCalendar();
-        }
+/* =========================================================
+   UTILITIES & GLOBAL
+========================================================= */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+function toggleNotif(){
+  const panel = document.getElementById('notif-panel');
+  panel.classList.toggle('hidden');
+}
+function markAllRead() {
+  DB.data.notifications.forEach(n=>n.read=true);
+  DB.save();
+  document.getElementById('notif-panel').classList.add('hidden');
+  refreshNotifDot();
+  toast('Notifications cleared');
+}
+function refreshNotifDot() {
+  const hasUnread = DB.data.notifications.some(n=>!n.read && (n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin'));
+  document.getElementById('notif-dot').style.display = hasUnread ? 'block' : 'none';
+}
 
-        // --- Modal Functions ---
-        function openTaskModal(eventTitle, eventDesc) {
-            document.getElementById('modalTitle').innerText = eventTitle;
-            document.getElementById('modalDesc').innerText = "Assign campaigns: " + eventDesc;
-            document.getElementById('taskModal').classList.remove('hidden');
-        }
+function openCmdk(){
+  document.getElementById('cmdk').classList.remove('hidden');
+  document.getElementById('cmdk').classList.add('flex');
+  setTimeout(()=>document.getElementById('cmdk-input').focus(),30);
+  renderCmdkResults('');
+}
+function closeCmdk(){ 
+  document.getElementById('cmdk').classList.add('hidden'); 
+  document.getElementById('cmdk').classList.remove('flex');
+}
+document.addEventListener('keydown', e=>{
+  if(e.key==='/' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){ e.preventDefault(); if(SESSION) openCmdk(); }
+  if(e.key==='Escape') { closeCmdk(); closeModal(); }
+});
+function renderCmdkResults(q){
+  q = q.toLowerCase().trim();
+  const results = [];
+  DB.data.tasks.filter(t=>!t.deleted).forEach(t=>{ if(!q || t.title.toLowerCase().includes(q)) results.push({tag:'Task', label:t.title, sub:t.type, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(t.id);}}); });
+  DB.data.products.filter(p=>!p.deleted).forEach(p=>{ if(!q || p.name.toLowerCase().includes(q)) results.push({tag:'Product', label:p.name, sub:p.category, action:()=>{closeCmdk();renderView('products');openProductDetail(p.id);}}); });
+  
+  const wrap = document.getElementById('cmdk-results');
+  wrap.innerHTML = results.slice(0,10).map((r,i)=>`<div class="p-3 border-b hover:bg-gray-50 cursor-pointer flex justify-between" onclick="window.__cmdkAction(${i})"><div><div class="text-sm font-bold">${escapeHtml(r.label)}</div><div class="text-xs text-gray-500">${r.sub}</div></div><div class="text-xs font-bold text-gray-300 uppercase">${r.tag}</div></div>`).join('') || `<div class="p-4 text-center text-sm text-gray-400">No results.</div>`;
+  window.__cmdkResults = results;
+  window.__cmdkAction = (i)=>{ window.__cmdkResults[i].action(); };
+}
 
-        function closeModal() {
-            document.getElementById('taskModal').classList.add('hidden');
-        }
-
-        // Initialize Calendar on load
-        renderCalendar();
-
-        function fetchTasksFromSheet() {
-            console.log("Fetching tasks from Google Sheets...");
-        }
-    </script>
+/* =========================================================
+   INIT
+========================================================= */
+(function init(){
+  DB.load();
+  const select = document.getElementById('login-user');
+  select.innerHTML = DB.data.users.map(u=>`<option value="${u.id}">${u.name} (${u.role})</option>`).join('');
+  const raw = localStorage.getItem('contentos_session');
+  if(raw){ SESSION = JSON.parse(raw); boot(); }
+})();
+</script>
 </body>
 </html>
