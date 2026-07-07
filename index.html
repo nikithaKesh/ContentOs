@@ -3,94 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContentOS Phase 2</title>
+<title>ContentOS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#14171c; --ink-soft:#3c4249; --paper:#f1f3f0; --surface:#ffffff; --line:#dfe2dc;
-    --accent:#2f6f5e; --accent-dark:#204f42; --accent-soft:#e2ede8;
-    --amber:#e2a542; --amber-soft:#faecd6; --coral:#d1503f; --coral-soft:#f7e2de;
-    --blue:#3d6fa8; --blue-soft:#e1ebf4; --radius:10px;
-    --shadow: 0 1px 2px rgba(20,23,28,.04), 0 6px 20px -8px rgba(20,23,28,.12);
+    --ink:#14171c; --paper:#f1f3f0; --surface:#ffffff; --line:#dfe2dc;
+    --accent:#2f6f5e;
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;}
   h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
-  ::-webkit-scrollbar{width:8px;height:8px;}
-  ::-webkit-scrollbar-thumb{background:#d4d7d0;border-radius:8px;}
-  a{text-decoration:none;color:inherit;}
-  button{font-family:inherit;cursor:pointer;}
-  input,select,textarea{font-family:inherit;}
-
-  /* ---------- APP SHELL & MOBILE ---------- */
-  #login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:100;}
-  .login-card{background:var(--surface);width:380px;max-width:90vw;border-radius:16px;padding:36px 32px;}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px;}
   
+  /* Shell & Dock */
+  #login-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:100;}
   #app{display:none;height:100vh;}
   .shell{display:flex;height:100vh;position:relative;}
+  .dock{width:240px;background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;flex-shrink:0;transition:transform 0.3s ease;z-index:50;}
+  .main-col{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--paper);}
   
-  .dock{width:220px;background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;flex-shrink:0;transition:transform 0.3s ease;z-index:50;}
-  .main-col{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;background:var(--paper);}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:#94a3b8;margin-bottom:4px;cursor:pointer;transition:all 0.2s;}
+  .nav-item:hover{background:#1e293b;color:#f8fafc;}
+  .nav-item.active{background:var(--accent);color:#ffffff;}
   
-  .dock-logo{display:flex;align-items:center;gap:9px;padding:6px 10px 22px;}
-  .dock-logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(47,111,94,.35);}
-  .dock-logo span{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff;}
-  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13.5px;font-weight:500;color:#b7bdb9;margin-bottom:2px;cursor:pointer;}
-  .nav-item:hover{background:#1e2229;color:#fff;}
-  .nav-item.active{background:var(--accent);color:#fff;}
-  .nav-item svg{width:16px;height:16px;flex-shrink:0;}
-  .dock-foot{margin-top:auto;padding:10px;border-top:1px solid #262b31;}
-  
-  .topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:14px;background:var(--surface);flex-shrink:0;}
-  .menu-btn{display:none;background:none;border:none;color:var(--ink);cursor:pointer;}
-  
-  .view{flex:1;overflow-y:auto;padding:24px 28px;}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);}
-  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;}
-  .kpi{padding:16px 18px;}
-  .kpi .num{font-family:'Space Grotesk';font-size:26px;font-weight:700;}
-  
+  /* UI Elements */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;}
   table{width:100%;border-collapse:collapse;font-size:13px;text-align:left;}
-  th{font-size:11px;text-transform:uppercase;color:var(--ink-soft);padding:10px 14px;border-bottom:1px solid var(--line);background:#f9f9f7;}
-  td{padding:11px 14px;border-bottom:1px solid #ececE7;}
+  th{font-size:11px;text-transform:uppercase;color:#64748b;padding:12px 16px;border-bottom:1px solid var(--line);background:#f8fafc;}
+  td{padding:12px 16px;border-bottom:1px solid #f1f5f9;}
   
-  .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.5);display:none;align-items:flex-start;justify-content:center;z-index:90;padding:6vh 20px;overflow-y:auto;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.6);display:none;align-items:flex-start;justify-content:center;z-index:90;padding:6vh 20px;overflow-y:auto;backdrop-filter:blur(2px);}
   .modal-overlay.open{display:flex;}
-  .modal{background:#fff;border-radius:14px;width:750px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);}
+  .modal{background:#fff;border-radius:16px;width:750px;max-width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);}
+  .modal-sm{width:450px;}
   
-  .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;z-index:200;display:none;transition: opacity 0.3s;}
+  .toast{position:fixed;bottom:24px;right:24px;background:#1e293b;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:200;display:none;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);transition:opacity 0.3s;}
   .toast.show{display:flex;}
   
-  /* Timeline & Comments */
-  .timeline{border-left:2px solid var(--line);margin-left:10px;padding-left:16px;position:relative;}
-  .tl-item{position:relative;margin-bottom:16px;font-size:12px;}
-  .tl-item::before{content:'';position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);}
-  .comment-box{background:#f9f9f7;border-radius:8px;padding:12px;margin-bottom:10px;font-size:13px;border:1px solid var(--line);}
+  /* Timeline & Calendar */
+  .timeline{border-left:2px solid #e2e8f0;margin-left:12px;padding-left:20px;position:relative;}
+  .tl-item{position:relative;margin-bottom:20px;}
+  .tl-item::before{content:'';position:absolute;left:-25px;top:4px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--accent);}
   
-  /* Mobile Queries */
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#e2e8f0;border:1px solid #e2e8f0;}
+  .cal-cell{background:#fff;min-height:100px;padding:8px;}
+  .cal-cell.dim{background:#f8fafc;color:#cbd5e1;}
+  
   @media(max-width:980px){
     .shell{flex-direction:column;}
-    .dock{position:absolute;left:-220px;height:100%;box-shadow:2px 0 10px rgba(0,0,0,0.2);}
-    .dock.open{transform:translateX(220px);}
-    .menu-btn{display:block;}
-    .grid-2, .grid-3{grid-template-columns:1fr !important;}
-    .view{padding:16px;}
-    .table-wrap{display:block;overflow-x:auto;}
+    .dock{position:absolute;left:-240px;height:100%;box-shadow:4px 0 15px rgba(0,0,0,0.1);}
+    .dock.open{transform:translateX(240px);}
+    .menu-btn{display:block !important;}
   }
 </style>
 </head>
 <body>
 
 <div id="login-screen">
-  <div class="login-card shadow-2xl">
-    <div style="font-family:'Space Grotesk';font-size:24px;font-weight:700;margin-bottom:6px;color:var(--ink);">ContentOS <span class="text-xs text-teal-600 align-top">v2</span></div>
-    <div class="text-xs text-gray-500 mb-6 uppercase tracking-widest font-semibold">Workspace Authentication</div>
-    <select id="login-user" class="w-full p-2 mb-4 rounded border border-gray-300 text-sm bg-gray-50 focus:outline-none focus:border-teal-500">
-      </select>
-    <button class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-lg text-sm font-bold transition shadow-sm" onclick="doLogin()">Enter Workspace</button>
+  <div class="card p-10 w-96 shadow-2xl">
+    <div class="font-bold text-3xl mb-1 text-gray-900 display">ContentOS <span class="text-sm text-teal-600 align-top">v2</span></div>
+    <div class="text-xs text-gray-500 mb-8 uppercase tracking-widest font-semibold">Workspace Authentication</div>
+    <label class="block text-xs font-bold text-gray-600 mb-2">SELECT USER</label>
+    <select id="login-user" class="w-full p-3 mb-6 rounded-lg border border-gray-300 text-sm bg-gray-50 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"></select>
+    <button class="w-full bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-lg text-sm font-bold transition shadow" onclick="doLogin()">Enter Workspace</button>
   </div>
 </div>
 
@@ -98,49 +77,64 @@
 <div class="shell">
   
   <div class="dock" id="sidebar">
-    <div class="dock-logo"><span class="dot"></span><span>ContentOS</span></div>
-    <div id="nav-list" class="flex-1 overflow-y-auto mt-2"></div>
-    <div class="dock-foot text-sm">
-      <div id="user-name-tag" class="font-bold text-white mb-1 truncate"></div>
-      <div id="user-role-tag" class="text-xs text-gray-400 mb-2 truncate"></div>
-      <a class="text-xs text-gray-500 hover:text-white cursor-pointer inline-block mt-2 border-t border-gray-700 pt-2 w-full" onclick="doLogout()">Sign out</a>
+    <div class="flex items-center gap-3 px-3 py-2 mb-6">
+      <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center border-2 border-teal-800 shadow-inner">
+        <span class="text-white font-bold text-sm">OS</span>
+      </div>
+      <span class="display font-bold text-xl text-white tracking-tight">ContentOS</span>
+    </div>
+    <div id="nav-list" class="flex-1 overflow-y-auto"></div>
+    <div class="mt-auto border-t border-gray-800 pt-4 px-2">
+      <div id="user-name-tag" class="font-bold text-white text-sm truncate mb-0.5"></div>
+      <div id="user-role-tag" class="text-xs text-gray-400 truncate mb-3"></div>
+      <button class="text-xs text-gray-500 hover:text-white transition flex items-center gap-2" onclick="doLogout()">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Sign out
+      </button>
     </div>
   </div>
 
   <div class="main-col">
-    <div class="topbar">
-      <button class="menu-btn mr-2" onclick="toggleSidebar()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    <div class="h-16 bg-white border-b border-gray-200 flex items-center px-6 gap-4 flex-shrink-0 z-10 relative">
+      <button class="menu-btn hidden mr-2 text-gray-600" onclick="toggleSidebar()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <div class="flex-1 relative max-w-lg">
-        <svg class="absolute left-3 top-2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="global-search" class="w-full bg-gray-100 border border-gray-200 rounded-lg py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-teal-500 focus:bg-white transition" placeholder="Search tasks, products, users... (/)" onfocus="openCmdk()" readonly>
+      
+      <div class="flex-1 max-w-xl relative">
+        <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input id="global-search" class="w-full bg-gray-100 border border-gray-200 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-teal-500 focus:bg-white transition" placeholder="Search tasks, products, brands, users... (/)" onfocus="openCmdk()" readonly>
       </div>
-      <div class="ml-auto flex items-center gap-4">
+      
+      <div class="ml-auto flex items-center gap-5">
+        <span id="topbar-date" class="text-xs font-mono text-gray-500 hidden sm:block"></span>
         <button class="relative text-gray-500 hover:text-teal-600 transition" onclick="toggleNotif()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
-          <span id="notif-dot" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full hidden"></span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span id="notif-dot" class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full hidden"></span>
         </button>
       </div>
     </div>
     
-    <div class="view" id="view"></div>
+    <div class="flex-1 overflow-y-auto p-6 md:p-8" id="view"></div>
   </div>
 </div>
 </div>
 
-<div id="notif-panel" class="absolute top-14 right-4 w-80 bg-white border border-gray-200 rounded-lg shadow-xl hidden z-[80] flex-col max-h-[80vh]">
-  <div class="p-3 border-b flex justify-between items-center bg-gray-50 rounded-t-lg">
+<div id="notif-panel" class="absolute top-16 right-6 w-80 bg-white border border-gray-200 rounded-xl shadow-2xl hidden z-[80] flex-col max-h-[70vh]">
+  <div class="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-xl">
     <span class="font-bold text-sm text-gray-800">Notifications</span>
-    <button class="text-xs text-teal-600 font-semibold hover:underline" onclick="markAllRead()">Mark all read</button>
+    <button class="text-xs text-teal-600 font-semibold hover:underline" onclick="markAllRead()">Mark read</button>
   </div>
-  <div id="notif-list" class="overflow-y-auto flex-1 p-2 space-y-1"></div>
+  <div id="notif-list" class="overflow-y-auto flex-1 divide-y"></div>
 </div>
 
-<div id="cmdk" class="fixed inset-0 bg-black/60 z-[100] hidden flex-col items-center pt-[12vh]" onclick="if(event.target===this)closeCmdk()">
-  <div class="bg-white w-[600px] max-w-[90vw] rounded-xl shadow-2xl overflow-hidden flex flex-col transform transition-all">
-    <input id="cmdk-input" class="w-full p-4 text-base border-b outline-none font-medium" placeholder="Search everything..." oninput="renderCmdkResults(this.value)">
-    <div id="cmdk-results" class="max-h-[50vh] overflow-y-auto bg-gray-50"></div>
+<div id="cmdk" class="fixed inset-0 bg-gray-900/40 z-[100] hidden flex-col items-center pt-[15vh] backdrop-blur-sm" onclick="if(event.target===this)closeCmdk()">
+  <div class="bg-white w-[650px] max-w-[95vw] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-all">
+    <div class="flex items-center px-4 border-b">
+      <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input id="cmdk-input" class="w-full p-4 text-lg border-none outline-none" placeholder="Search ContentOS..." oninput="renderCmdkResults(this.value)">
+      <span class="text-xs text-gray-400 font-mono border px-1.5 rounded">ESC</span>
+    </div>
+    <div id="cmdk-results" class="max-h-[50vh] overflow-y-auto bg-gray-50/50"></div>
   </div>
 </div>
 
@@ -148,62 +142,26 @@
   <div class="modal flex flex-col max-h-[90vh]" id="modal-box"></div>
 </div>
 
-<div class="toast flex items-center gap-2" id="toast"></div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
-   CORE ARCHITECTURE & DATA LAYER (PHASE 2)
+   CORE ARCHITECTURE & DATA LAYER
 ========================================================= */
 
-// Advanced Permission Matrix
+// Req 22: Advanced Role Permissions Matrix
 const ROLES_MATRIX = {
   'Admin': { 
-    dashboard:{view:true}, 
-    tasks:{view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, 
-    products:{view:true, create:true, edit:true, del:true}, 
-    brands:{view:true, edit:true}, 
-    reports:{view:true, export:true}, 
-    analytics:{view:true}, 
-    settings:{view:true, edit:true}, 
-    users:{view:true, create:true, edit:true, del:true}, 
-    audit:{view:true}, 
-    trash:{view:true, restore:true, del:true} 
+    dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:true}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:true, edit:true}, users:{view:true, create:true, edit:true, del:true}, audit:{view:true}, trash:{view:true, restore:true, del:true}, calendar:{view:true}, log:{view:true}
   },
   'General Manager': { 
-    dashboard:{view:true}, 
-    tasks:{view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, 
-    products:{view:true, create:true, edit:true, del:false}, 
-    brands:{view:true, edit:true}, 
-    reports:{view:true, export:true}, 
-    analytics:{view:true}, 
-    settings:{view:false, edit:false}, 
-    users:{view:true, create:false, edit:false, del:false}, 
-    audit:{view:true}, 
-    trash:{view:false, restore:false, del:false} 
+    dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:false}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:true, create:false, edit:false, del:false}, audit:{view:true}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true}
   },
   'Content Creator': { 
-    dashboard:{view:true}, 
-    tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, 
-    products:{view:true, create:false, edit:false, del:false}, 
-    brands:{view:true, edit:false}, 
-    reports:{view:false, export:false}, 
-    analytics:{view:true}, 
-    settings:{view:false, edit:false}, 
-    users:{view:false, create:false, edit:false, del:false}, 
-    audit:{view:false}, 
-    trash:{view:false, restore:false, del:false} 
+    dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:false, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true}
   },
   'Viewer': { 
-    dashboard:{view:true}, 
-    tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, 
-    products:{view:true, create:false, edit:false, del:false}, 
-    brands:{view:true, edit:false}, 
-    reports:{view:true, export:false}, 
-    analytics:{view:true}, 
-    settings:{view:false, edit:false}, 
-    users:{view:false, create:false, edit:false, del:false}, 
-    audit:{view:false}, 
-    trash:{view:false, restore:false, del:false} 
+    dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:true, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true}
   }
 };
 
@@ -216,75 +174,72 @@ const DEFAULT_SETTINGS = {
   googleSheets: { sheetId: '', syncTasks: false, syncProducts: false }
 };
 
+// Sri Lankan Holidays & Marketing Calendar Data
+const CALENDAR_EVENTS = [
+  {date:'2026-01-01', name:"New Year's Day", type:'global'}, {date:'2026-01-03', name:'Duruthu Full Moon Poya', type:'sl'},
+  {date:'2026-02-04', name:'Independence Day', type:'sl'}, {date:'2026-02-14', name:"Valentine's Day", type:'global'},
+  {date:'2026-04-13', name:'Sinhala & Tamil New Year', type:'sl'}, {date:'2026-05-01', name:'May Day', type:'sl'},
+  {date:'2026-05-30', name:'Vesak Full Moon Poya', type:'sl'}, {date:'2026-12-25', name:'Christmas', type:'global'}
+];
+
 const DB = {
-  key: 'contentos_db_v2',
+  key: 'contentos_db_v2_final',
   data: null,
   load() {
     const raw = localStorage.getItem(this.key);
-    if(raw) {
-      this.data = JSON.parse(raw);
-      this.migrate(); // Handles v1 -> v2 upgrade seamlessly
-    } else {
-      this.data = this.seed();
-      this.save();
-    }
+    if(raw) { this.data = JSON.parse(raw); this.migrate(); } 
+    else { this.data = this.seed(); this.save(); }
   },
   migrate() {
+    // Migration checks to ensure all arrays exist for Phase 2
     if(!this.data.brands) this.data.brands = [{id:'exact',name:'Exact Extract',color:'#2f6f5e'}, {id:'biseka',name:'Biseka',color:'#3d6fa8'}];
     if(!this.data.settings) this.data.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
     if(!this.data.comments) this.data.comments = [];
     if(!this.data.history) this.data.history = [];
     if(!this.data.audit) this.data.audit = [];
     if(!this.data.trash) this.data.trash = [];
+    if(!this.data.logs) this.data.logs = [];
     
-    // Convert V1 Task driveLink strings to V2 links array
-    this.data.tasks.forEach(t => {
-      if(t.driveLink !== undefined) {
-        t.links = t.driveLink ? [{id:uid('lnk'), name:'Main File', url:t.driveLink}] : [];
-        delete t.driveLink;
-      }
-      if(t.deleted === undefined) t.deleted = false;
+    // Ensure all items have 'deleted' flags
+    this.data.tasks.forEach(t => { 
+      if(t.deleted===undefined) t.deleted = false; 
+      if(!t.links) t.links = t.driveLink ? [{id:uid('lnk'), name:'Main File', url:t.driveLink}] : [];
     });
-    
-    // Ensure all products have deleted flag
     this.data.products.forEach(p => { if(p.deleted===undefined) p.deleted = false; });
-    
     this.save();
   },
   save() { localStorage.setItem(this.key, JSON.stringify(this.data)); },
   seed() {
-    // Generate initial demo data
     const users = [
-      {id:'u1', name:'Sanduni Fernando', role:'Admin', email:'sanduni@agency.lk'},
-      {id:'u2', name:'Ruwan Jayasinghe', role:'General Manager', email:'ruwan@agency.lk'},
-      {id:'u3', name:'Nadeesha Perera', role:'Content Creator', email:'nadeesha@agency.lk'},
-      {id:'u4', name:'Ishara Madushani', role:'Viewer', email:'ishara@agency.lk'}
+      {id:'u1', name:'Nikitha Keshan Gomes', role:'Admin', email:'nk@biseka.lk'},
+      {id:'u2', name:'General Manager', role:'General Manager', email:'gm@biseka.lk'},
+      {id:'u3', name:'Content Creator 1', role:'Content Creator', email:'cc1@biseka.lk'},
+      {id:'u4', name:'Client Viewer', role:'Viewer', email:'view@biseka.lk'}
     ];
     const brands = [
-      {id:'exact', name:'Exact Extract', color:'#2f6f5e'},
-      {id:'biseka', name:'Biseka', color:'#3d6fa8'},
-      {id:'lovelab', name:'Love&Lab', color:'#d1503f'},
-      {id:'ola', name:'OLA Tangalle', color:'#e2a542'}
+      {id:'exact', name:'Exact Extract', color:'#2f6f5e'}, {id:'biseka', name:'Biseka', color:'#3d6fa8'},
+      {id:'lovelab', name:'Love&Lab', color:'#d1503f'}, {id:'ola', name:'OLA Tangalle', color:'#e2a542'},
+      {id:'scrub', name:'Scrub&Butter', color:'#7a5cae'}, {id:'titan', name:'Titan Fitness', color:'#20685e'}
     ];
     const products = [
       {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active', ts:Date.now()-864000000, deleted:false},
       {id:'p2', name:'Turmeric Night Cream', brand:'biseka', sku:'BSK-TN-050', category:'Cream', status:'Active', ts:Date.now()-400000000, deleted:false}
     ];
     const tasks = [
-      {id:'t1', brand:'exact', title:'Instagram Reel Launch', type:'Video', product:'p1', assignee:'u3', addedBy:'u2', date:todayISO(), status:'Pending', links:[], deleted:false, ts:Date.now()-80000},
-      {id:'t2', brand:'biseka', title:'Story Set - Turmeric', type:'Story', product:'p2', assignee:'u3', addedBy:'u2', date:todayISO(), status:'In Progress', links:[{id:uid('lnk'), name:'Canva Link', url:'https://canva.com'}], deleted:false, ts:Date.now()-3000000}
+      {id:'t1', brand:'exact', title:'Instagram Reel Launch', type:'Video', product:'p1', assignee:'u3', addedBy:'u1', date:todayISO(), status:'Pending', links:[], deleted:false, ts:Date.now()-80000},
+      {id:'t2', brand:'biseka', title:'Story Set - Turmeric', type:'Story', product:'p2', assignee:'u3', addedBy:'u2', date:todayISO(), status:'In Progress', links:[{id:uid('lnk'), name:'Canva Edit', url:'https://canva.com'}], deleted:false, ts:Date.now()-3000000}
     ];
     return { users, brands, products, tasks, logs:[], notifications:[], comments:[], history:[], audit:[], trash:[], settings:JSON.parse(JSON.stringify(DEFAULT_SETTINGS)) };
   }
 };
 
-/* --- Helpers --- */
+/* --- Utilities --- */
 function uid(prefix){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
 function todayISO(){ return new Date().toISOString().slice(0,10); }
-function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDate(iso){ if(!iso) return '—'; return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
 function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'Just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
 function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function brandOf(id){ return DB.data.brands.find(b=>b.id===id) || {name:'Unknown', color:'#999'}; }
+function brandOf(id){ return DB.data.brands.find(b=>b.id===id) || {name:'Unknown', color:'#94a3b8'}; }
 function getUserName(id){ const u=DB.data.users.find(x=>x.id===id); return u ? u.name : 'System'; }
 
 let SESSION = null;
@@ -296,26 +251,23 @@ let currentView = 'dashboard';
 function logAudit(module, action, oldVal, newVal) {
   DB.data.audit.unshift({ id: uid('aud'), user: SESSION.id, module, action, oldVal: JSON.stringify(oldVal), newVal: JSON.stringify(newVal), ts: Date.now() });
 }
-
 function logTaskHistory(taskId, action) {
   DB.data.history.unshift({ id: uid('hst'), taskId, user: SESSION.id, action, ts: Date.now() });
 }
-
 function addNotif(text, type='System', roleFilter='all') {
-  const icon = type==='Comment' ? '💬' : type==='Warning' ? '⚠️' : type==='Task' ? '📋' : '🔔';
-  DB.data.notifications.unshift({ id: uid('ntf'), text, type, icon, ts: Date.now(), read: false, forRole: roleFilter });
+  const icons = {'Comment':'💬', 'Warning':'⚠️', 'Task':'📋', 'System':'🔔', 'Complete':'✅'};
+  DB.data.notifications.unshift({ id: uid('ntf'), text, type, icon:icons[type]||'🔔', ts: Date.now(), read: false, forRole: roleFilter });
   refreshNotifDot();
 }
-
 function softDelete(module, id, itemObj) {
   itemObj.deleted = true;
   DB.data.trash.unshift({ id: uid('trsh'), module, itemId: id, itemData: JSON.stringify(itemObj), deletedBy: SESSION.id, ts: Date.now() });
-  logAudit(module, 'Deleted (Moved to Trash)', itemObj.name || itemObj.title, null);
+  logAudit(module, 'Moved to Trash', itemObj.name || itemObj.title, null);
   DB.save();
 }
 
 /* =========================================================
-   AUTHENTICATION
+   AUTHENTICATION & ROUTING
 ========================================================= */
 function doLogin(){
   const userId = document.getElementById('login-user').value;
@@ -332,30 +284,31 @@ function boot(){
   document.getElementById('app').style.display='block';
   document.getElementById('user-name-tag').textContent = SESSION.name;
   document.getElementById('user-role-tag').textContent = SESSION.role;
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
   buildNav();
   renderView('dashboard');
   refreshNotifDot();
 }
 
-/* =========================================================
-   NAVIGATION & UI ROUTING
-========================================================= */
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function buildNav(){
   const p = perms();
   const menu = [
     {id:'dashboard', label:'Dashboard', icon:'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z', show:p.dashboard.view},
-    {id:'tasks', label:'Tasks & Workflow', icon:'M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11', show:p.tasks.view},
-    {id:'products', label:'Products Hub', icon:'M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z', show:p.products.view},
+    {id:'tasks', label:'Task Workflow', icon:'M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11', show:p.tasks.view},
+    {id:'products', label:'Products Library', icon:'M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z', show:p.products.view},
+    {id:'calendar', label:'Marketing Calendar', icon:'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', show:p.calendar.view},
+    {id:'log', label:'Content Logs', icon:'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.log.view},
     {id:'analytics', label:'Analytics', icon:'M4 19h16M7 15v4M12 9v10M17 5v14', show:p.analytics.view},
-    {id:'reports', label:'Reports', icon:'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.reports.view},
-    {id:'audit', label:'Audit Log', icon:'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.audit.view},
+    {id:'reports', label:'Export Reports', icon:'M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.reports.view},
+    {id:'users', label:'Team & Users', icon:'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', show:p.users.view},
+    {id:'audit', label:'System Audit', icon:'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', show:p.audit.view},
     {id:'trash', label:'Trash', icon:'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16', show:p.trash.view},
     {id:'settings', label:'Settings', icon:'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', show:p.settings.view},
   ];
   document.getElementById('nav-list').innerHTML = menu.filter(m=>m.show).map(m=>`
     <a class="nav-item ${currentView===m.id?'active':''}" onclick="renderView('${m.id}')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${m.icon}"/></svg>
+      <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${m.icon}"/></svg>
       <span>${m.label}</span>
     </a>`).join('');
 }
@@ -363,51 +316,53 @@ function renderView(id) {
   currentView = id;
   buildNav();
   if(window.innerWidth <= 980) document.getElementById('sidebar').classList.remove('open');
-  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, analytics:renderAnalytics, settings:renderSettings, reports:renderReports, audit:renderAudit, trash:renderTrash};
+  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, calendar:renderCalendar, log:renderLogs, analytics:renderAnalytics, settings:renderSettings, reports:renderReports, users:renderUsers, audit:renderAudit, trash:renderTrash};
   if(renders[id]) renders[id](document.getElementById('view'));
 }
 
 /* =========================================================
-   VIEWS
+   1. DASHBOARD & FEED (Req 8)
 ========================================================= */
-
-/* --- 1. DASHBOARD --- */
 function renderDash(el) {
   const activeTasks = DB.data.tasks.filter(t=>!t.deleted && t.status!=='Done');
-  const feed = DB.data.history.slice(0, 8); // Req 8: Recent Activity Feed
+  const feed = DB.data.history.slice(0, 10);
   
   el.innerHTML = `
-    <h1 class="text-2xl font-bold mb-6">Dashboard Overview</h1>
-    <div class="grid-2 mb-6">
-      <div class="card p-5 border-t-4 border-teal-600">
-        <h3 class="font-bold text-xs mb-4 text-gray-500 uppercase tracking-wide">Active Workspace Tasks</h3>
-        <div class="text-4xl font-bold font-mono text-gray-800">${activeTasks.length}</div>
-        <button class="mt-4 text-sm text-teal-600 font-semibold hover:underline" onclick="renderView('tasks')">View Task Board →</button>
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Dashboard</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      
+      <div class="card p-6 border-t-4 border-teal-600 shadow-sm flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-xs mb-2 text-gray-500 uppercase tracking-wider">Active Tasks</h3>
+          <div class="text-5xl font-bold font-mono text-gray-800">${activeTasks.length}</div>
+        </div>
+        <button class="mt-6 text-sm text-teal-600 font-bold hover:underline self-start" onclick="renderView('tasks')">View Task Board →</button>
       </div>
-      <div class="card p-5">
-        <h3 class="font-bold text-xs mb-4 text-gray-500 uppercase tracking-wide">Live Activity Feed</h3>
-        <div class="space-y-3">
+      
+      <div class="card p-6 shadow-sm">
+        <h3 class="font-bold text-xs mb-4 text-gray-500 uppercase tracking-wider border-b pb-2">Live Activity Feed</h3>
+        <div class="space-y-4 max-h-[200px] overflow-y-auto pr-2">
           ${feed.length ? feed.map(h=>`
             <div class="text-sm flex gap-3 items-start">
               <span class="w-2 h-2 bg-teal-500 rounded-full mt-1.5 flex-shrink-0"></span>
-              <div>
-                <span class="font-semibold text-gray-800">${getUserName(h.user)}</span> <span class="text-gray-600">${h.action}</span>
-                <div class="text-[11px] text-gray-400 mt-0.5">${timeAgo(h.ts)}</div>
+              <div class="leading-tight">
+                <span class="font-bold text-gray-800">${getUserName(h.user)}</span> <span class="text-gray-600">${h.action}</span>
+                <div class="text-[10px] text-gray-400 mt-1 font-mono uppercase">${timeAgo(h.ts)}</div>
               </div>
             </div>`).join('') : '<div class="text-gray-400 text-sm">No recent activity.</div>'}
         </div>
       </div>
     </div>
     
-    <div class="card p-5">
-      <h3 class="font-bold text-xs mb-4 text-gray-500 uppercase tracking-wide">Brand Priorities</h3>
+    <div class="card p-6 shadow-sm">
+      <h3 class="font-bold text-xs mb-4 text-gray-500 uppercase tracking-wider border-b pb-2">Brand Priorities</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         ${DB.data.brands.map(b=>{
           const count = DB.data.tasks.filter(t=>!t.deleted && t.brand===b.id).length;
-          return `<div class="p-3 rounded border text-center" style="border-left: 4px solid ${b.color}; background: #fafafa;">
-            <div class="font-bold text-sm text-gray-700">${b.name}</div>
-            <div class="text-2xl font-bold mt-1" style="color:${b.color}">${count}</div>
-            <div class="text-[10px] text-gray-400 uppercase">Tasks</div>
+          return `<div class="p-4 rounded-xl border border-gray-100 shadow-sm" style="border-left: 4px solid ${b.color}; background: #fafafa;">
+            <div class="font-bold text-sm text-gray-700 truncate">${b.name}</div>
+            <div class="text-3xl font-bold mt-2" style="color:${b.color}">${count}</div>
+            <div class="text-[10px] text-gray-400 uppercase font-bold mt-1">Open Tasks</div>
           </div>`;
         }).join('')}
       </div>
@@ -415,58 +370,62 @@ function renderDash(el) {
   `;
 }
 
-/* --- 2. TASKS (Filters, List, Detail Modal) --- */
-let taskFilters = {brand:'', status:'', type:''};
+/* =========================================================
+   2. TASKS & WORKFLOW (Req 1, 2, 3, 7, 14)
+========================================================= */
+let taskFilter = {brand:'', status:'', type:'', month:'', priority:''}; // Extended filters
 function renderTasks(el) {
   const p = perms().tasks;
   let tasks = DB.data.tasks.filter(t=>!t.deleted);
   
-  // Advanced Filters
-  if(taskFilters.brand) tasks = tasks.filter(t=>t.brand===taskFilters.brand);
-  if(taskFilters.status) tasks = tasks.filter(t=>t.status===taskFilters.status);
-  if(taskFilters.type) tasks = tasks.filter(t=>t.type===taskFilters.type);
+  if(taskFilter.brand) tasks = tasks.filter(t=>t.brand===taskFilter.brand);
+  if(taskFilter.status) tasks = tasks.filter(t=>t.status===taskFilter.status);
+  if(taskFilter.type) tasks = tasks.filter(t=>t.type===taskFilter.type);
+  if(taskFilter.month) tasks = tasks.filter(t=>t.date.startsWith(taskFilter.month));
 
   el.innerHTML = `
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Tasks & Workflow</h1>
-      ${p.create ? `<button class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-700 transition shadow-sm" onclick="openTaskCreateModal()">+ Create Task</button>` : ''}
+      <h1 class="text-2xl font-bold text-gray-800">Tasks & Workflow</h1>
+      ${p.create ? `<button class="bg-teal-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-teal-700 shadow transition" onclick="openTaskCreateModal()">+ Create Task</button>` : ''}
     </div>
     
-    <div class="flex flex-wrap gap-3 mb-4">
-      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-teal-500" onchange="taskFilters.brand=this.value;renderTasks(document.getElementById('view'))">
-        <option value="">All Brands</option>
-        ${DB.data.brands.map(b=>`<option value="${b.id}" ${taskFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+    <div class="flex flex-wrap gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="taskFilter.brand=this.value;renderView('tasks')">
+        <option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${taskFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
       </select>
-      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-teal-500" onchange="taskFilters.status=this.value;renderTasks(document.getElementById('view'))">
-        <option value="">All Statuses</option>
-        ${DB.data.settings.taskStatuses.map(s=>`<option ${taskFilters.status===s?'selected':''}>${s}</option>`).join('')}
+      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="taskFilter.status=this.value;renderView('tasks')">
+        <option value="">All Statuses</option>${DB.data.settings.taskStatuses.map(s=>`<option ${taskFilter.status===s?'selected':''}>${s}</option>`).join('')}
       </select>
-      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-teal-500" onchange="taskFilters.type=this.value;renderTasks(document.getElementById('view'))">
-        <option value="">All Types</option>
-        ${DB.data.settings.postTypes.map(pt=>`<option ${taskFilters.type===pt?'selected':''}>${pt}</option>`).join('')}
+      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="taskFilter.type=this.value;renderView('tasks')">
+        <option value="">All Types</option>${DB.data.settings.postTypes.map(pt=>`<option ${taskFilter.type===pt?'selected':''}>${pt}</option>`).join('')}
       </select>
-      ${(taskFilters.brand||taskFilters.status||taskFilters.type) ? `<button class="text-sm text-gray-500 hover:text-gray-800" onclick="taskFilters={brand:'',status:'',type:''};renderTasks(document.getElementById('view'))">Clear</button>` : ''}
+      <input type="month" class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none text-gray-600" value="${taskFilter.month}" onchange="taskFilter.month=this.value;renderView('tasks')">
+      ${(taskFilter.brand||taskFilter.status||taskFilter.type||taskFilter.month) ? `<button class="text-sm text-gray-500 hover:text-gray-800 font-medium px-2" onclick="taskFilter={brand:'',status:'',type:'',month:'',priority:''};renderView('tasks')">Clear Filters</button>` : ''}
     </div>
 
-    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden table-wrap">
+    <div class="card shadow-sm overflow-hidden border border-gray-200">
       <table class="w-full text-sm">
-        <thead class="bg-gray-50 border-b"><tr><th class="p-3">Task Details</th><th class="p-3">Brand & Product</th><th class="p-3">Status</th><th class="p-3">Links</th></tr></thead>
-        <tbody>
+        <thead><tr><th class="p-4">Task Details</th><th class="p-4">Brand & Product</th><th class="p-4">Status</th><th class="p-4 text-center">Files</th></tr></thead>
+        <tbody class="divide-y divide-gray-100">
           ${tasks.map(t=>`
-            <tr class="border-b hover:bg-gray-50 cursor-pointer group transition" onclick="openTaskDetail('${t.id}')">
-              <td class="p-3">
-                <div class="font-semibold text-gray-800 group-hover:text-teal-700">${escapeHtml(t.title)}</div>
-                <div class="text-[11px] text-gray-500 mt-1">${t.type} • Assigned to: ${getUserName(t.assignee)}</div>
+            <tr class="hover:bg-gray-50 cursor-pointer group transition" onclick="openTaskDetail('${t.id}')">
+              <td class="p-4">
+                <div class="font-bold text-gray-800 group-hover:text-teal-700 text-[15px]">${escapeHtml(t.title)}</div>
+                <div class="text-xs text-gray-500 mt-1">${t.type} • Assigned to: ${getUserName(t.assignee)}</div>
               </td>
-              <td class="p-3">
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold text-white border shadow-sm" style="background:${brandOf(t.brand).color}">${brandOf(t.brand).name}</span>
-                ${t.product ? `<div class="text-[11px] text-gray-500 mt-1 truncate max-w-[150px]">${escapeHtml(DB.data.products.find(p=>p.id===t.product)?.name||'')}</div>` : ''}
+              <td class="p-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase tracking-wider" style="background:${brandOf(t.brand).color}">${brandOf(t.brand).name}</span>
+                ${t.product ? `<div class="text-xs text-gray-500 mt-1.5 truncate max-w-[200px]">${escapeHtml(DB.data.products.find(p=>p.id===t.product)?.name||'')}</div>` : ''}
               </td>
-              <td class="p-3"><span class="px-2 py-1 rounded text-[11px] font-semibold border ${t.status==='Done'?'bg-teal-50 text-teal-700 border-teal-200':'bg-gray-100 text-gray-700'}">${t.status}</span></td>
-              <td class="p-3 text-center"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px] font-mono">${t.links.length}</span></td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold ${t.status==='Done'?'bg-teal-100 text-teal-800':t.status==='In Progress'?'bg-blue-100 text-blue-800':'bg-gray-100 text-gray-700'}">${t.status}</span>
+              </td>
+              <td class="p-4 text-center">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full text-xs font-mono font-bold text-gray-600">${t.links.length}</span>
+              </td>
             </tr>
           `).join('')}
-          ${tasks.length===0?'<tr><td colspan="4" class="p-8 text-center text-gray-400">No tasks found.</td></tr>':''}
+          ${tasks.length===0?'<tr><td colspan="4" class="p-10 text-center text-gray-400">No tasks match criteria.</td></tr>':''}
         </tbody>
       </table>
     </div>
@@ -475,25 +434,24 @@ function renderTasks(el) {
 
 function openTaskCreateModal() {
   const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh] modal-sm';
   box.innerHTML = `
-    <div class="p-4 border-b flex justify-between items-center bg-white rounded-t-xl">
+    <div class="p-5 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
       <h3 class="font-bold text-lg text-gray-800">Create New Task</h3>
       <button class="text-gray-400 hover:text-gray-800" onclick="closeModal()">✕</button>
     </div>
-    <div class="p-6 space-y-5 bg-gray-50 overflow-y-auto">
-      <div><label class="block text-xs font-bold text-gray-500 mb-1">TASK TITLE</label><input id="nt-title" class="w-full border border-gray-300 rounded-md p-2.5 text-sm focus:border-teal-500 outline-none"></div>
+    <div class="p-6 space-y-4 bg-white overflow-y-auto">
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">TASK TITLE</label><input id="nt-title" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:border-teal-500 outline-none"></div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">BRAND</label><select id="nt-brand" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none">${DB.data.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">PRODUCT (OPTIONAL)</label><select id="nt-product" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none"><option value="">-- General / No Product --</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}</select></div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-bold text-gray-500 mb-1">BRAND</label><select id="nt-brand" class="w-full border border-gray-300 rounded-md p-2.5 text-sm outline-none">${DB.data.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
-        <div><label class="block text-xs font-bold text-gray-500 mb-1">PRODUCT (OPTIONAL)</label><select id="nt-product" class="w-full border border-gray-300 rounded-md p-2.5 text-sm outline-none"><option value="">-- General / No Product --</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}</select></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-xs font-bold text-gray-500 mb-1">CONTENT TYPE</label><select id="nt-type" class="w-full border border-gray-300 rounded-md p-2.5 text-sm outline-none">${DB.data.settings.postTypes.map(pt=>`<option>${pt}</option>`).join('')}</select></div>
-        <div><label class="block text-xs font-bold text-gray-500 mb-1">ASSIGN TO</label><select id="nt-assignee" class="w-full border border-gray-300 rounded-md p-2.5 text-sm outline-none">${DB.data.users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">TYPE</label><select id="nt-type" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none">${DB.data.settings.postTypes.map(pt=>`<option>${pt}</option>`).join('')}</select></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">ASSIGN TO</label><select id="nt-assignee" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm outline-none">${DB.data.users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
       </div>
     </div>
-    <div class="p-4 border-t bg-white rounded-b-xl flex justify-end gap-3">
-      <button class="px-4 py-2 border rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50" onclick="closeModal()">Cancel</button>
-      <button class="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-semibold hover:bg-teal-700 shadow-sm" onclick="saveNewTask()">Create Task</button>
+    <div class="p-5 border-t bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+      <button class="px-5 py-2 border rounded-lg text-sm font-bold text-gray-600 hover:bg-white" onclick="closeModal()">Cancel</button>
+      <button class="px-5 py-2 bg-teal-600 text-white rounded-lg text-sm font-bold hover:bg-teal-700 shadow-sm" onclick="saveNewTask()">Create</button>
     </div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
@@ -508,12 +466,11 @@ function saveNewTask() {
   
   if(!title) return toast('Task title is required');
 
-  // Req 7: Duplicate Content Warning
-  if(product) {
+  if(product) { // Duplicate Warning Req
     const dups = DB.data.tasks.filter(t=>!t.deleted && t.product===product && t.type===type);
     if(dups.length > 0) {
-      if(!confirm(`Duplicate Warning: This product already has ${dups.length} active ${type} task(s). Do you want to continue creating another one?`)) return;
-      addNotif(`Duplicate ${type} task created for product`, 'Warning');
+      if(!confirm(`Warning: This product already has ${dups.length} active ${type} task(s). Create anyway?`)) return;
+      addNotif(`Duplicate ${type} task created`, 'Warning');
     }
   }
 
@@ -522,15 +479,11 @@ function saveNewTask() {
   
   logTaskHistory(t.id, 'Task created & assigned');
   logAudit('Tasks', 'Create', null, t.title);
-  addNotif(`New task assigned: ${title}`, 'Task', assignee); // Notify specific user
+  addNotif(`New task assigned: ${title}`, 'Task', assignee);
   
-  DB.save();
-  closeModal();
-  renderTasks(document.getElementById('view'));
-  toast('Task successfully created');
+  DB.save(); closeModal(); renderView('tasks'); toast('Task created');
 }
 
-// Req 1, 2, 3: Task Detail Hub (Comments, Multiple Links, History)
 function openTaskDetail(id) {
   const t = DB.data.tasks.find(x=>x.id===id);
   const p = perms().tasks;
@@ -538,89 +491,90 @@ function openTaskDetail(id) {
   const hist = DB.data.history.filter(h=>h.taskId===id).sort((a,b)=>b.ts-a.ts);
   
   const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh]'; // ensure full width
   box.innerHTML = `
-    <div class="p-4 border-b flex justify-between items-center bg-white rounded-t-xl shadow-sm z-10 relative">
+    <div class="p-5 border-b flex justify-between items-center bg-white rounded-t-2xl z-10">
       <div>
-        <div class="text-[10px] font-bold uppercase tracking-wider mb-1" style="color:${brandOf(t.brand).color}">${brandOf(t.brand).name} • ${t.type}</div>
-        <h3 class="font-bold text-xl text-gray-800 pr-4">${escapeHtml(t.title)}</h3>
+        <div class="text-[10px] font-bold uppercase tracking-widest mb-1 px-2 py-0.5 rounded inline-block text-white" style="background:${brandOf(t.brand).color}">${brandOf(t.brand).name}</div>
+        <span class="text-xs text-gray-400 font-bold ml-2 uppercase tracking-wide">${t.type}</span>
+        <h3 class="font-bold text-2xl text-gray-800 mt-1">${escapeHtml(t.title)}</h3>
       </div>
-      <div class="flex gap-2 items-center">
-        ${p.del ? `<button class="text-red-500 text-xs font-semibold px-2 py-1 rounded hover:bg-red-50 transition border border-transparent hover:border-red-200" onclick="deleteTask('${id}')">Trash</button>` : ''}
-        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition" onclick="closeModal()">✕</button>
+      <div class="flex gap-3 items-center">
+        ${p.del ? `<button class="text-red-500 text-sm font-bold px-3 py-1.5 rounded hover:bg-red-50 transition border border-transparent hover:border-red-200" onclick="deleteTask('${id}')">Trash</button>` : ''}
+        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500" onclick="closeModal()">✕</button>
       </div>
     </div>
     
-    <div class="flex-1 overflow-y-auto bg-gray-50 p-4 grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="flex-1 overflow-y-auto bg-gray-50 p-5 grid grid-cols-1 lg:grid-cols-5 gap-5 rounded-b-2xl">
       
-      <div class="md:col-span-2 space-y-4">
-        
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-          <label class="block text-[10px] font-bold text-gray-400 mb-1">WORKFLOW STATUS</label>
-          <select class="w-full border border-gray-300 rounded-md p-2 text-sm font-semibold bg-gray-50 outline-none focus:border-teal-500 mb-4" onchange="updateTaskStatus('${id}', this.value)" ${p.edit?'':'disabled'}>
+      <div class="lg:col-span-2 space-y-5">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+          <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Status</label>
+          <select class="w-full border border-gray-300 rounded-lg p-2.5 text-sm font-bold text-gray-700 bg-gray-50 outline-none focus:border-teal-500 mb-5" onchange="updateTaskStatus('${id}', this.value)" ${p.edit?'':'disabled'}>
             ${DB.data.settings.taskStatuses.map(s=>`<option ${t.status===s?'selected':''}>${s}</option>`).join('')}
           </select>
           
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Product:</span><span class="font-medium text-right truncate pl-2">${t.product ? escapeHtml(DB.data.products.find(pr=>pr.id===t.product)?.name) : 'None'}</span></div>
-            <div class="flex justify-between border-b pb-1"><span class="text-gray-500">Assignee:</span><span class="font-medium">${getUserName(t.assignee)}</span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Created:</span><span class="font-medium mono text-xs">${fmtDate(t.date)}</span></div>
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between border-b border-gray-100 pb-2"><span class="text-gray-500">Product</span><span class="font-bold text-gray-800 text-right truncate pl-2">${t.product ? escapeHtml(DB.data.products.find(pr=>pr.id===t.product)?.name) : 'None'}</span></div>
+            <div class="flex justify-between border-b border-gray-100 pb-2"><span class="text-gray-500">Assignee</span><span class="font-bold text-gray-800">${getUserName(t.assignee)}</span></div>
+            <div class="flex justify-between"><span class="text-gray-500">Created</span><span class="font-bold text-gray-800 mono">${fmtDate(t.date)}</span></div>
           </div>
         </div>
         
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-          <div class="flex justify-between items-center mb-3">
-            <div class="text-[10px] font-bold text-gray-400 uppercase">Drive Attachments (${t.links.length})</div>
-            ${p.edit ? `<button class="text-teal-600 text-xs font-bold hover:underline" onclick="addLinkPrompt('${id}')">+ Add Link</button>` : ''}
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Attachments (${t.links.length})</div>
+            ${p.edit ? `<button class="text-teal-600 text-xs font-bold hover:underline" onclick="addLinkPrompt('${id}')">+ Add File</button>` : ''}
           </div>
           <div class="space-y-2">
             ${t.links.length ? t.links.map(l=>`
-              <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-lg border border-gray-200 group">
-                <a href="${l.url}" target="_blank" class="text-sm text-blue-600 font-medium truncate flex-1 hover:underline flex items-center gap-2">
-                  <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200 group">
+                <a href="${l.url}" target="_blank" class="text-sm text-blue-600 font-bold truncate flex-1 hover:underline flex items-center gap-2">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                   ${escapeHtml(l.name)}
                 </a>
-                ${p.edit ? `<button class="text-gray-300 hover:text-red-500 ml-2 text-xs transition px-1" onclick="removeLink('${id}','${l.id}')">✕</button>` : ''}
+                ${p.edit ? `<button class="text-gray-400 hover:text-red-500 ml-2 text-xs font-bold" onclick="removeLink('${id}','${l.id}')">✕</button>` : ''}
               </div>
-            `).join('') : '<div class="text-gray-400 text-xs text-center py-2 bg-gray-50 rounded border border-dashed">No files attached.</div>'}
+            `).join('') : '<div class="text-gray-400 text-xs text-center py-3 bg-gray-50 rounded-lg border border-dashed">No files attached yet.</div>'}
           </div>
         </div>
       </div>
 
-      <div class="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col" style="max-height: 500px;">
-        <div class="flex border-b text-xs font-bold text-gray-500">
-          <div class="px-4 py-3 border-b-2 border-teal-600 text-teal-800 flex-1 text-center">DISCUSSION (${comments.length})</div>
-          <div class="px-4 py-3 border-l text-center hover:bg-gray-50 cursor-pointer" onclick="document.getElementById('td-hist').classList.toggle('hidden'); document.getElementById('td-comm').classList.toggle('hidden');">TOGGLE HISTORY</div>
+      <div class="lg:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[500px]">
+        <div class="flex border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-widest bg-gray-50 rounded-t-xl">
+          <div class="px-5 py-4 border-b-2 border-teal-600 text-teal-800 flex-1 text-center cursor-pointer">Discussion</div>
+          <div class="px-5 py-4 border-l border-gray-200 text-center hover:bg-gray-100 cursor-pointer transition" onclick="document.getElementById('td-hist').classList.toggle('hidden'); document.getElementById('td-comm').classList.toggle('hidden');">Log / History</div>
         </div>
         
         <div id="td-comm" class="flex-1 flex flex-col overflow-hidden">
-          <div class="flex-1 overflow-y-auto p-4 space-y-3" id="td-thread">
+          <div class="flex-1 overflow-y-auto p-5 space-y-4 bg-white" id="td-thread">
             ${comments.map(c=>`
-              <div class="comment-box">
-                <div class="flex justify-between items-baseline mb-1">
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <div class="flex justify-between items-center mb-2">
                   <span class="font-bold text-gray-800 text-[13px]">${getUserName(c.userId)}</span>
-                  <div class="flex gap-2 items-center">
+                  <div class="flex gap-3 items-center">
                     <span class="text-[10px] text-gray-400 font-mono">${timeAgo(c.ts)}</span>
-                    ${c.userId===SESSION.id ? `<button class="text-red-400 hover:text-red-600 text-[10px]" onclick="deleteComment('${id}','${c.id}')">Del</button>` : ''}
+                    ${c.userId===SESSION.id ? `<button class="text-red-400 hover:text-red-600 text-xs font-bold" onclick="deleteComment('${id}','${c.id}')">Del</button>` : ''}
                   </div>
                 </div>
-                <div class="text-gray-600 text-sm whitespace-pre-wrap">${escapeHtml(c.text)}</div>
+                <div class="text-gray-700 text-sm whitespace-pre-wrap">${escapeHtml(c.text)}</div>
               </div>
             `).join('')}
             ${comments.length===0?'<div class="text-center text-sm text-gray-400 py-10">Start the conversation...</div>':''}
           </div>
           ${p.comment ? `
-          <div class="p-3 border-t bg-gray-50 flex gap-2">
-            <textarea id="td-comment" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500 resize-none" rows="1" placeholder="Type a comment..."></textarea>
-            <button class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-teal-700 transition" onclick="addComment('${id}')">Send</button>
+          <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+            <textarea id="td-comment" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500 resize-none shadow-sm" rows="1" placeholder="Type your comment..."></textarea>
+            <button class="bg-teal-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-teal-700 transition shadow-sm" onclick="addComment('${id}')">Send</button>
           </div>` : ''}
         </div>
         
-        <div id="td-hist" class="flex-1 overflow-y-auto p-4 hidden bg-gray-50">
+        <div id="td-hist" class="flex-1 overflow-y-auto p-6 hidden bg-white">
           <div class="timeline">
             ${hist.map(h=>`
               <div class="tl-item">
-                <span class="font-bold text-gray-700">${getUserName(h.user)}</span> <span class="text-gray-500">${h.action}</span>
-                <div class="text-[10px] text-gray-400 mt-0.5 font-mono">${new Date(h.ts).toLocaleString()}</div>
+                <span class="font-bold text-gray-800 text-sm">${getUserName(h.user)}</span> <span class="text-gray-600 text-sm">${h.action}</span>
+                <div class="text-[10px] text-gray-400 mt-1 font-mono uppercase">${new Date(h.ts).toLocaleString()}</div>
               </div>
             `).join('')}
           </div>
@@ -631,41 +585,40 @@ function openTaskDetail(id) {
   `;
   document.getElementById('modal-overlay').classList.add('open');
   const thread = document.getElementById('td-thread');
-  if(thread) thread.scrollTop = thread.scrollHeight; // Auto-scroll to latest comment
+  if(thread) thread.scrollTop = thread.scrollHeight;
 }
 
-/* Modifying Task actions */
 function updateTaskStatus(id, newStatus) {
   const t = DB.data.tasks.find(x=>x.id===id);
   const old = t.status;
   t.status = newStatus;
   logTaskHistory(id, `Changed status to "${newStatus}"`);
   logAudit('Tasks', 'Update Status', old, newStatus);
-  if(newStatus === 'Done') addNotif(`Task completed: ${t.title}`, 'Task');
-  DB.save();
-  toast('Status updated successfully');
-  renderTasks(document.getElementById('view'));
+  if(newStatus === 'Done') {
+    addNotif(`Task completed: ${t.title}`, 'Complete');
+    // Save to logs for V1 compatibility/Analytics
+    DB.data.logs.unshift({ id:uid('log'), taskId:t.id, brand:t.brand, product:t.product, type:t.type, date:todayISO(), title:t.title, links:t.links, completedBy:SESSION.id });
+  }
+  DB.save(); toast('Status updated'); renderView('tasks');
 }
 
 function addLinkPrompt(id) {
-  const name = prompt("Enter attachment name (e.g. Final PSD, Caption Doc):");
+  const name = prompt("Enter attachment name (e.g. Final Video, Caption Doc):");
   if(!name) return;
   const url = prompt("Paste Google Drive URL:");
   if(!url) return;
   const t = DB.data.tasks.find(x=>x.id===id);
   t.links.push({id:uid('lnk'), name, url});
-  logTaskHistory(id, `Added drive attachment: ${name}`);
+  logTaskHistory(id, `Added attachment: ${name}`);
   logAudit('Tasks', 'Add Link', null, name);
-  DB.save();
-  openTaskDetail(id);
+  DB.save(); openTaskDetail(id);
 }
 function removeLink(tid, lid) {
   if(!confirm("Remove this attachment?")) return;
   const t = DB.data.tasks.find(x=>x.id===tid);
   t.links = t.links.filter(l=>l.id!==lid);
   logTaskHistory(tid, `Removed an attachment`);
-  DB.save();
-  openTaskDetail(tid);
+  DB.save(); openTaskDetail(tid);
 }
 
 function addComment(id) {
@@ -674,331 +627,568 @@ function addComment(id) {
   const c = { id:uid('cmt'), taskId:id, userId:SESSION.id, text, ts:Date.now() };
   DB.data.comments.push(c);
   logTaskHistory(id, 'Added a comment');
-  
-  // Notification triggering
   const t = DB.data.tasks.find(x=>x.id===id);
-  addNotif(`${SESSION.name} commented on "${t.title}": ${text.substring(0,20)}...`, 'Comment');
-  
-  DB.save();
-  openTaskDetail(id);
+  addNotif(`${SESSION.name} commented: ${text.substring(0,25)}...`, 'Comment');
+  DB.save(); openTaskDetail(id);
 }
-
 function deleteComment(tid, cid) {
-  if(!confirm('Delete your comment permanently?')) return;
+  if(!confirm('Delete comment permanently?')) return;
   DB.data.comments = DB.data.comments.filter(c=>c.id!==cid);
   logTaskHistory(tid, 'Deleted a comment');
-  DB.save();
-  openTaskDetail(tid);
+  DB.save(); openTaskDetail(tid);
 }
-
 function deleteTask(id) {
   if(!confirm("Move task to trash?")) return;
-  const t = DB.data.tasks.find(x=>x.id===id);
-  softDelete('Tasks', id, t);
-  closeModal();
-  renderTasks(document.getElementById('view'));
-  toast('Task moved to trash');
+  softDelete('Tasks', id, DB.data.tasks.find(x=>x.id===id));
+  closeModal(); renderView('tasks'); toast('Task trashed');
 }
 
-/* --- 3. PRODUCTS DASHBOARD & CONTENT LIBRARY (Req 5, 6, 11, 12) --- */
-let prodFilters = {brand:'', category:''};
+/* =========================================================
+   3. PRODUCTS HUB (Req 5, 6, 11, 12)
+========================================================= */
+let prodFilter = {brand:'', category:''};
 function renderProducts(el) {
   const p = perms().products;
   let products = DB.data.products.filter(pr=>!pr.deleted);
   
-  if(prodFilters.brand) products = products.filter(pr=>pr.brand===prodFilters.brand);
-  if(prodFilters.category) products = products.filter(pr=>pr.category===prodFilters.category);
+  if(prodFilter.brand) products = products.filter(pr=>pr.brand===prodFilter.brand);
+  if(prodFilter.category) products = products.filter(pr=>pr.category===prodFilter.category);
 
   el.innerHTML = `
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Products Hub</h1>
-      ${p.create ? `<button class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-700 transition" onclick="toast('Product Creation Modal placeholder')">+ Add Product</button>` : ''}
+      <h1 class="text-2xl font-bold text-gray-800">Products Library</h1>
+      ${p.create ? `<button class="bg-teal-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow hover:bg-teal-700 transition" onclick="openProductModal()">+ Add Product</button>` : ''}
     </div>
     
-    <div class="flex gap-3 mb-4">
-      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="prodFilters.brand=this.value;renderProducts(document.getElementById('view'))">
-        <option value="">All Brands</option>
-        ${DB.data.brands.map(b=>`<option value="${b.id}" ${prodFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+    <div class="flex gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-200 shadow-sm inline-flex">
+      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="prodFilter.brand=this.value;renderView('products')">
+        <option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${prodFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
       </select>
-      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="prodFilters.category=this.value;renderProducts(document.getElementById('view'))">
-        <option value="">All Categories</option>
-        ${DB.data.settings.productCategories.map(c=>`<option ${prodFilters.category===c?'selected':''}>${c}</option>`).join('')}
+      <select class="border border-gray-300 rounded-lg p-2 text-sm focus:border-teal-500 outline-none" onchange="prodFilter.category=this.value;renderView('products')">
+        <option value="">All Categories</option>${DB.data.settings.productCategories.map(c=>`<option ${prodFilter.category===c?'selected':''}>${c}</option>`).join('')}
       </select>
+      ${(prodFilter.brand||prodFilter.category) ? `<button class="text-sm text-gray-500 hover:text-gray-800 px-2 font-medium" onclick="prodFilter={brand:'',category:''};renderView('products')">Clear</button>` : ''}
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5">
       ${products.map(pr=>{
         const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===pr.id);
         const done = tasks.filter(t=>t.status==='Done').length;
         const brand = brandOf(pr.brand);
         return `
-        <div class="card p-5 hover:shadow-lg cursor-pointer transition border-t-4 bg-white flex flex-col" style="border-top-color:${brand.color}" onclick="openProductDetail('${pr.id}')">
-          <div class="flex justify-between items-start mb-2">
-            <div class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white" style="background:${brand.color}">${brand.name}</div>
-            <span class="text-[10px] font-mono text-gray-400 border px-1 rounded">${pr.sku||'NO-SKU'}</span>
+        <div class="card p-5 hover:shadow-lg cursor-pointer transition border-t-4 flex flex-col" style="border-top-color:${brand.color}" onclick="openProductDetail('${pr.id}')">
+          <div class="flex justify-between items-start mb-3">
+            <div class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded text-white" style="background:${brand.color}">${brand.name}</div>
+            <span class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">${pr.sku||'NO-SKU'}</span>
           </div>
-          <div class="font-bold text-gray-800 text-lg leading-tight mb-4 flex-1">${escapeHtml(pr.name)}</div>
-          <div class="flex justify-between items-end pt-3 border-t">
+          <div class="font-bold text-gray-800 text-lg leading-tight mb-5 flex-1">${escapeHtml(pr.name)}</div>
+          <div class="flex justify-between items-end pt-4 border-t border-gray-100">
             <div>
-              <div class="text-[10px] text-gray-400 font-bold uppercase">Status</div>
-              <div class="text-xs font-semibold ${pr.status==='Active'?'text-teal-600': pr.status==='Out of Stock'?'text-red-500':'text-gray-600'}">${pr.status}</div>
+              <div class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1">Status</div>
+              <div class="text-xs font-bold ${pr.status==='Active'?'text-teal-600': pr.status==='Out of Stock'?'text-red-500':'text-gray-600'}">${pr.status}</div>
             </div>
             <div class="text-right">
-              <div class="text-[10px] text-gray-400 font-bold uppercase">Content</div>
+              <div class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-1">Content</div>
               <div class="text-sm font-bold text-gray-800">${tasks.length} <span class="text-xs text-gray-400 font-normal">(${done} done)</span></div>
             </div>
           </div>
         </div>`;
       }).join('')}
-      ${products.length===0?'<div class="col-span-full p-10 text-center text-gray-400 bg-white rounded-xl border border-dashed">No products match your filters.</div>':''}
+      ${products.length===0?'<div class="col-span-full p-12 text-center text-gray-400 bg-white rounded-xl border border-dashed text-sm">No products found.</div>':''}
     </div>
   `;
+}
+
+function openProductModal(id=null) {
+  const p = id ? DB.data.products.find(x=>x.id===id) : null;
+  const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh] modal-sm';
+  box.innerHTML = `
+    <div class="p-5 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
+      <h3 class="font-bold text-lg text-gray-800">${p?'Edit Product':'New Product'}</h3>
+      <button class="text-gray-400 hover:text-gray-800" onclick="closeModal()">✕</button>
+    </div>
+    <div class="p-6 space-y-4 bg-white">
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">PRODUCT NAME</label><input id="pm-name" value="${p?escapeHtml(p.name):''}" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:border-teal-500 outline-none"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">BRAND</label><select id="pm-brand" class="w-full border rounded-lg p-2.5 text-sm outline-none">${DB.data.brands.map(b=>`<option value="${b.id}" ${p&&p.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">SKU</label><input id="pm-sku" value="${p?p.sku:''}" class="w-full border rounded-lg p-2.5 text-sm outline-none"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">CATEGORY</label><select id="pm-category" class="w-full border rounded-lg p-2.5 text-sm outline-none">${DB.data.settings.productCategories.map(c=>`<option ${p&&p.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+        <div><label class="block text-xs font-bold text-gray-500 mb-1">STATUS</label><select id="pm-status" class="w-full border rounded-lg p-2.5 text-sm outline-none">${DB.data.settings.productStatuses.map(s=>`<option ${p&&p.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      </div>
+    </div>
+    <div class="p-5 border-t bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+      <button class="px-5 py-2 border rounded-lg text-sm font-bold text-gray-600 hover:bg-white" onclick="closeModal()">Cancel</button>
+      <button class="px-5 py-2 bg-teal-600 text-white rounded-lg text-sm font-bold hover:bg-teal-700 shadow" onclick="saveProduct(${p?`'${p.id}'`:'null'})">Save Product</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function saveProduct(id) {
+  const name = document.getElementById('pm-name').value.trim();
+  if(!name) return toast('Name required');
+  const data = {
+    name, brand: document.getElementById('pm-brand').value, sku: document.getElementById('pm-sku').value.trim(),
+    category: document.getElementById('pm-category').value, status: document.getElementById('pm-status').value
+  };
+  
+  if(id) {
+    const p = DB.data.products.find(x=>x.id===id);
+    logAudit('Products', 'Edit', p.name, name);
+    Object.assign(p, data);
+  } else {
+    const p = { id:uid('prd'), ts:Date.now(), deleted:false, ...data };
+    DB.data.products.unshift(p);
+    logAudit('Products', 'Create', null, name);
+    addNotif(`New Product Added: ${name}`, 'System');
+  }
+  DB.save(); closeModal(); renderView('products'); toast('Product saved');
 }
 
 function openProductDetail(id) {
   const pr = DB.data.products.find(x=>x.id===id);
   const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===id);
   const brand = brandOf(pr.brand);
+  const p = perms().products;
   
-  // Breakdown (Req 5)
   const breakdown = {};
   DB.data.settings.postTypes.forEach(pt => breakdown[pt] = tasks.filter(t=>t.type===pt).length);
 
   const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh]'; 
   box.innerHTML = `
-    <div class="p-5 flex justify-between items-center bg-white rounded-t-xl z-10 border-b">
+    <div class="p-6 border-b flex justify-between items-center bg-white rounded-t-2xl shadow-sm z-10 relative">
       <div>
-        <div class="text-[10px] font-bold uppercase tracking-wider mb-1" style="color:${brand.color}">${brand.name} • ${pr.category}</div>
-        <h3 class="font-bold text-2xl text-gray-800">${escapeHtml(pr.name)}</h3>
+        <div class="text-[10px] font-bold uppercase tracking-widest mb-1.5 px-2 py-0.5 rounded inline-block text-white" style="background:${brand.color}">${brand.name}</div>
+        <span class="text-xs text-gray-400 font-bold ml-2 uppercase tracking-wider">${pr.category}</span>
+        <h3 class="font-bold text-3xl text-gray-800 mt-1">${escapeHtml(pr.name)}</h3>
       </div>
-      <button class="w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 flex items-center justify-center transition" onclick="closeModal()">✕</button>
+      <div class="flex items-center gap-3">
+        ${p.edit ? `<button class="text-teal-600 text-sm font-bold hover:underline px-2" onclick="openProductModal('${id}')">Edit</button>` : ''}
+        ${p.del ? `<button class="text-red-500 text-sm font-bold hover:underline px-2" onclick="deleteProduct('${id}')">Trash</button>` : ''}
+        <button class="w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 flex items-center justify-center transition" onclick="closeModal()">✕</button>
+      </div>
     </div>
     
-    <div class="bg-gray-50 overflow-y-auto" style="max-height:70vh;">
-      
-      <div class="grid grid-cols-4 divide-x bg-white border-b mb-6 shadow-sm">
-        <div class="p-4 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase">Total Content</div><div class="text-2xl font-bold mt-1 text-gray-800">${tasks.length}</div></div>
-        <div class="p-4 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase">Posts</div><div class="text-xl font-bold mt-1 text-gray-700">${breakdown['Post']||0}</div></div>
-        <div class="p-4 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase">Stories / Video</div><div class="text-xl font-bold mt-1 text-gray-700">${(breakdown['Story']||0)+(breakdown['Video']||0)}</div></div>
-        <div class="p-4 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase">Current Status</div><div class="text-sm font-bold mt-2 px-2 py-1 bg-gray-100 rounded inline-block text-gray-700">${pr.status}</div></div>
+    <div class="bg-gray-50 overflow-y-auto rounded-b-2xl">
+      <div class="grid grid-cols-4 divide-x bg-white border-b mb-8 shadow-sm">
+        <div class="p-5 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Content</div><div class="text-3xl font-bold mt-2 text-gray-800">${tasks.length}</div></div>
+        <div class="p-5 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Posts</div><div class="text-xl font-bold mt-3 text-gray-700">${breakdown['Post']||0}</div></div>
+        <div class="p-5 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Video/Story</div><div class="text-xl font-bold mt-3 text-gray-700">${(breakdown['Story']||0)+(breakdown['Video']||0)}</div></div>
+        <div class="p-5 text-center"><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</div><div class="text-sm font-bold mt-4 px-3 py-1.5 bg-gray-100 rounded inline-block text-gray-700">${pr.status}</div></div>
       </div>
 
-      <div class="px-6 pb-6">
-        <h4 class="font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide">Content Library Preview (Req 6)</h4>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-          ${tasks.map(t=>`
-            <div class="bg-white aspect-square flex flex-col items-center justify-center rounded-xl border border-gray-200 shadow-sm p-3 text-center cursor-pointer hover:border-teal-500 hover:shadow-md transition relative group" onclick="openTaskDetail('${t.id}')">
-              <div class="absolute top-2 right-2 w-2 h-2 rounded-full ${t.status==='Done'?'bg-teal-500':'bg-amber-400'}"></div>
-              <svg class="w-8 h-8 text-gray-300 mb-2 group-hover:text-teal-500 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              <div class="text-xs font-bold text-gray-700 truncate w-full">${t.type}</div>
-              <div class="text-[9px] font-mono text-gray-400 mt-1">${fmtDate(t.date)}</div>
-            </div>
-          `).join('')}
-          ${tasks.length===0?'<div class="col-span-full p-6 text-center text-sm text-gray-400 bg-white border border-dashed rounded-xl">Library is empty.</div>':''}
+      <div class="px-8 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2">
+          <h4 class="font-bold text-sm text-gray-800 mb-4 uppercase tracking-widest border-b pb-2">Content Library Preview</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            ${tasks.map(t=>`
+              <div class="bg-white aspect-square flex flex-col items-center justify-center rounded-xl border border-gray-200 shadow-sm p-4 text-center cursor-pointer hover:border-teal-500 hover:shadow-md transition relative group" onclick="openTaskDetail('${t.id}')">
+                <div class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full ${t.status==='Done'?'bg-teal-500':'bg-amber-400'}"></div>
+                <svg class="w-10 h-10 text-gray-300 mb-3 group-hover:text-teal-500 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <div class="text-sm font-bold text-gray-700 truncate w-full">${t.type}</div>
+                <div class="text-[10px] font-mono text-gray-400 mt-1.5">${fmtDate(t.date)}</div>
+              </div>
+            `).join('')}
+            ${tasks.length===0?'<div class="col-span-full p-8 text-center text-sm text-gray-400 bg-white border border-dashed rounded-xl">Library is empty.</div>':''}
+          </div>
         </div>
 
-        <h4 class="font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide">Product Timeline (Req 12)</h4>
-        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm timeline ml-2">
-          ${tasks.length ? `<div class="tl-item"><span class="font-bold text-gray-700">Latest Content Planned</span> <div class="text-xs text-gray-500">${escapeHtml(tasks[0].title)}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${fmtDate(tasks[0].date)}</div></div>` : ''}
-          <div class="tl-item"><span class="font-bold text-gray-700">Product Created</span> <div class="text-[10px] text-gray-400 font-mono mt-1">${new Date(pr.ts).toLocaleString()}</div></div>
+        <div>
+          <h4 class="font-bold text-sm text-gray-800 mb-4 uppercase tracking-widest border-b pb-2">Timeline</h4>
+          <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm timeline ml-2">
+            ${tasks.length ? `<div class="tl-item"><span class="font-bold text-gray-800 text-sm">Latest Content</span> <div class="text-xs text-gray-500 mt-1">${escapeHtml(tasks[0].title)}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${fmtDate(tasks[0].date)}</div></div>` : ''}
+            <div class="tl-item"><span class="font-bold text-gray-800 text-sm">Product Created</span> <div class="text-[10px] text-gray-400 font-mono mt-1.5">${new Date(pr.ts).toLocaleString()}</div></div>
+          </div>
         </div>
+        
       </div>
     </div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
 }
 
-/* --- 4. ANALYTICS (Req 13, 14) --- */
-let anaFilter = { month: new Date().toISOString().slice(0,7), brand:'' };
-function renderAnalytics(el) {
-  const p = perms().analytics;
-  if(!p.view) return;
+function deleteProduct(id) {
+  if(!confirm("Move product to trash?")) return;
+  softDelete('Products', id, DB.data.products.find(x=>x.id===id));
+  closeModal(); renderView('products'); toast('Product trashed');
+}
 
-  let baseTasks = DB.data.tasks.filter(t=>!t.deleted && t.status==='Done');
-  if(anaFilter.month) baseTasks = baseTasks.filter(t=>t.date.startsWith(anaFilter.month));
-  if(anaFilter.brand) baseTasks = baseTasks.filter(t=>t.brand===anaFilter.brand);
-
+/* =========================================================
+   4. MARKETING CALENDAR & LOGS
+========================================================= */
+// Restored from V1 as requested.
+let calMonth = new Date().getMonth(); let calYear = new Date().getFullYear();
+function renderCalendar(el){
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  let blanks = firstDay===0 ? 6 : firstDay-1; // Monday start
+  
+  let cells = '';
+  for(let i=0; i<blanks; i++) cells += `<div class="cal-cell dim"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs = CALENDAR_EVENTS.filter(e=>e.date===iso);
+    const tsks = DB.data.tasks.filter(t=>t.date===iso && !t.deleted);
+    cells += `
+      <div class="cal-cell ${iso===todayISO()?'ring-2 ring-teal-500 bg-teal-50':''}">
+        <div class="font-bold text-sm mb-1">${d}</div>
+        ${evs.map(e=>`<div class="text-[10px] font-bold px-1 py-0.5 rounded mb-1 truncate ${e.type==='global'?'bg-blue-100 text-blue-800':'bg-orange-100 text-orange-800'}">${e.name}</div>`).join('')}
+        ${tsks.map(t=>`<div class="text-[10px] bg-gray-100 border text-gray-700 px-1 py-0.5 rounded mb-0.5 truncate cursor-pointer hover:bg-gray-200" onclick="openTaskDetail('${t.id}')">${t.title}</div>`).join('')}
+      </div>`;
+  }
+  
   el.innerHTML = `
-    <h1 class="text-2xl font-bold mb-6">Advanced Analytics</h1>
-    
-    <div class="flex gap-3 mb-6 bg-white p-3 rounded-lg border border-gray-200 shadow-sm inline-flex">
-      <input type="month" class="border rounded p-1.5 text-sm outline-none" value="${anaFilter.month}" onchange="anaFilter.month=this.value;renderView('analytics')">
-      <select class="border rounded p-1.5 text-sm outline-none" onchange="anaFilter.brand=this.value;renderView('analytics')">
-        <option value="">All Brands</option>
-        ${DB.data.brands.map(b=>`<option value="${b.id}" ${anaFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
-      </select>
-    </div>
-
-    <div class="grid-2 gap-6">
-      <div class="card p-6 shadow-sm border-gray-200">
-        <h3 class="font-bold text-sm text-gray-700 uppercase tracking-wide mb-5">Brand Content Distribution</h3>
-        <div class="space-y-4">
-          ${DB.data.brands.map(b=>{
-            const count = baseTasks.filter(t=>t.brand===b.id).length;
-            const max = Math.max(1, baseTasks.length);
-            const pct = (count/max)*100;
-            return `<div class="flex items-center text-sm">
-              <div class="w-32 truncate font-semibold text-gray-700">${b.name}</div>
-              <div class="flex-1 bg-gray-100 h-4 rounded-full mx-3 overflow-hidden border border-gray-200"><div class="h-full" style="width:${pct}%;background:${b.color}"></div></div>
-              <div class="w-10 text-right mono text-gray-500 text-xs">${count}</div>
-            </div>`;
-          }).join('')}
-        </div>
+    <h1 class="text-2xl font-bold mb-6">Marketing Calendar</h1>
+    <div class="card p-6 bg-white">
+      <div class="flex justify-between items-center mb-6">
+        <button class="px-3 py-1 border rounded hover:bg-gray-50 font-bold" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderView('calendar')">← Prev</button>
+        <span class="font-bold text-xl">${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][calMonth]} ${calYear}</span>
+        <button class="px-3 py-1 border rounded hover:bg-gray-50 font-bold" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderView('calendar')">Next →</button>
       </div>
-      
-      <div class="card p-6 shadow-sm border-gray-200">
-        <h3 class="font-bold text-sm text-gray-700 uppercase tracking-wide mb-5">Content Type Breakdown</h3>
-        <div class="space-y-4">
-          ${DB.data.settings.postTypes.map(pt=>{
-            const count = baseTasks.filter(t=>t.type===pt).length;
-            const max = Math.max(1, baseTasks.length);
-            const pct = (count/max)*100;
-            return `<div class="flex items-center text-sm">
-              <div class="w-32 truncate font-semibold text-gray-700">${pt}</div>
-              <div class="flex-1 bg-gray-100 h-4 rounded-full mx-3 overflow-hidden border border-gray-200"><div class="h-full bg-teal-500" style="width:${pct}%"></div></div>
-              <div class="w-10 text-right mono text-gray-500 text-xs">${count}</div>
-            </div>`;
-          }).join('')}
-        </div>
+      <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs text-gray-500 mb-2 uppercase">
+        <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
       </div>
+      <div class="cal-grid rounded-lg overflow-hidden">${cells}</div>
     </div>
   `;
 }
 
-/* --- 5. SETTINGS & INTEGRATION PREP (Req 15, 16, 17) --- */
-function renderSettings(el) {
-  const p = perms().settings;
-  if(!p.view) return;
-  const s = DB.data.settings;
+// Content Logs 
+let logFilter = {brand:'', type:'', month:''};
+function renderLogs(el){
+  let logs = DB.data.logs;
+  if(logFilter.brand) logs = logs.filter(l=>l.brand===logFilter.brand);
+  if(logFilter.type) logs = logs.filter(l=>l.type===logFilter.type);
+  if(logFilter.month) logs = logs.filter(l=>l.date.startsWith(logFilter.month));
 
   el.innerHTML = `
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">System Settings</h1>
-      ${p.edit ? `<button class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-teal-700 shadow-sm" onclick="saveSettings()">Save Config</button>` : ''}
+    <h1 class="text-2xl font-bold mb-6">Content Audit Logs</h1>
+    <div class="flex gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-200 shadow-sm inline-flex">
+      <select class="border rounded-lg p-2 text-sm outline-none" onchange="logFilter.brand=this.value;renderView('log')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${logFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
+      <select class="border rounded-lg p-2 text-sm outline-none" onchange="logFilter.type=this.value;renderView('log')"><option value="">All Types</option>${DB.data.settings.postTypes.map(t=>`<option ${logFilter.type===t?'selected':''}>${t}</option>`).join('')}</select>
+      <input type="month" class="border rounded-lg p-2 text-sm outline-none" value="${logFilter.month}" onchange="logFilter.month=this.value;renderView('log')">
+      ${(logFilter.brand||logFilter.type||logFilter.month)?`<button class="text-sm px-2 hover:text-gray-800" onclick="logFilter={brand:'',type:'',month:''};renderView('log')">Clear</button>`:''}
     </div>
-    
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-      
-      <div class="card p-6 border-t-4 border-gray-800 shadow-sm">
-        <h3 class="font-bold border-b pb-3 mb-4 text-gray-800">Brand Configurations</h3>
-        <div class="space-y-3">
-          ${DB.data.brands.map(b=>`
-            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded border">
-              <input type="color" value="${b.color}" class="w-8 h-8 rounded border p-0 cursor-pointer" disabled>
-              <div class="font-semibold text-sm flex-1 text-gray-700">${b.name}</div>
-              <button class="text-xs text-teal-600" onclick="toast('Brand edit opens modal (Placeholder)')">Edit</button>
-            </div>
-          `).join('')}
-          <button class="w-full py-2 border border-dashed rounded text-sm text-gray-500 hover:bg-gray-50">+ Add Brand</button>
-        </div>
-      </div>
-
-      <div class="card p-6 border-t-4 border-gray-800 shadow-sm">
-        <h3 class="font-bold border-b pb-3 mb-4 text-gray-800">Lists & Categories</h3>
-        <div class="text-sm text-gray-600 mb-2"><span class="font-bold text-gray-800">Post Types:</span> ${s.postTypes.join(', ')}</div>
-        <div class="text-sm text-gray-600 mb-2"><span class="font-bold text-gray-800">Task Statuses:</span> ${s.taskStatuses.join(', ')}</div>
-        <div class="text-sm text-gray-600"><span class="font-bold text-gray-800">Categories:</span> ${s.productCategories.join(', ')}</div>
-        <button class="mt-4 text-xs bg-gray-100 px-3 py-1.5 rounded font-semibold text-gray-600 hover:bg-gray-200">Manage Lists</button>
-      </div>
-
-      <div class="card p-6 border-t-4 border-blue-500 shadow-sm">
-        <h3 class="font-bold border-b pb-3 mb-4 text-gray-800 flex items-center gap-2">
-          <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.33 10.18a7 7 0 00-13.66 0A5 5 0 006 20h13a4 4 0 00.33-9.82z"/></svg>
-          Google Drive Integration Prep
-        </h3>
-        <div class="space-y-4">
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-1">ROOT FOLDER ID</label><input class="w-full border rounded p-2.5 text-sm bg-gray-50" value="${s.googleDrive.rootFolderId}" placeholder="e.g. 1A2b3C4d..."></div>
-          <div class="flex items-center gap-2"><input type="checkbox" ${s.googleDrive.autoCreateFolders?'checked':''}><span class="text-sm text-gray-600 font-medium">Auto-create Folders per Brand</span></div>
-          <button class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg text-xs font-bold border border-blue-200 hover:bg-blue-100 transition" onclick="toast('Drive API hook is disabled in Phase 2 prep.')">Test Drive Connection</button>
-        </div>
-      </div>
-
-      <div class="card p-6 border-t-4 border-green-500 shadow-sm">
-        <h3 class="font-bold border-b pb-3 mb-4 text-gray-800 flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
-          Google Sheets Sync Prep
-        </h3>
-        <div class="space-y-4">
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-1">MASTER SHEET ID</label><input class="w-full border rounded p-2.5 text-sm bg-gray-50" value="${s.googleSheets.sheetId}" placeholder="e.g. 1xY..."></div>
-          <div class="flex items-center gap-2"><input type="checkbox" ${s.googleSheets.syncTasks?'checked':''}><span class="text-sm text-gray-600 font-medium">Auto-sync Tasks (Write-only)</span></div>
-          <button class="bg-green-50 text-green-600 px-4 py-2 rounded-lg text-xs font-bold border border-green-200 hover:bg-green-100 transition" onclick="toast('Sheets API sync is disabled in Phase 2 prep.')">Run Manual Sync</button>
-        </div>
-      </div>
-
-    </div>
-  `;
-}
-function saveSettings() {
-  logAudit('Settings', 'Updated configuration', null, null);
-  toast('Settings saved locally');
-}
-
-/* --- 6. REPORTS (Req 18) --- */
-function renderReports(el) {
-  const p = perms().reports;
-  if(!p.view) return;
-  el.innerHTML = `
-    <h1 class="text-2xl font-bold mb-6">Data Exports & Reports</h1>
-    <div class="card p-8 text-center bg-white border border-gray-200 shadow-sm max-w-2xl mx-auto mt-10">
-      <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      </div>
-      <h3 class="font-bold text-xl text-gray-800 mb-2">Export Content Data</h3>
-      <p class="text-sm text-gray-500 mb-8 max-w-md mx-auto">Generate CSV or Excel reports for Monthly Content, Brand Breakdowns, or Task Audits. This architecture seamlessly feeds into the pending Google Sheets sync.</p>
-      
-      <div class="flex justify-center gap-3">
-        <select class="border rounded p-2 text-sm outline-none bg-gray-50"><option>Monthly Content Report</option><option>Brand Summary</option></select>
-        ${p.export ? `<button class="bg-teal-600 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-teal-700 transition" onclick="toast('Generating CSV File...')">Download CSV</button>` : ''}
-      </div>
-    </div>
-  `;
-}
-
-/* --- 7. AUDIT LOG (Req 20) --- */
-function renderAudit(el) {
-  if(!perms().audit.view) return;
-  el.innerHTML = `
-    <h1 class="text-2xl font-bold mb-6">System Audit Log</h1>
-    <div class="card bg-white shadow-sm overflow-hidden table-wrap">
+    <div class="card overflow-hidden">
       <table class="w-full text-sm">
-        <thead class="bg-gray-50 border-b text-gray-500"><tr><th class="p-3">Time</th><th class="p-3">User</th><th class="p-3">Module</th><th class="p-3">Action</th><th class="p-3">Details</th></tr></thead>
+        <thead><tr><th>Completed Item</th><th>Brand / Type</th><th>Drive File</th><th>Date & User</th></tr></thead>
         <tbody>
-          ${DB.data.audit.map(a=>`
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-3 font-mono text-[11px] text-gray-500 whitespace-nowrap">${new Date(a.ts).toLocaleString()}</td>
-              <td class="p-3 font-semibold text-gray-700">${getUserName(a.user)}</td>
-              <td class="p-3 text-gray-600">${a.module}</td>
-              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 border">${a.action}</span></td>
-              <td class="p-3 text-xs text-gray-500 truncate max-w-[200px]">${a.newVal?a.newVal:a.oldVal||'--'}</td>
+          ${logs.map(l=>`
+            <tr class="hover:bg-gray-50">
+              <td class="font-bold text-gray-800">${escapeHtml(l.title)}</td>
+              <td><span class="px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase" style="background:${brandOf(l.brand).color}">${brandOf(l.brand).name}</span><span class="text-xs text-gray-500 ml-2">${l.type}</span></td>
+              <td>${l.links?.length ? `<a href="${l.links[0].url}" target="_blank" class="text-blue-600 font-bold hover:underline text-xs">View File ↗</a>` : '<span class="text-gray-400 text-xs">No link</span>'}</td>
+              <td class="text-xs text-gray-500"><div class="font-mono">${fmtDate(l.date)}</div><div>By ${getUserName(l.completedBy)}</div></td>
             </tr>
           `).join('')}
-          ${DB.data.audit.length===0?'<tr><td colspan="5" class="p-8 text-center text-gray-400">Log empty.</td></tr>':''}
+          ${logs.length===0?'<tr><td colspan="4" class="p-8 text-center text-gray-400">No logs found.</td></tr>':''}
         </tbody>
       </table>
     </div>
   `;
 }
 
-/* --- 8. TRASH SYSTEM (Req 21) --- */
+/* =========================================================
+   5. ADVANCED ANALYTICS (Req 13)
+========================================================= */
+let anaFilter = { month: new Date().toISOString().slice(0,7), brand:'' };
+function renderAnalytics(el) {
+  let baseTasks = DB.data.tasks.filter(t=>!t.deleted && t.status==='Done');
+  if(anaFilter.month) baseTasks = baseTasks.filter(t=>t.date.startsWith(anaFilter.month));
+  if(anaFilter.brand) baseTasks = baseTasks.filter(t=>t.brand===anaFilter.brand);
+
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Advanced Analytics</h1>
+    <div class="flex gap-3 mb-6 bg-white p-3 rounded-xl border border-gray-200 shadow-sm inline-flex">
+      <input type="month" class="border rounded-lg p-2 text-sm outline-none focus:border-teal-500" value="${anaFilter.month}" onchange="anaFilter.month=this.value;renderView('analytics')">
+      <select class="border rounded-lg p-2 text-sm outline-none focus:border-teal-500" onchange="anaFilter.brand=this.value;renderView('analytics')">
+        <option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${anaFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card p-6 shadow-sm border-gray-200">
+        <h3 class="font-bold text-xs text-gray-500 uppercase tracking-widest mb-6 border-b pb-2">Brand Output</h3>
+        <div class="space-y-5">
+          ${DB.data.brands.map(b=>{
+            const count = baseTasks.filter(t=>t.brand===b.id).length;
+            const max = Math.max(1, baseTasks.length);
+            return `<div class="flex items-center text-sm"><div class="w-32 truncate font-bold text-gray-700">${b.name}</div><div class="flex-1 bg-gray-100 h-3 rounded-full mx-4 overflow-hidden"><div class="h-full rounded-full" style="width:${(count/max)*100}%;background:${b.color}"></div></div><div class="w-8 text-right mono font-bold">${count}</div></div>`;
+          }).join('')}
+        </div>
+      </div>
+      
+      <div class="card p-6 shadow-sm border-gray-200">
+        <h3 class="font-bold text-xs text-gray-500 uppercase tracking-widest mb-6 border-b pb-2">Format Breakdown</h3>
+        <div class="space-y-5">
+          ${DB.data.settings.postTypes.map(pt=>{
+            const count = baseTasks.filter(t=>t.type===pt).length;
+            const max = Math.max(1, baseTasks.length);
+            return `<div class="flex items-center text-sm"><div class="w-32 truncate font-bold text-gray-700">${pt}</div><div class="flex-1 bg-gray-100 h-3 rounded-full mx-4 overflow-hidden"><div class="h-full rounded-full bg-teal-500" style="width:${(count/max)*100}%"></div></div><div class="w-8 text-right mono font-bold">${count}</div></div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   6. SETTINGS & INTEGRATIONS (Req 4, 15, 16, 17)
+========================================================= */
+function renderSettings(el) {
+  if(!perms().settings.view) return;
+  const s = DB.data.settings;
+
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">System Settings</h1>
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 pb-10">
+      
+      <div class="card p-6 border-t-4 border-gray-800 shadow-sm">
+        <h3 class="font-bold text-lg mb-5 text-gray-800 border-b pb-2">Brand Configurations</h3>
+        <div class="space-y-3">
+          ${DB.data.brands.map(b=>`
+            <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-sm transition">
+              <div class="w-6 h-6 rounded-full shadow-inner" style="background:${b.color}"></div>
+              <div class="font-bold text-sm flex-1 text-gray-700">${b.name}</div>
+              <button class="text-xs font-bold text-teal-600 hover:underline bg-white px-2 py-1 rounded border shadow-sm" onclick="openBrandModal('${b.id}')">Edit Theme</button>
+            </div>
+          `).join('')}
+          <button class="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm font-bold text-gray-500 hover:bg-gray-50 transition" onclick="openBrandModal()">+ Add New Brand</button>
+        </div>
+      </div>
+
+      <div class="card p-6 border-t-4 border-teal-600 shadow-sm">
+        <h3 class="font-bold text-lg mb-5 text-gray-800 border-b pb-2">System Lists</h3>
+        <div class="space-y-5">
+          <div><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Post Types</div><div class="text-sm font-medium text-gray-700 bg-gray-50 p-2 rounded border">${s.postTypes.join(', ')}</div></div>
+          <div><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Categories</div><div class="text-sm font-medium text-gray-700 bg-gray-50 p-2 rounded border">${s.productCategories.join(', ')}</div></div>
+          <div><div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Task Statuses</div><div class="text-sm font-medium text-gray-700 bg-gray-50 p-2 rounded border">${s.taskStatuses.join(', ')}</div></div>
+          <button class="w-full bg-gray-100 py-2 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-200 transition border" onclick="openListsModal()">Manage Lists</button>
+        </div>
+      </div>
+
+      <div class="card p-6 border-t-4 border-blue-500 shadow-sm">
+        <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.33 10.18a7 7 0 00-13.66 0A5 5 0 006 20h13a4 4 0 00.33-9.82z"/></svg> Drive Integration
+        </h3>
+        <div class="space-y-4">
+          <div><label class="block text-xs font-bold text-gray-500 mb-1">ROOT FOLDER ID</label><input class="w-full border rounded-lg p-2.5 text-sm bg-gray-50 outline-none focus:border-blue-500" value="${s.googleDrive.rootFolderId}" id="set-gd"></div>
+          <button class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold border border-blue-200 hover:bg-blue-100 transition" onclick="saveIntegration('gd')">Save Drive Config</button>
+        </div>
+      </div>
+
+      <div class="card p-6 border-t-4 border-green-500 shadow-sm">
+        <h3 class="font-bold text-lg mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg> Sheets Sync
+        </h3>
+        <div class="space-y-4">
+          <div><label class="block text-xs font-bold text-gray-500 mb-1">MASTER SHEET ID</label><input class="w-full border rounded-lg p-2.5 text-sm bg-gray-50 outline-none focus:border-green-500" value="${s.googleSheets.sheetId}" id="set-gs"></div>
+          <button class="bg-green-50 text-green-700 px-4 py-2 rounded-lg text-xs font-bold border border-green-200 hover:bg-green-100 transition" onclick="saveIntegration('gs')">Save Sheets Config</button>
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+function saveIntegration(type) {
+  if(type==='gd') DB.data.settings.googleDrive.rootFolderId = document.getElementById('set-gd').value;
+  if(type==='gs') DB.data.settings.googleSheets.sheetId = document.getElementById('set-gs').value;
+  DB.save(); logAudit('Settings', 'Updated Integrations', null, null); toast('Configuration saved');
+}
+
+function openBrandModal(id=null) {
+  const b = id ? DB.data.brands.find(x=>x.id===id) : null;
+  const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh] modal-sm';
+  box.innerHTML = `
+    <div class="p-5 border-b bg-gray-50 rounded-t-2xl flex justify-between items-center">
+      <h3 class="font-bold text-lg text-gray-800">${b?'Edit Theme':'Add Brand'}</h3>
+      <button onclick="closeModal()" class="text-gray-400 hover:text-gray-800">✕</button>
+    </div>
+    <div class="p-6 space-y-5 bg-white">
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">BRAND NAME</label><input id="bm-name" value="${b?b.name:''}" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:border-teal-500"></div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">PRIMARY COLOR</label><input type="color" id="bm-color" value="${b?b.color:'#000000'}" class="w-14 h-14 border rounded p-1 cursor-pointer"></div>
+    </div>
+    <div class="p-5 border-t bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+      <button class="px-5 py-2 border rounded-lg text-sm font-bold text-gray-600 hover:bg-white" onclick="closeModal()">Cancel</button>
+      <button class="px-5 py-2 bg-teal-600 text-white rounded-lg text-sm font-bold hover:bg-teal-700 shadow" onclick="saveBrand(${b?`'${b.id}'`:'null'})">Save Brand</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function saveBrand(id) {
+  const name = document.getElementById('bm-name').value.trim();
+  const color = document.getElementById('bm-color').value;
+  if(!name) return toast('Name required');
+  if(id) {
+    const b = DB.data.brands.find(x=>x.id===id);
+    logAudit('Settings', 'Edit Brand', b.name, name);
+    b.name = name; b.color = color;
+  } else {
+    DB.data.brands.push({id:uid('bnd'), name, color});
+    logAudit('Settings', 'Add Brand', null, name);
+  }
+  DB.save(); closeModal(); renderView('settings'); toast('Brand saved');
+}
+
+function openListsModal() {
+  const s = DB.data.settings;
+  const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh] modal-sm';
+  box.innerHTML = `
+    <div class="p-5 border-b bg-gray-50 rounded-t-2xl flex justify-between items-center">
+      <h3 class="font-bold text-lg text-gray-800">Manage System Lists</h3>
+      <button onclick="closeModal()" class="text-gray-400 hover:text-gray-800">✕</button>
+    </div>
+    <div class="p-6 space-y-4 bg-white overflow-y-auto">
+      <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Post Types (Comma separated)</label><textarea id="lm-pt" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:border-teal-500 font-mono" rows="2">${s.postTypes.join(', ')}</textarea></div>
+      <div><label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Categories</label><textarea id="lm-cat" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:border-teal-500 font-mono" rows="2">${s.productCategories.join(', ')}</textarea></div>
+    </div>
+    <div class="p-5 border-t bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+      <button class="px-5 py-2 border rounded-lg text-sm font-bold text-gray-600 hover:bg-white" onclick="closeModal()">Cancel</button>
+      <button class="px-5 py-2 bg-teal-600 text-white rounded-lg text-sm font-bold hover:bg-teal-700 shadow" onclick="saveLists()">Save Lists</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function saveLists() {
+  DB.data.settings.postTypes = document.getElementById('lm-pt').value.split(',').map(s=>s.trim()).filter(Boolean);
+  DB.data.settings.productCategories = document.getElementById('lm-cat').value.split(',').map(s=>s.trim()).filter(Boolean);
+  DB.save(); logAudit('Settings', 'Update Lists', null, null); closeModal(); renderView('settings'); toast('Lists updated');
+}
+
+
+/* =========================================================
+   7. USERS, REPORTS, AUDIT, TRASH
+========================================================= */
+
+// USERS
+function renderUsers(el){
+  if(!perms().users.view) return;
+  el.innerHTML = `
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Team & Users</h1>
+      ${perms().users.create ? `<button class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-teal-700" onclick="openUserModal()">+ Add User</button>` : ''}
+    </div>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th></th></tr></thead>
+        <tbody>
+          ${DB.data.users.map(u=>`
+            <tr class="hover:bg-gray-50">
+              <td class="font-bold text-gray-800">${escapeHtml(u.name)}</td>
+              <td><span class="px-2 py-1 bg-gray-100 rounded text-xs font-bold border">${u.role}</span></td>
+              <td class="text-gray-500">${u.email||'—'}</td>
+              <td class="text-right">${perms().users.edit ? `<button class="text-teal-600 text-xs font-bold hover:underline" onclick="openUserModal('${u.id}')">Edit</button>` : ''}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+function openUserModal(id=null){
+  const u = id ? DB.data.users.find(x=>x.id===id) : null;
+  const box = document.getElementById('modal-box');
+  box.className = 'modal flex flex-col max-h-[90vh] modal-sm';
+  box.innerHTML = `
+    <div class="p-5 border-b bg-gray-50 rounded-t-2xl flex justify-between items-center"><h3 class="font-bold text-lg">${u?'Edit User':'New User'}</h3><button onclick="closeModal()">✕</button></div>
+    <div class="p-6 space-y-4 bg-white">
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">NAME</label><input id="um-name" value="${u?escapeHtml(u.name):''}" class="w-full border rounded p-2.5 text-sm outline-none"></div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">EMAIL</label><input id="um-email" value="${u?u.email:''}" class="w-full border rounded p-2.5 text-sm outline-none"></div>
+      <div><label class="block text-xs font-bold text-gray-500 mb-1">ROLE</label><select id="um-role" class="w-full border rounded p-2.5 text-sm outline-none">${Object.keys(ROLES_MATRIX).map(r=>`<option ${u&&u.role===r?'selected':''}>${r}</option>`).join('')}</select></div>
+    </div>
+    <div class="p-5 border-t bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+      ${u ? `<button class="mr-auto text-red-500 text-sm font-bold hover:underline" onclick="deleteUser('${u.id}')">Remove</button>` : ''}
+      <button class="px-4 py-2 border rounded-lg text-sm font-bold" onclick="closeModal()">Cancel</button>
+      <button class="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-bold shadow" onclick="saveUser(${u?`'${u.id}'`:'null'})">Save</button>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function saveUser(id){
+  const name = document.getElementById('um-name').value.trim();
+  if(!name) return toast('Name required');
+  const data = {name, email:document.getElementById('um-email').value.trim(), role:document.getElementById('um-role').value};
+  if(id) { Object.assign(DB.data.users.find(x=>x.id===id), data); logAudit('Users','Edit',null,name); } 
+  else { DB.data.users.push({id:uid('usr'), ...data}); logAudit('Users','Create',null,name); }
+  DB.save(); closeModal(); renderView('users'); toast('User saved');
+}
+function deleteUser(id) {
+  if(!confirm("Remove user?")) return;
+  DB.data.users = DB.data.users.filter(x=>x.id!==id);
+  DB.save(); closeModal(); renderView('users'); toast('User removed');
+}
+
+// REPORTS
+function renderReports(el) {
+  if(!perms().reports.view) return;
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">Data Exports & Reports</h1>
+    <div class="card p-10 text-center bg-white border border-gray-200 shadow-sm max-w-2xl mx-auto mt-10">
+      <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-5">
+        <svg class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3 class="font-bold text-2xl text-gray-800 mb-3">Export Workspace Data</h3>
+      <p class="text-sm text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">Generate raw CSV/Excel dumps for your content output, audit trails, and product database. This connects directly to the Phase 2 Google Sheets module.</p>
+      <div class="flex justify-center gap-3">
+        <select class="border border-gray-300 rounded-lg p-2.5 text-sm font-bold text-gray-700 outline-none bg-gray-50 focus:border-teal-500"><option>Monthly Content Log</option><option>Task Audit Report</option><option>Product Library Dump</option></select>
+        ${perms().reports.export ? `<button class="bg-teal-600 text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow hover:bg-teal-700 transition" onclick="toast('Generating raw CSV (Integration Pending)')">Export CSV</button>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// AUDIT
+function renderAudit(el) {
+  if(!perms().audit.view) return;
+  el.innerHTML = `
+    <h1 class="text-2xl font-bold mb-6">System Audit Log</h1>
+    <div class="card shadow-sm overflow-hidden">
+      <table class="w-full text-sm">
+        <thead><tr><th>Time</th><th>User</th><th>Module & Action</th><th>Details</th></tr></thead>
+        <tbody>
+          ${DB.data.audit.map(a=>`
+            <tr class="hover:bg-gray-50 border-b border-gray-100">
+              <td class="font-mono text-[11px] text-gray-500 whitespace-nowrap">${new Date(a.ts).toLocaleString()}</td>
+              <td class="font-bold text-gray-700">${getUserName(a.user)}</td>
+              <td><span class="font-bold text-gray-800">${a.module}</span> <span class="text-xs text-gray-500 border bg-gray-100 px-1 rounded ml-1">${a.action}</span></td>
+              <td class="text-xs text-gray-500 truncate max-w-[200px]">${a.newVal?a.newVal:a.oldVal||'--'}</td>
+            </tr>
+          `).join('')}
+          ${DB.data.audit.length===0?'<tr><td colspan="4" class="p-8 text-center text-gray-400">Log empty.</td></tr>':''}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+// TRASH
 function renderTrash(el) {
   const p = perms().trash;
   if(!p.view) return;
   el.innerHTML = `
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold">Trash & Recovery</h1>
-      ${p.del ? `<button class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-semibold border border-red-200 hover:bg-red-100 transition" onclick="emptyTrash()">Empty Trash</button>` : ''}
+      ${p.del ? `<button class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-bold border border-red-200 hover:bg-red-100 transition" onclick="emptyTrash()">Empty Trash</button>` : ''}
     </div>
-    <div class="card bg-white shadow-sm overflow-hidden table-wrap">
+    <div class="card shadow-sm overflow-hidden">
       <table class="w-full text-sm">
-        <thead class="bg-gray-50 border-b text-gray-500"><tr><th class="p-3">Deleted Date</th><th class="p-3">Type</th><th class="p-3">Deleted By</th><th class="p-3 text-right">Actions</th></tr></thead>
+        <thead><tr><th>Deleted Time</th><th>Data Type</th><th>Deleted By</th><th class="text-right">Actions</th></tr></thead>
         <tbody>
           ${DB.data.trash.map(tr=>`
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-3 font-mono text-[11px] text-gray-500">${new Date(tr.ts).toLocaleString()}</td>
-              <td class="p-3 font-semibold text-gray-700">${tr.module}</td>
-              <td class="p-3 text-gray-600">${getUserName(tr.deletedBy)}</td>
-              <td class="p-3 text-right">
-                ${p.restore ? `<button class="text-teal-600 text-xs font-bold mr-3 hover:underline" onclick="restoreItem('${tr.id}')">Restore</button>` : ''}
+            <tr class="hover:bg-gray-50">
+              <td class="font-mono text-[11px] text-gray-500">${new Date(tr.ts).toLocaleString()}</td>
+              <td class="font-bold text-gray-700">${tr.module}</td>
+              <td class="text-gray-600">${getUserName(tr.deletedBy)}</td>
+              <td class="text-right">
+                ${p.restore ? `<button class="text-teal-600 text-xs font-bold mr-3 hover:underline px-2 py-1 border border-teal-200 rounded bg-teal-50" onclick="restoreItem('${tr.id}')">Restore</button>` : ''}
                 ${p.del ? `<button class="text-red-500 text-xs font-bold hover:underline" onclick="permanentDelete('${tr.id}')">Delete</button>` : ''}
               </td>
             </tr>
@@ -1014,17 +1204,17 @@ function restoreItem(id) {
   if(tr.module === 'Tasks') DB.data.tasks.find(x=>x.id===tr.itemId).deleted = false;
   if(tr.module === 'Products') DB.data.products.find(x=>x.id===tr.itemId).deleted = false;
   DB.data.trash = DB.data.trash.filter(x=>x.id!==id);
-  logAudit(tr.module, 'Restored from trash', null, tr.itemId);
-  DB.save(); renderTrash(document.getElementById('view')); toast('Item restored');
+  logAudit(tr.module, 'Restored', null, tr.itemId);
+  DB.save(); renderView('trash'); toast('Item restored');
 }
 function permanentDelete(id) {
   if(!confirm("Permanently delete? Cannot be undone.")) return;
   DB.data.trash = DB.data.trash.filter(x=>x.id!==id);
-  DB.save(); renderTrash(document.getElementById('view')); toast('Permanently deleted');
+  DB.save(); renderView('trash'); toast('Permanently deleted');
 }
 function emptyTrash() {
   if(!confirm("Empty all trash?")) return;
-  DB.data.trash = []; DB.save(); renderTrash(document.getElementById('view')); toast('Trash emptied');
+  DB.data.trash = []; DB.save(); renderView('trash'); toast('Trash emptied');
 }
 
 /* =========================================================
@@ -1048,19 +1238,18 @@ function renderCmdkResults(q){
   q = q.toLowerCase().trim();
   const results = [];
   
-  // Categorized searching
   DB.data.tasks.filter(t=>!t.deleted).forEach(t=>{ if(!q || t.title.toLowerCase().includes(q)) results.push({tag:'Task', label:t.title, sub:t.type, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(t.id);}}); });
   DB.data.products.filter(p=>!p.deleted).forEach(p=>{ if(!q || p.name.toLowerCase().includes(q)) results.push({tag:'Product', label:p.name, sub:p.category, action:()=>{closeCmdk();renderView('products');openProductDetail(p.id);}}); });
   DB.data.brands.forEach(b=>{ if(!q || b.name.toLowerCase().includes(q)) results.push({tag:'Brand', label:b.name, sub:'Dashboard View', action:()=>{closeCmdk();renderView('dashboard');}}); });
   
   const wrap = document.getElementById('cmdk-results');
   wrap.innerHTML = results.slice(0,10).map((r,i)=>`
-    <div class="p-3 border-b hover:bg-gray-100 cursor-pointer flex justify-between items-center transition" onclick="window.__cmdkAction(${i})">
+    <div class="p-4 border-b hover:bg-gray-100 cursor-pointer flex justify-between items-center transition" onclick="window.__cmdkAction(${i})">
       <div>
         <div class="text-sm font-bold text-gray-800">${escapeHtml(r.label)}</div>
-        <div class="text-[11px] text-gray-500 mt-0.5">${r.sub}</div>
+        <div class="text-[11px] font-bold text-gray-400 mt-1 uppercase tracking-wider">${r.sub}</div>
       </div>
-      <div class="text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded border border-teal-100 uppercase tracking-wide">${r.tag}</div>
+      <div class="text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded border border-teal-200 uppercase tracking-widest">${r.tag}</div>
     </div>
   `).join('') || `<div class="p-6 text-center text-sm text-gray-400">No matching records found.</div>`;
   
@@ -1075,7 +1264,7 @@ function toggleNotif(){ document.getElementById('notif-panel').classList.toggle(
 function markAllRead() {
   DB.data.notifications.forEach(n=>n.read=true);
   DB.save(); document.getElementById('notif-panel').classList.add('hidden');
-  refreshNotifDot(); toast('Notifications marked read');
+  refreshNotifDot(); toast('Notifications cleared');
 }
 function refreshNotifDot() {
   const unread = DB.data.notifications.filter(n=>!n.read && (n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin'));
@@ -1083,14 +1272,14 @@ function refreshNotifDot() {
   
   const wrap = document.getElementById('notif-list');
   wrap.innerHTML = DB.data.notifications.filter(n=>(n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin')).slice(0,15).map(n=>`
-    <div class="p-2 border-b text-sm flex gap-2 ${n.read?'opacity-60':'bg-teal-50'}">
+    <div class="p-3 text-sm flex gap-3 ${n.read?'opacity-60':'bg-teal-50'}">
       <div class="text-base">${n.icon||'🔔'}</div>
       <div>
-        <div class="text-gray-800">${escapeHtml(n.text)}</div>
-        <div class="text-[10px] text-gray-400 mt-1">${timeAgo(n.ts)}</div>
+        <div class="text-gray-800 font-medium">${escapeHtml(n.text)}</div>
+        <div class="text-[10px] text-gray-400 mt-1 font-mono uppercase">${timeAgo(n.ts)}</div>
       </div>
     </div>
-  `).join('') || `<div class="p-4 text-center text-xs text-gray-400">Inbox is zero.</div>`;
+  `).join('') || `<div class="p-6 text-center text-xs text-gray-400 font-bold uppercase tracking-widest">Inbox is zero.</div>`;
 }
 
 function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
