@@ -10,25 +10,14 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
   :root{
-    --ink:#14171c;
-    --ink-soft:#3c4249;
-    --paper:#f1f3f0;
-    --surface:#ffffff;
-    --line:#dfe2dc;
-    --accent:#2f6f5e;
-    --accent-dark:#204f42;
-    --accent-soft:#e2ede8;
-    --amber:#e2a542;
-    --amber-soft:#faecd6;
-    --coral:#d1503f;
-    --coral-soft:#f7e2de;
-    --blue:#3d6fa8;
-    --blue-soft:#e1ebf4;
-    --radius:10px;
+    --ink:#14171c; --ink-soft:#3c4249; --paper:#f1f3f0; --surface:#ffffff; --line:#dfe2dc;
+    --accent:#2f6f5e; --accent-dark:#204f42; --accent-soft:#e2ede8;
+    --amber:#e2a542; --amber-soft:#faecd6; --coral:#d1503f; --coral-soft:#f7e2de;
+    --blue:#3d6fa8; --blue-soft:#e1ebf4; --radius:10px;
     --shadow: 0 1px 2px rgba(20,23,28,.04), 0 6px 20px -8px rgba(20,23,28,.12);
   }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);}
   h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
   ::-webkit-scrollbar{width:8px;height:8px;}
@@ -53,13 +42,12 @@
   .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
   .btn-ghost:hover{background:#f1f1ee;}
   .btn-danger{background:var(--coral-soft);color:var(--coral);}
-  .btn-danger:hover{background:var(--coral);color:#fff;}
   .btn-sm{padding:6px 10px;font-size:12px;border-radius:7px;}
 
   /* ---------- APP SHELL ---------- */
   #app{display:none;height:100vh;}
-  .shell{display:grid;grid-template-columns:220px 1fr;height:100vh;position:relative;}
-  .dock{background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;z-index:50;transition:transform 0.3s ease;}
+  .shell{display:grid;grid-template-columns:220px 1fr;height:100vh;}
+  .dock{background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;transition:transform 0.3s;}
   .dock-logo{display:flex;align-items:center;gap:9px;padding:6px 10px 22px;}
   .dock-logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(47,111,94,.35);}
   .dock-logo span{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff;letter-spacing:-.02em;}
@@ -74,9 +62,8 @@
   .logout-link{font-size:11px;color:#8a908b;margin-top:8px;display:inline-block;}
   .logout-link:hover{color:#fff;}
 
-  .main-col{display:flex;flex-direction:column;min-width:0;}
+  .main-col{display:flex;flex-direction:column;min-width:0;position:relative;}
   .topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:14px;background:var(--surface);flex-shrink:0;}
-  .menu-btn{display:none;background:none;border:none;font-size:18px;color:var(--ink-soft);padding:5px;}
   .search-wrap{flex:1;max-width:480px;position:relative;}
   .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#9a9d97;}
   #global-search{width:100%;padding:8px 12px 8px 32px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font-size:13px;}
@@ -88,6 +75,7 @@
   .icon-btn svg{width:17px;height:17px;}
   .badge-dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid #fff;}
   .date-chip{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono';}
+  .menu-btn{display:none;background:none;border:none;font-size:18px;color:var(--ink-soft);cursor:pointer;}
 
   .view{flex:1;overflow-y:auto;padding:24px 28px;}
   .view-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
@@ -109,11 +97,6 @@
   .status-progress{background:var(--blue-soft);color:#264a72;}
   .status-review{background:#efe4f6;color:#5b3a80;}
   .status-done{background:var(--accent-soft);color:var(--accent-dark);}
-  .status-overdue{background:var(--coral-soft);color:#8f3323;}
-  .status-active{background:var(--accent-soft);color:var(--accent-dark);}
-  .status-new{background:var(--blue-soft);color:#264a72;}
-  .status-oos{background:var(--coral-soft);color:#8f3323;}
-  .status-disc{background:#eceae5;color:#6b6d68;}
 
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
   .select,.tfield{padding:7px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;background:#fff;color:var(--ink);}
@@ -130,29 +113,22 @@
   .task-card .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
   .task-card .title{font-weight:600;font-size:14px;}
   .task-card .meta{font-size:11.5px;color:var(--ink-soft);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap;}
-  .brand-group{margin-bottom:26px;}
-  .brand-group-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .brand-group-head .line{flex:1;height:1px;background:var(--line);}
 
-  /* Phase 2: Timeline & Hub Elements */
+  /* Phase 2: Timelines & Comments */
   .timeline{border-left:2px solid var(--line);margin-left:10px;padding-left:16px;}
-  .tl-item{position:relative;margin-bottom:16px;font-size:12.5px;}
+  .tl-item{position:relative;margin-bottom:16px;font-size:12px;}
   .tl-item::before{content:'';position:absolute;left:-23px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);}
   .comment-box{background:#fbfbfa;border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;font-size:13px;}
-  .hub-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;}
+  mark.hl { background: var(--amber-soft); color: var(--amber); padding: 0 2px; border-radius: 3px; font-weight:600; }
+  
+  .hub-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;}
   .gallery-item{aspect-ratio:1;border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fbfbfa;cursor:pointer;transition:border-color 0.2s;}
   .gallery-item:hover{border-color:var(--accent);}
-
-  .log-card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
-  .log-embed{width:100%;aspect-ratio:16/10;background:#eef0ec;display:flex;align-items:center;justify-content:center;color:#9a9d97;font-size:12px;border-bottom:1px solid var(--line);}
-  .log-embed iframe{width:100%;height:100%;border:0;}
-  .log-body{padding:12px 14px;}
-  .log-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
 
   .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.6);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:60;padding:6vh 20px;overflow-y:auto;}
   .modal-overlay.open{display:flex;}
   .modal{background:#fff;border-radius:14px;width:520px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);}
-  .modal-large{width:800px;}
+  .modal-lg{width:850px;}
   .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);}
   .modal-head h3{margin:0;font-size:16px;}
   .modal-body{padding:18px 20px;max-height:65vh;overflow-y:auto;}
@@ -162,72 +138,39 @@
   .form-row{margin-bottom:14px;}
   .form-row label{font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:5px;}
   .form-row input,.form-row select,.form-row textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:7px;font-size:13.5px;background:#fbfbfa;}
-  .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-  /* Command palette */
-  #cmdk{position:fixed;inset:0;background:rgba(20,23,28,.5);backdrop-filter:blur(3px);z-index:80;display:none;align-items:flex-start;justify-content:center;padding-top:10vh;}
+  #cmdk{position:fixed;inset:0;background:rgba(20,23,28,.45);z-index:80;display:none;align-items:flex-start;justify-content:center;padding-top:10vh;}
   #cmdk.open{display:flex;}
   .cmdk-box{width:600px;max-width:90vw;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;}
-  .cmdk-input{width:100%;border:none;padding:18px;font-size:16px;border-bottom:1px solid var(--line);}
+  .cmdk-input{width:100%;border:none;padding:16px 18px;font-size:15px;border-bottom:1px solid var(--line);}
   .cmdk-input:focus{outline:none;}
-  .cmdk-results{max-height:400px;overflow-y:auto;padding-bottom:10px;}
-  .cmdk-item{padding:12px 18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;border-bottom:1px solid #f2f2ef;}
+  .cmdk-results{max-height:360px;overflow-y:auto;}
+  .cmdk-item{padding:11px 18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;border-bottom:1px solid #f2f2ef;}
   .cmdk-item:hover{background:var(--paper);cursor:pointer;}
-  .cmdk-tag{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
-  mark.hl { background: var(--amber-soft); color: #8a5a12; padding: 0 2px; border-radius: 3px; font-weight:600;}
 
-  /* Notifications panel */
   #notif-panel{position:absolute;top:56px;right:20px;width:340px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:none;z-index:70;max-height:420px;overflow-y:auto;}
   #notif-panel.open{display:block;}
   .notif-item{padding:12px 16px;border-bottom:1px solid #f2f2ef;font-size:12.5px;display:flex;gap:10px;align-items:flex-start;}
-  .notif-item .n-icon{font-size:16px;flex-shrink:0;}
-  .notif-item.read{opacity:.6;}
-  .notif-time{color:#9a9d97;font-size:10.5px;margin-top:4px;}
 
-  /* Calendar */
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .cal-dow{font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;text-align:center;padding-bottom:4px;font-weight:600;}
-  .cal-cell{background:#fff;border:1px solid var(--line);border-radius:8px;min-height:88px;padding:6px 7px;font-size:11.5px;position:relative;}
-  .cal-cell.dim{background:#f4f4f1;color:#b6b8b1;}
-  .cal-cell .dnum{font-weight:700;font-family:'Space Grotesk';font-size:13px;}
-  .cal-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
-  .cal-tag{font-size:9.5px;padding:2px 5px;border-radius:4px;margin-top:3px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .cal-holiday{background:var(--coral-soft);color:#8f3323;}
-  .cal-poya{background:#efe4f6;color:#5b3a80;}
-  .cal-religious{background:#e1ebf4;color:#264a72;}
-  .cal-marketing{background:var(--amber-soft);color:#8a5a12;}
-  .cal-task{background:var(--blue-soft);color:#264a72;cursor:pointer;}
-  .cal-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-bottom:14px;}
-  .cal-legend span{display:inline-flex;align-items:center;gap:6px;}
-  .cal-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;}
-
-  /* Bars for analytics */
-  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .bar-label{width:120px;font-size:12px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .bar-track{flex:1;height:10px;background:#eceae5;border-radius:6px;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:6px;}
-  .bar-val{width:34px;text-align:right;font-size:12px;font-family:'IBM Plex Mono';color:var(--ink-soft);}
-
-  .empty-state{text-align:center;padding:50px 20px;color:var(--ink-soft);}
-  .empty-state svg{width:38px;height:38px;margin-bottom:10px;opacity:.5;}
-  .empty-state .t{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:4px;}
-
-  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
+  
+  /* Mobile Responsive Updates (Req 35) */
   @media(max-width:980px){
-    .shell{display:flex;flex-direction:column;height:100vh;}
-    .dock{position:absolute;left:-220px;height:100%;box-shadow:2px 0 10px rgba(0,0,0,.2);}
-    .dock.open{transform:translateX(220px);}
+    .shell{display:block;height:auto;}
+    .dock{position:fixed;left:-240px;top:0;height:100vh;width:240px;box-shadow:2px 0 10px rgba(0,0,0,.2);z-index:100;}
+    .dock.open{transform:translateX(240px);}
     .menu-btn{display:block;}
     .grid-2,.grid-3,.hub-grid{grid-template-columns:1fr;}
-    .table-responsive{display:block;width:100%;overflow-x:auto;}
+    .card{overflow-x:auto;}
+    .view{padding:16px;}
   }
+  .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:200;display:none;align-items:center;gap:8px;}
+  .toast.show{display:flex;}
 </style>
 </head>
 <body>
 
-<!-- ============ LOGIN ============ -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo"><span class="dot"></span><span>ContentOS</span></div>
@@ -238,10 +181,8 @@
   </div>
 </div>
 
-<!-- ============ APP ============ -->
 <div id="app">
 <div class="shell">
-  <!-- DOCK / SIDEBAR -->
   <div class="dock" id="sidebar">
     <div class="dock-logo"><span class="dot"></span><span>ContentOS</span></div>
     <div id="nav-list" style="flex:1;overflow-y:auto;"></div>
@@ -257,17 +198,15 @@
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main-col">
     <div class="topbar">
       <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="global-search" placeholder="Search tasks, products, users, comments..." onfocus="openCmdk()" readonly>
+        <input id="global-search" placeholder="Search tasks, products, brands, logs, comments... (/)" onfocus="openCmdk()" readonly>
         <span class="kbd">/</span>
       </div>
       <div class="topbar-right">
-        <!-- CRITICAL FIX: Restored topbar-date so boot() does not crash -->
         <span class="date-chip" id="topbar-date"></span>
         <button class="icon-btn" onclick="toggleNotif()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
@@ -280,22 +219,20 @@
 </div>
 </div>
 
-<!-- Notifications panel (Req 10: Expanded) -->
 <div id="notif-panel">
   <div style="padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fbfbfa;">
     <select id="notif-filter" class="select" style="padding:4px;font-size:11px;" onchange="renderNotifList()">
       <option value="all">All Notifications</option>
       <option value="Task">Tasks</option>
       <option value="Comment">Comments</option>
-      <option value="System">System / Settings</option>
       <option value="Warning">Warnings</option>
+      <option value="System">System</option>
     </select>
     <a style="font-size:11px;color:var(--accent);font-weight:600;cursor:pointer;" onclick="markAllRead()">Mark all read</a>
   </div>
   <div id="notif-list"></div>
 </div>
 
-<!-- Command palette (Req 9) -->
 <div id="cmdk" onclick="if(event.target===this)closeCmdk()">
   <div class="cmdk-box">
     <input class="cmdk-input" id="cmdk-input" placeholder="Search across all modules..." oninput="renderCmdkResults(this.value)">
@@ -303,24 +240,20 @@
   </div>
 </div>
 
-<!-- Generic modal -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal" id="modal-box"></div>
-</div>
-
+<div class="modal-overlay" id="modal-overlay"><div class="modal" id="modal-box"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
-   ContentOS Phase 2 — Data Layer & Configuration
+   ContentOS Phase 2 — Core Data & Configuration
 ========================================================= */
 
 // Req 22: Advanced Permission Matrix
 const ROLES_MATRIX = {
-  'Admin': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:true}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:true, edit:true}, users:{view:true, create:true, edit:true, del:true}, audit:{view:true}, trash:{view:true, restore:true, del:true}, calendar:{view:true}, log:{view:true} },
-  'General Manager': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:false}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:true, create:false, edit:false, del:false}, audit:{view:true}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true} },
-  'Content Creator': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:false, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true} },
-  'Viewer': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:true, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, calendar:{view:true}, log:{view:true} }
+  'Admin': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:true}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:true, edit:true}, users:{view:true, create:true, edit:true, del:true}, audit:{view:true}, trash:{view:true, restore:true, del:true}, log:{view:true} },
+  'General Manager': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:false}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:true, create:false, edit:false, del:false}, audit:{view:true}, trash:{view:false, restore:false, del:false}, log:{view:true} },
+  'Content Creator': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:false, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, log:{view:true} },
+  'Viewer': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:true, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, log:{view:true} }
 };
 
 const DEFAULT_SETTINGS = {
@@ -334,14 +267,6 @@ const DEFAULT_SETTINGS = {
   notifPrefs: { Task:true, Comment:true, Warning:true, System:true }
 };
 
-const SL_HOLIDAYS = [
-  {date:'2026-01-01', name:"New Year's Day", type:'global'}, {date:'2026-01-03', name:'Duruthu Full Moon Poya', type:'poya'},
-  {date:'2026-02-04', name:'Independence Day', type:'public'}, {date:'2026-02-14', name:"Valentine's Day", type:'marketing'},
-  {date:'2026-04-13', name:'Sinhala & Tamil New Year', type:'public'}, {date:'2026-05-01', name:'May Day', type:'public'},
-  {date:'2026-05-30', name:'Vesak Full Moon Poya', type:'poya'}, {date:'2026-12-25', name:'Christmas', type:'global'}
-];
-function holidayTypeMeta(t){ return { public:{label:'Public', cls:'cal-holiday'}, poya:{label:'Poya', cls:'cal-poya'}, religious:{label:'Religious', cls:'cal-religious'}, marketing:{label:'Marketing', cls:'cal-marketing'}, global:{label:'Global', cls:'cal-task'} }[t] || {label:'Event', cls:'cal-holiday'}; }
-
 const DB = {
   key: 'contentos_db_v2_final',
   data: null,
@@ -351,7 +276,7 @@ const DB = {
     else { this.data = this.seed(); this.save(); }
   },
   migrate() {
-    // Structural guarantees for Phase 2
+    // Upgrades V1 structure to V2
     if(!this.data.brands) this.data.brands = [ {id:'exact',name:'Exact Extract',color:'#2f6f5e',priority:true}, {id:'biseka',name:'Biseka',color:'#3d6fa8',priority:true}, {id:'lovelab',name:'Love&Lab',color:'#d1503f',priority:true}, {id:'ola',name:'OLA Tangalle',color:'#e2a542',priority:false} ];
     if(!this.data.settings) this.data.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
     if(!this.data.settings.taskPriorities) this.data.settings.taskPriorities = ['High','Normal','Low'];
@@ -360,14 +285,12 @@ const DB = {
     if(!this.data.history) this.data.history = [];
     if(!this.data.audit) this.data.audit = [];
     if(!this.data.trash) this.data.trash = [];
+    if(!this.data.logs) this.data.logs = [];
     
     this.data.tasks.forEach(t => { 
       if(t.deleted===undefined) t.deleted = false; 
       if(!t.priority) t.priority = 'Normal';
-      if(!t.links) {
-        t.links = t.driveLink ? [{id:uid('lnk'), name:'Main File', url:t.driveLink}] : [];
-        delete t.driveLink;
-      }
+      if(!t.links) { t.links = t.driveLink ? [{id:uid('lnk'), name:'Main File', url:t.driveLink}] : []; delete t.driveLink; }
     });
     this.data.products.forEach(p => { if(p.deleted===undefined) p.deleted = false; });
     this.save();
@@ -399,33 +322,29 @@ function todayISO(){ return new Date().toISOString().slice(0,10); }
 function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
 function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
 function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function hl(text, q) { if(!q || !text) return escapeHtml(text); return escapeHtml(text).replace(new RegExp(`(${escapeHtml(q)})`, 'gi'), '<mark class="hl">$1</mark>'); } // Req 9 Highlight
 function brandOf(id){ return DB.data.brands.find(b=>b.id===id) || {name:'Unknown', color:'#999'}; }
 function getUserName(id){ const u=DB.data.users.find(x=>x.id===id); return u ? u.name : 'System'; }
-// Req 9: Search Highlighting
-function hl(text, q) { 
-  if(!q || !text) return escapeHtml(text); 
-  return escapeHtml(text).replace(new RegExp(`(${escapeHtml(q)})`, 'gi'), '<mark class="hl">$1</mark>'); 
-}
 
-let SESSION = null; // {id, name, role}
+let SESSION = null; 
 let currentView = 'dashboard';
 
 /* =========================================================
-   SYSTEM LOGGING & EVENT HANDLING
+   SYSTEM LOGGING & AUDIT (Req 20, 21, 3)
 ========================================================= */
-function logAudit(module, action, oldVal, newVal) { // Req 20
+function logAudit(module, action, oldVal, newVal) { 
   DB.data.audit.unshift({ id: uid('aud'), user: SESSION.id, module, action, oldVal: JSON.stringify(oldVal), newVal: JSON.stringify(newVal), ts: Date.now() });
 }
-function logTaskHistory(taskId, action) { // Req 3
+function logTaskHistory(taskId, action) { 
   DB.data.history.unshift({ id: uid('hst'), taskId, user: SESSION.id, action, ts: Date.now() });
 }
-function addNotif(text, type='System', roleFilter='all') { // Req 10
-  if(DB.data.settings.notifPrefs && DB.data.settings.notifPrefs[type] === false) return; // Respect Settings
-  const icons = {'Comment':'💬', 'Warning':'⚠️', 'Task':'📋', 'System':'⚙️', 'Complete':'✅'};
+function addNotif(text, type='System', roleFilter='all') { 
+  if(DB.data.settings.notifPrefs && DB.data.settings.notifPrefs[type] === false) return; 
+  const icons = {'Comment':'<i class="fas fa-comment-dots text-blue-500"></i>', 'Warning':'<i class="fas fa-exclamation-triangle" style="color:var(--amber);"></i>', 'Task':'<i class="fas fa-tasks text-teal-600"></i>', 'System':'<i class="fas fa-cog text-gray-500"></i>'};
   DB.data.notifications.unshift({ id: uid('ntf'), text, type, icon:icons[type]||'🔔', ts: Date.now(), read: false, forRole: roleFilter });
   refreshNotifDot();
 }
-function softDelete(module, id, itemObj) { // Req 21
+function softDelete(module, id, itemObj) { 
   itemObj.deleted = true;
   DB.data.trash.unshift({ id: uid('trsh'), module, itemId: id, itemData: JSON.stringify(itemObj), deletedBy: SESSION.id, ts: Date.now() });
   logAudit(module, 'Moved to Trash', itemObj.name || itemObj.title, null);
@@ -433,7 +352,7 @@ function softDelete(module, id, itemObj) { // Req 21
 }
 
 /* =========================================================
-   AUTHENTICATION & ROUTING
+   AUTHENTICATION & NAVIGATION
 ========================================================= */
 function doLogin(){
   const userId = document.getElementById('login-user').value;
@@ -455,34 +374,30 @@ function boot(){
   buildNav(); renderView('dashboard'); refreshNotifDot();
 }
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function buildNav(){
   const p = perms();
   const menu = [
-    {id:'dashboard', label:'Dashboard', icon:'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z', show:p.dashboard?.view},
-    {id:'tasks', label:'Tasks & Workflow', icon:'M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11', show:p.tasks?.view},
-    {id:'products', label:'Products Library', icon:'M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z', show:p.products?.view},
-    {id:'calendar', label:'Marketing Calendar', icon:'M8 2v4M16 2v4M3 9h18M4 5h16a1 1 0 011 1v13a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z', show:p.calendar?.view},
-    {id:'log', label:'Content Logs', icon:'M4 6h16M4 12h16M4 18h7', show:p.log?.view},
-    {id:'brands', label:'Brands', icon:'M12 2l2.4 5.5L20 8l-4.4 3.8L17 18l-5-3.2L7 18l1.4-6.2L4 8l5.6-.5L12 2z', show:p.brands?.view},
-    {id:'analytics', label:'Analytics', icon:'M4 19h16M7 15v4M12 9v10M17 5v14', show:p.analytics?.view},
-    {id:'reports', label:'Export Reports', icon:'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', show:p.reports?.view},
-    {id:'users', label:'Team & Users', icon:'M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75', show:p.users?.view},
-    {id:'audit', label:'System Audit', icon:'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', show:p.audit?.view},
-    {id:'trash', label:'Trash', icon:'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16', show:p.trash?.view},
-    {id:'settings', label:'Settings', icon:'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', show:p.settings?.view},
+    {id:'dashboard', label:'Dashboard', icon:'<i class="fas fa-home"></i>', show:p.dashboard?.view},
+    {id:'tasks', label:'Task Workflow', icon:'<i class="fas fa-tasks"></i>', show:p.tasks?.view},
+    {id:'products', label:'Products Library', icon:'<i class="fas fa-box-open"></i>', show:p.products?.view},
+    {id:'log', label:'Content Logs', icon:'<i class="fas fa-history"></i>', show:p.log?.view},
+    {id:'brands', label:'Brands', icon:'<i class="fas fa-tags"></i>', show:p.brands?.view},
+    {id:'analytics', label:'Analytics', icon:'<i class="fas fa-chart-line"></i>', show:p.analytics?.view},
+    {id:'reports', label:'Export Reports', icon:'<i class="fas fa-file-export"></i>', show:p.reports?.view},
+    {id:'users', label:'Team & Users', icon:'<i class="fas fa-users"></i>', show:p.users?.view},
+    {id:'audit', label:'System Audit', icon:'<i class="fas fa-shield-alt"></i>', show:p.audit?.view},
+    {id:'trash', label:'Trash', icon:'<i class="fas fa-trash-alt"></i>', show:p.trash?.view},
+    {id:'settings', label:'Settings', icon:'<i class="fas fa-cog"></i>', show:p.settings?.view},
   ];
   document.getElementById('nav-list').innerHTML = menu.filter(m=>m.show).map(m=>`
     <a class="nav-item ${currentView===m.id?'active':''}" onclick="renderView('${m.id}')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${m.icon}"/></svg>
-      <span>${m.label}</span>
+      <span style="width:20px; text-align:center;">${m.icon}</span> <span>${m.label}</span>
     </a>`).join('');
 }
 function renderView(id) {
-  currentView = id;
-  buildNav();
+  currentView = id; buildNav();
   if(window.innerWidth <= 980) document.getElementById('sidebar').classList.remove('open');
-  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, calendar:renderCalendar, log:renderLogs, brands:renderBrands, analytics:renderAnalytics, settings:renderSettings, reports:renderReports, users:renderUsers, audit:renderAudit, trash:renderTrash};
+  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, log:renderLogs, brands:renderBrands, analytics:renderAnalytics, settings:renderSettings, reports:renderReports, users:renderUsers, audit:renderAudit, trash:renderTrash};
   if(renders[id]) renders[id](document.getElementById('view'));
 }
 
@@ -538,7 +453,7 @@ function renderDash(el) {
 }
 
 /* =========================================================
-   2. TASKS & WORKFLOW (Req 1, 2, 3, 7, 14)
+   2. TASKS & WORKFLOW (Req 1, 2, 3, 7, 14, 28)
 ========================================================= */
 let taskFilter = {brand:'', status:'', type:'', month:'', priority:'', category:''};
 function renderTasks(el) {
@@ -638,7 +553,7 @@ function saveNewTask() {
   
   if(!title) return toast('Task title is required');
 
-  if(product) { // Req 7: Duplicate Warning
+  if(product) { // Req 14: Duplicate Warning
     const dups = DB.data.tasks.filter(t=>!t.deleted && t.product===product && t.type===type);
     if(dups.length > 0) {
       if(!confirm(`Warning: This product already has ${dups.length} active ${type} task(s). Create anyway?`)) return;
@@ -667,7 +582,7 @@ function openTaskDetail(id) {
   const b = brandOf(t.brand);
   
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-large'; 
+  box.className = 'modal modal-lg'; 
   box.innerHTML = `
     <div class="modal-head" style="align-items:flex-start;">
       <div>
@@ -683,7 +598,6 @@ function openTaskDetail(id) {
     
     <div class="modal-body" style="background:#f4f4f1; padding:20px;">
       <div class="hub-grid">
-        <!-- Details & Links -->
         <div style="display:flex; flex-direction:column; gap:16px;">
           
           <div class="card" style="padding:16px;">
@@ -715,15 +629,14 @@ function openTaskDetail(id) {
           </div>
         </div>
 
-        <!-- Discussion & History Tabs -->
         <div class="card" style="display:flex; flex-direction:column; height:480px; overflow:hidden;">
           <div style="display:flex; border-bottom:1px solid var(--line); background:#fbfbfa;">
-            <div style="flex:1; padding:14px; text-align:center; font-size:11px; font-weight:700; color:var(--accent); border-bottom:2px solid var(--accent); text-transform:uppercase; letter-spacing:0.05em;">Discussion</div>
+            <div style="flex:1; padding:14px; text-align:center; font-size:11px; font-weight:700; color:var(--accent); border-bottom:2px solid var(--accent); text-transform:uppercase; letter-spacing:0.05em; cursor:pointer;" onclick="document.getElementById('td-hist').style.display='none'; document.getElementById('td-comm').style.display='flex';">Discussion</div>
             <div style="flex:1; padding:14px; text-align:center; font-size:11px; font-weight:700; color:var(--ink-soft); border-left:1px solid var(--line); text-transform:uppercase; letter-spacing:0.05em; cursor:pointer;" onclick="document.getElementById('td-hist').style.display='block'; document.getElementById('td-comm').style.display='none';">Activity Log</div>
           </div>
           
           <div id="td-comm" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
-            <div id="td-thread" style="flex:1; overflow-y:auto; padding:20px; background:#fff; display:flex; flex-direction:column; gap:14px;">
+            <div id="td-thread" style="flex:1; overflow-y:auto; padding:20px; background:#fff; display:flex; flex-direction:column;">
               ${comments.map(c=>`
                 <div class="comment-box">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -839,7 +752,6 @@ function deleteTask(id) {
   closeModal(); renderView('tasks'); toast('Task trashed');
 }
 
-
 /* =========================================================
    3. PRODUCTS HUB (Req 5, 6, 11, 12, 14)
 ========================================================= */
@@ -871,7 +783,7 @@ function renderProducts(el) {
         const done = tasks.filter(t=>t.status==='Done').length;
         const brand = brandOf(pr.brand);
         return `
-        <div class="card" style="padding:20px; border-top:4px solid ${brand.color}; cursor:pointer; display:flex; flex-direction:column;" onclick="openProductDetail('${pr.id}')">
+        <div class="card" style="padding:20px; border-top:4px solid ${brand.color}; cursor:pointer; display:flex; flex-direction:column; transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='var(--shadow)'" onmouseout="this.style.boxShadow='none'" onclick="openProductDetail('${pr.id}')">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
             <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:3px 6px; border-radius:4px; color:#fff; background:${brand.color};">${brand.name}</div>
             <span style="font-size:11px; font-family:'IBM Plex Mono'; color:var(--ink-soft); background:#f4f4f1; padding:2px 6px; border-radius:4px; border:1px solid var(--line);">${pr.sku||'NO-SKU'}</span>
@@ -950,7 +862,7 @@ function openProductDetail(id) {
   DB.data.settings.postTypes.forEach(pt => breakdown[pt] = tasks.filter(t=>t.type===pt).length);
 
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-large'; 
+  box.className = 'modal modal-lg'; 
   box.innerHTML = `
     <div class="modal-head" style="align-items:flex-start;">
       <div>
@@ -1014,58 +926,7 @@ function deleteProduct(id) {
 }
 
 /* =========================================================
-   4. MARKETING CALENDAR
-========================================================= */
-let calMonth = new Date().getMonth(); let calYear = new Date().getFullYear();
-let calEventFilter = 'all';
-function renderCalendar(el){
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  let blanks = firstDay===0 ? 6 : firstDay-1; 
-  
-  let cells = '';
-  for(let i=0; i<blanks; i++) cells += `<div class="cal-cell dim"></div>`;
-  for(let d=1; d<=daysInMonth; d++){
-    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const evs = SL_HOLIDAYS.filter(e=>e.date===iso && (calEventFilter==='all'||e.type===calEventFilter));
-    const tsks = DB.data.tasks.filter(t=>t.date===iso && !t.deleted);
-    cells += `
-      <div class="cal-cell ${iso===todayISO()?'today':''}">
-        <div class="dnum">${d}</div>
-        ${evs.map(e=>`<span class="cal-tag ${holidayTypeMeta(e.type).cls}" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}</span>`).join('')}
-        ${tsks.map(t=>`<span class="cal-tag cal-task" title="${escapeHtml(t.title)}" onclick="openTaskDetail('${t.id}')">${brandOf(t.brand).name}: ${t.type}</span>`).join('')}
-      </div>`;
-  }
-  
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Marketing Calendar</div><div class="view-desc">Campaigns, holidays, and content schedules.</div></div>
-      <div class="toolbar" style="margin:0;">
-        <button class="btn btn-ghost btn-sm" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderView('calendar')">← Prev</button>
-        <span style="font-weight:700;font-family:'Space Grotesk';min-width:140px;text-align:center;display:inline-block;font-size:18px;">${['January','February','March','April','May','June','July','August','September','October','November','December'][calMonth]} ${calYear}</span>
-        <button class="btn btn-ghost btn-sm" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderView('calendar')">Next →</button>
-        <select class="select" onchange="calEventFilter=this.value;renderView('calendar')">
-          <option value="all">All Events</option><option value="public">Public Holidays</option><option value="poya">Poya Days</option><option value="marketing">Marketing</option>
-        </select>
-      </div>
-    </div>
-    
-    <div class="cal-legend">
-      <span><i style="background:var(--coral-soft);border:1px solid #e0a99e;"></i>Public</span>
-      <span><i style="background:#efe4f6;border:1px solid #d6bfe8;"></i>Poya</span>
-      <span><i style="background:var(--amber-soft);border:1px solid #edcd8f;"></i>Marketing</span>
-      <span><i style="background:var(--blue-soft);border:1px solid #b9d0e6;"></i>Your Task</span>
-    </div>
-    
-    <div class="card" style="padding:16px;">
-      <div class="cal-grid" style="margin-bottom:6px;">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="cal-dow">${d}</div>`).join('')}</div>
-      <div class="cal-grid">${cells}</div>
-    </div>
-  `;
-}
-
-/* =========================================================
-   5. CONTENT LOGS (Req 14 extended filters)
+   4. CONTENT LOGS (Req 14 extended filters)
 ========================================================= */
 let logFilter = {brand:'', type:'', month:'', product:''};
 function renderLogs(el){
@@ -1081,10 +942,10 @@ function renderLogs(el){
     </div>
     <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
       <select class="select" onchange="logFilter.brand=this.value;renderView('log')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${logFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-      <select class="select" onchange="logFilter.product=this.value;renderView('log')"><option value="">All Products</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}" ${logFilter.product===p.id?'selected':''}>${p.name}</option>`).join('')}</select>
+      <select class="select" onchange="logFilter.product=this.value;renderView('log')"><option value="">All Products</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}" ${logFilter.product===p.id?'selected':''}>${escapeHtml(p.name)}</option>`).join('')}</select>
       <select class="select" onchange="logFilter.type=this.value;renderView('log')"><option value="">All Types</option>${DB.data.settings.postTypes.map(t=>`<option ${logFilter.type===t?'selected':''}>${t}</option>`).join('')}</select>
       <input type="month" class="tfield" value="${logFilter.month}" onchange="logFilter.month=this.value;renderView('log')">
-      ${Object.values(logFilter).some(Boolean)?`<button class="btn btn-ghost btn-sm" onclick="logFilter={brand:'',type:'',month:'',product:''};renderView('log')">Clear</button>`:''}
+      ${Object.values(logFilter).some(Boolean)?`<button class="btn btn-ghost btn-sm" onclick="logFilter={brand:'',type:'',month:'',product:''};renderView('log')">Clear filters</button>`:''}
     </div>
     
     <div class="card table-responsive">
@@ -1097,7 +958,7 @@ function renderLogs(el){
             <tr>
               <td style="font-weight:600;">${escapeHtml(l.title)}<div style="font-size:11px; color:var(--ink-soft); margin-top:4px;">${l.type}</div></td>
               <td><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span><div style="font-size:11.5px; color:var(--ink-soft); margin-top:6px;">${l.product?escapeHtml(DB.data.products.find(p=>p.id===l.product)?.name||''):'No Product'}</div></td>
-              <td>${l.links?.length ? `<a href="${l.links[0].url}" target="_blank" style="color:var(--blue); font-weight:600; font-size:12.5px;"><i class="fas fa-external-link-alt" style="margin-right:6px;"></i>View File</a>` : '<span style="color:var(--ink-soft); font-size:12px;">No link provided</span>'}</td>
+              <td>${l.links?.length ? `<a href="${l.links[0].url}" target="_blank" style="color:var(--blue); font-weight:600; font-size:12.5px; text-decoration:none;"><i class="fas fa-external-link-alt" style="margin-right:6px;"></i>View File</a>` : '<span style="color:var(--ink-soft); font-size:12px;">No link provided</span>'}</td>
               <td><div class="mono" style="font-size:12px; margin-bottom:4px;">${fmtDate(l.date)}</div><div style="font-size:11px; color:var(--ink-soft);">By ${getUserName(l.completedBy)}</div></td>
             </tr>
           `}).join('')}
@@ -1109,37 +970,7 @@ function renderLogs(el){
 }
 
 /* =========================================================
-   BRANDS (Req 4 specific view)
-========================================================= */
-function renderBrands(el){
-  if(!perms().brands.view) return;
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Brands</div><div class="view-desc">Priority tracking by brand.</div></div>
-    </div>
-    <div class="grid-3">
-      ${DB.data.brands.map(b=>{
-        const bLogs = DB.data.logs.filter(l=>l.brand===b.id);
-        const bTasks = DB.data.tasks.filter(t=>!t.deleted && t.brand===b.id && t.status!=='Done');
-        return `
-        <div class="card" style="padding:20px; border-top:4px solid ${b.color};">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <div style="font-size:18px; font-weight:700; color:var(--ink);">${b.name}</div>
-            ${b.priority ? '<span class="pill status-active">Priority</span>' : ''}
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
-            <div><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase;">Open Tasks</div><div style="font-size:24px; font-weight:700; font-family:'Space Grotesk';">${bTasks.length}</div></div>
-            <div style="text-align:right;"><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase;">Total Output</div><div style="font-size:24px; font-weight:700; font-family:'Space Grotesk';">${bLogs.length}</div></div>
-          </div>
-          ${perms().brands.edit ? `<button class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;" onclick="renderView('settings')">Edit Theme in Settings</button>` : ''}
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-}
-
-/* =========================================================
-   6. ADVANCED ANALYTICS (Req 13, 14)
+   6. ADVANCED ANALYTICS (Req 13, 14, 27)
 ========================================================= */
 let anaFilter = { month: new Date().toISOString().slice(0,7), year:'', brand:'', product:'', type:'' };
 function renderAnalytics(el) {
@@ -1168,7 +999,7 @@ function renderAnalytics(el) {
     <div class="grid-2">
       <div class="card" style="padding:24px;">
         <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Brand Output Volume</div>
-        <div>
+        <div style="display:flex; flex-direction:column; gap:16px;">
           ${DB.data.brands.map(b=>{
             const count = baseTasks.filter(t=>t.brand===b.id).length;
             const max = Math.max(1, baseTasks.length);
@@ -1179,7 +1010,7 @@ function renderAnalytics(el) {
       
       <div class="card" style="padding:24px;">
         <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Format Breakdown</div>
-        <div>
+        <div style="display:flex; flex-direction:column; gap:16px;">
           ${DB.data.settings.postTypes.map(pt=>{
             const count = baseTasks.filter(t=>t.type===pt).length;
             const max = Math.max(1, baseTasks.length);
@@ -1205,7 +1036,6 @@ function renderSettings(el) {
     
     <div class="grid-2" style="margin-bottom:24px;">
       
-      <!-- Brands (Color Theme Req 4) -->
       <div class="card" style="padding:24px;">
         <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Brand Themes</div>
         <div style="display:flex; flex-direction:column; gap:12px;">
@@ -1220,7 +1050,6 @@ function renderSettings(el) {
         </div>
       </div>
 
-      <!-- General Lookups (Req 15) -->
       <div class="card" style="padding:24px;">
         <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">System Lists</div>
         <div style="display:flex; flex-direction:column; gap:16px;">
@@ -1233,20 +1062,18 @@ function renderSettings(el) {
     </div>
 
     <div class="grid-2">
-      <!-- Google Drive (Req 16 Folder Structure Config) -->
       <div class="card" style="padding:24px; border-top:4px solid var(--blue);">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fab fa-google-drive" style="color:var(--blue);"></i> Drive Prep</div>
+        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fab fa-google-drive" style="color:var(--blue);"></i> Drive Integration</div>
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div><label class="field-label">Master Root Folder ID</label><input class="tfield" style="width:100%; font-family:'IBM Plex Mono';" value="${s.googleDrive.rootFolderId}" id="set-gd-root"></div>
-          <div><label class="field-label">Brand Default Folders (JSON)</label><textarea class="tfield" style="width:100%; font-family:'IBM Plex Mono';" id="set-gd-brands" rows="2"></textarea></div>
+          <div><label class="field-label">Brand Default Folders (JSON Map)</label><textarea class="tfield" style="width:100%; font-family:'IBM Plex Mono';" id="set-gd-brands" rows="2"></textarea></div>
           <button class="btn btn-ghost" style="color:var(--blue); border-color:var(--blue-soft); align-self:flex-start;" onclick="saveIntegration('gd')">Save Drive Config</button>
         </div>
       </div>
 
-      <!-- Google Sheets (Req 17) & Notification Settings -->
       <div style="display:flex; flex-direction:column; gap:24px;">
         <div class="card" style="padding:24px; border-top:4px solid var(--accent);">
-          <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fas fa-file-excel" style="color:var(--accent);"></i> Sheets Prep</div>
+          <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fas fa-file-excel" style="color:var(--accent);"></i> Sheets Integration</div>
           <div style="display:flex; flex-direction:column; gap:14px;">
             <div><label class="field-label">Master Sheet ID</label><input class="tfield" style="width:100%; font-family:'IBM Plex Mono';" value="${s.googleSheets.sheetId}" id="set-gs"></div>
             <button class="btn btn-ghost" style="color:var(--accent); border-color:var(--accent-soft); align-self:flex-start;" onclick="saveIntegration('gs')">Save Sheets Config</button>
@@ -1348,7 +1175,7 @@ function renderUsers(el){
     </div>
     <div class="card table-responsive">
       <table>
-        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th style="text-align:right;">Actions</th></tr></thead>
         <tbody>
           ${DB.data.users.map(u=>`
             <tr>
@@ -1536,7 +1363,7 @@ function renderCmdkResults(q){
   
   DB.data.tasks.filter(t=>!t.deleted).forEach(t=>{ if(!q || t.title.toLowerCase().includes(q)) results.push({tag:'Task', label:t.title, sub:t.type, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(t.id);}}); });
   DB.data.products.filter(p=>!p.deleted).forEach(p=>{ if(!q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)) results.push({tag:'Product', label:p.name, sub:p.sku, action:()=>{closeCmdk();renderView('products');openProductDetail(p.id);}}); });
-  DB.data.brands.forEach(b=>{ if(!q || b.name.toLowerCase().includes(q)) results.push({tag:'Brand', label:b.name, sub:'Dashboard View', action:()=>{closeCmdk();renderView('dashboard');}}); });
+  DB.data.brands.forEach(b=>{ if(!q || b.name.toLowerCase().includes(q)) results.push({tag:'Brand', label:b.name, sub:'Dashboard View', action:()=>{closeCmdk();renderView('brands');}}); });
   DB.data.users.forEach(u=>{ if(!q || u.name.toLowerCase().includes(q)) results.push({tag:'User', label:u.name, sub:u.role, action:()=>{closeCmdk();renderView('users');}}); });
   
   // Search Comments
