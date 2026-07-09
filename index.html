@@ -138,6 +138,7 @@
   .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.5);display:none;align-items:flex-start;justify-content:center;z-index:60;padding:6vh 20px;overflow-y:auto;}
   .modal-overlay.open{display:flex;}
   .modal{background:#fff;border-radius:14px;width:520px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);}
+  .modal.modal-wide{width:720px;}
   .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);}
   .modal-head h3{margin:0;font-size:16px;}
   .modal-body{padding:18px 20px;max-height:65vh;overflow-y:auto;}
@@ -176,7 +177,8 @@
   /* Calendar */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
   .cal-dow{font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;text-align:center;padding-bottom:4px;font-weight:600;}
-  .cal-cell{background:#fff;border:1px solid var(--line);border-radius:8px;min-height:88px;padding:6px 7px;font-size:11.5px;position:relative;}
+  .cal-cell{background:#fff;border:1px solid var(--line);border-radius:8px;min-height:88px;padding:6px 7px;font-size:11.5px;position:relative;cursor:pointer;}
+  .cal-cell:hover{border-color:var(--accent);}
   .cal-cell.dim{background:#f4f4f1;color:#b6b8b1;}
   .cal-cell .dnum{font-weight:700;font-family:'Space Grotesk';font-size:13px;}
   .cal-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
@@ -186,6 +188,7 @@
   .cal-religious{background:#e1ebf4;color:#264a72;}
   .cal-marketing{background:var(--amber-soft);color:#8a5a12;}
   .cal-task{background:var(--blue-soft);color:#264a72;}
+  .cal-custom{background:#dff2ea;color:#1f6a4f;}
   .cal-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-bottom:14px;}
   .cal-legend span{display:inline-flex;align-items:center;gap:6px;}
   .cal-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;}
@@ -234,7 +237,7 @@
   .timeline-item:after{content:'';position:absolute;left:-13px;top:11px;bottom:0;width:1px;background:var(--line);}
   .timeline-item:last-child:after{display:none;}
   .timeline-detail{color:var(--ink-soft);font-size:11px;margin-top:1px;}
-  .detail-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+  .detail-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;flex-wrap:wrap;}
   .detail-tab{padding:7px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);border-bottom:2px solid transparent;cursor:pointer;}
   .detail-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
   .search-counter-wrap{display:flex;gap:8px;margin-bottom:12px;}
@@ -269,6 +272,42 @@
   .audit-action{color:var(--ink);margin-top:2px;}
   .audit-meta{color:var(--ink-soft);font-size:10.5px;margin-top:3px;}
 
+  /* Product thumbnail */
+  .prod-thumb{width:38px;height:38px;border-radius:8px;object-fit:cover;background:#eef0ec;border:1px solid var(--line);flex-shrink:0;}
+  .prod-thumb-placeholder{width:38px;height:38px;border-radius:8px;background:#eef0ec;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#9a9d97;font-size:14px;flex-shrink:0;}
+  .prod-thumb-lg{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#eef0ec;border:1px solid var(--line);flex-shrink:0;}
+  .prod-thumb-xl{width:100%;aspect-ratio:1;border-radius:10px;object-fit:cover;background:#eef0ec;border:1px solid var(--line);}
+  .prod-name-cell{display:flex;align-items:center;gap:10px;}
+  .product-grid-card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:.15s;}
+  .product-grid-card:hover{border-color:var(--accent);box-shadow:var(--shadow);}
+  .product-grid-card .img-wrap{aspect-ratio:1;background:#eef0ec;display:flex;align-items:center;justify-content:center;color:#9a9d97;overflow:hidden;}
+  .product-grid-card .img-wrap img{width:100%;height:100%;object-fit:cover;}
+  .product-grid-card .body{padding:10px 12px;}
+  .product-grid-card .pname{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .product-grid-card .pmeta{font-size:10.5px;color:var(--ink-soft);margin-top:3px;}
+  .view-toggle{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+  .view-toggle button{border:none;background:#fff;padding:6px 11px;font-size:12px;font-weight:600;color:var(--ink-soft);}
+  .view-toggle button.active{background:var(--accent);color:#fff;}
+  .logo-preview{width:52px;height:52px;border-radius:10px;object-fit:cover;background:#eef0ec;border:1px solid var(--line);}
+  .settings-nav{display:flex;flex-direction:column;gap:2px;}
+  .settings-nav-item{padding:9px 12px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;}
+  .settings-nav-item:hover{background:var(--paper);}
+  .settings-nav-item.active{background:var(--accent-soft);color:var(--accent-dark);}
+  .settings-shell{display:grid;grid-template-columns:190px 1fr;gap:20px;}
+  .tag-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:var(--paper);border:1px solid var(--line);font-size:12px;font-weight:500;margin:0 6px 6px 0;}
+  .tag-chip button{background:none;border:none;color:var(--ink-soft);font-size:13px;padding:0;line-height:1;}
+  .tag-chip button:hover{color:var(--coral);}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0ec;}
+  .toggle-row:last-child{border-bottom:none;}
+  .switch{position:relative;width:38px;height:22px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .switch .slider{position:absolute;cursor:pointer;inset:0;background:#d5d8d1;border-radius:22px;transition:.15s;}
+  .switch .slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
+  .switch input:checked + .slider{background:var(--accent);}
+  .switch input:checked + .slider:before{transform:translateX(16px);}
+  .inline-add-row{display:flex;gap:8px;margin-top:10px;}
+  .inline-add-row input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;}
+
   /* Responsive */
   @media(max-width:980px){
     .shell{grid-template-columns:70px 1fr;}
@@ -279,6 +318,7 @@
     .log-grid{grid-template-columns:1fr;}
     .kpi-grid{grid-template-columns:repeat(2,1fr);}
     .product-kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .settings-shell{grid-template-columns:1fr;}
   }
   @media(max-width:640px){
     .view{padding:16px 14px;}
@@ -324,7 +364,7 @@
 <div class="shell">
   <!-- DOCK / SIDEBAR -->
   <div class="dock">
-    <div class="dock-logo"><span class="dot"></span><span>ContentOS</span></div>
+    <div class="dock-logo" id="dock-logo-wrap"><span class="dot"></span><span>ContentOS</span></div>
     <div id="nav-list"></div>
     <div class="dock-foot">
       <div class="dock-user">
@@ -389,9 +429,10 @@
 ========================================================= */
 
 let BRANDS = [];
-const POST_TYPES = ['Story','Post','Status','Video','Animation','Other'];
-const TASK_STATUSES = ['Pending','In Progress','In Review','Done'];
+const POST_TYPES_DEFAULT = ['Story','Post','Status','Video','Animation','Other'];
+const TASK_STATUSES_DEFAULT = ['Pending','In Progress','In Review','Done'];
 const PRODUCT_STATUSES = ['New Product','Active','Out of Stock','Discontinued'];
+const CATEGORIES_DEFAULT = ['Serum','Soap','Body Care','Hair Care','Cream','Scrub','Gel','Supplement'];
 const NOTIF_TYPES = {
   task: {badge:'📋', label:'Task'},
   comment: {badge:'💬', label:'Comment'},
@@ -400,10 +441,10 @@ const NOTIF_TYPES = {
   assigned: {badge:'📌', label:'Assigned'},
 };
 const ROLES = {
-  'Admin':          {label:'Admin', desc:'Full access', pages:['dashboard','tasks','log','calendar','products','brands','analytics','audit','users'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true},
-  'General Manager':{label:'General Manager', desc:'Create, review & approve tasks', pages:['dashboard','tasks','log','calendar','products','brands','analytics','audit','users'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true},
-  'Content Creator':{label:'Content Creator', desc:'View assigned tasks, upload work', pages:['dashboard','tasks','log','calendar','products','brands'], canCreateTask:false, canReview:false, canApprove:false, canUpload:true, canManageUsers:false, canManageProducts:false, canManageBrands:false},
-  'Viewer':         {label:'Viewer', desc:'Read only', pages:['dashboard','tasks','log','calendar','products','brands','analytics'], canCreateTask:false, canReview:false, canApprove:false, canUpload:false, canManageUsers:false, canManageProducts:false, canManageBrands:false},
+  'Admin':          {label:'Admin', desc:'Full access', pages:['dashboard','tasks','log','calendar','products','brands','analytics','audit','users','settings'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true, canManageSettings:true},
+  'General Manager':{label:'General Manager', desc:'Create, review & approve tasks', pages:['dashboard','tasks','log','calendar','products','brands','analytics','audit','users','settings'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true, canManageSettings:true},
+  'Content Creator':{label:'Content Creator', desc:'View assigned tasks, upload work', pages:['dashboard','tasks','log','calendar','products','brands'], canCreateTask:false, canReview:false, canApprove:false, canUpload:true, canManageUsers:false, canManageProducts:false, canManageBrands:false, canManageSettings:false},
+  'Viewer':         {label:'Viewer', desc:'Read only', pages:['dashboard','tasks','log','calendar','products','brands','analytics'], canCreateTask:false, canReview:false, canApprove:false, canUpload:false, canManageUsers:false, canManageProducts:false, canManageBrands:false, canManageSettings:false},
 };
 
 const SL_HOLIDAYS = [
@@ -450,6 +491,10 @@ function fmtDateTime(ts){ if(!ts) return '—'; const d=new Date(ts); return d.t
 function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
 function brandOf(id){ return BRANDS.find(b=>b.id===id) || {name:'Unknown',color:'#999'}; }
 function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function getPostTypes(){ return (DB.data.settings && DB.data.settings.postTypes) || POST_TYPES_DEFAULT; }
+function getTaskStatuses(){ return (DB.data.settings && DB.data.settings.taskStatuses) || TASK_STATUSES_DEFAULT; }
+function getCategories(){ return (DB.data.settings && DB.data.settings.categories) || CATEGORIES_DEFAULT; }
+function notifEnabled(type){ const s=DB.data.settings; if(!s || !s.notifSettings) return true; return s.notifSettings[type]!==false; }
 
 const DB = {
   key: 'contentos_db_v2',
@@ -463,6 +508,20 @@ const DB = {
   migrate(){
     if(!this.data.brands) this.data.brands = this.seed().brands;
     if(!this.data.auditLog) this.data.auditLog = [];
+    if(!this.data.customEvents) this.data.customEvents = [];
+    if(!this.data.settings){
+      this.data.settings = {
+        companyName: 'ContentOS Agency',
+        companyLogo: '',
+        postTypes: POST_TYPES_DEFAULT.slice(),
+        taskStatuses: TASK_STATUSES_DEFAULT.slice(),
+        categories: CATEGORIES_DEFAULT.slice(),
+        notifSettings: {task:true, comment:true, complete:true, review:true, assigned:true},
+        integrations: {sheetsUrl:'', driveUrl:'', sheetsConnected:false, driveConnected:false}
+      };
+    }
+    (this.data.brands||[]).forEach(b=>{ if(b.logo===undefined) b.logo=''; });
+    (this.data.products||[]).forEach(p=>{ if(p.image===undefined) p.image=''; });
     (this.data.tasks||[]).forEach(t=>{
       if(!t.comments) t.comments = [];
       if(!t.driveLinks){
@@ -476,12 +535,12 @@ const DB = {
   save(){ localStorage.setItem(this.key, JSON.stringify(this.data)); },
   seed(){
     const brands = [
-      {id:'exact',   name:'Exact Extract',     color:'#2f6f5e', priority:true},
-      {id:'biseka',  name:'Biseka',            color:'#3d6fa8', priority:true},
-      {id:'lovelab', name:'Love&Lab',          color:'#d1503f', priority:true},
-      {id:'ola',     name:'OLA Tangalle',      color:'#e2a542', priority:false},
-      {id:'scrub',   name:'Scrub&Butter',      color:'#7a5cae', priority:false},
-      {id:'titan',   name:'Titan Fitness',     color:'#20685e', priority:false},
+      {id:'exact',   name:'Exact Extract',     color:'#2f6f5e', priority:true, logo:''},
+      {id:'biseka',  name:'Biseka',            color:'#3d6fa8', priority:true, logo:''},
+      {id:'lovelab', name:'Love&Lab',          color:'#d1503f', priority:true, logo:''},
+      {id:'ola',     name:'OLA Tangalle',      color:'#e2a542', priority:false, logo:''},
+      {id:'scrub',   name:'Scrub&Butter',      color:'#7a5cae', priority:false, logo:''},
+      {id:'titan',   name:'Titan Fitness',     color:'#20685e', priority:false, logo:''},
     ];
     const users = [
       {id:'u1', name:'Sanduni Fernando', role:'Admin', email:'sanduni@agency.lk'},
@@ -491,14 +550,14 @@ const DB = {
       {id:'u5', name:'Ishara Madushani', role:'Viewer', email:'ishara@agency.lk'},
     ];
     const products = [
-      {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active'},
-      {id:'p2', name:'Charcoal Deep Cleanse Bar', brand:'biseka', sku:'BSK-CH-100', category:'Soap', status:'New Product'},
-      {id:'p3', name:'Rose Glow Body Butter', brand:'lovelab', sku:'LNL-RG-200', category:'Body Care', status:'Active'},
-      {id:'p4', name:'Coconut Milk Shampoo', brand:'exact', sku:'EXA-CM-250', category:'Hair Care', status:'Out of Stock'},
-      {id:'p5', name:'Turmeric Night Cream', brand:'biseka', sku:'BSK-TN-050', category:'Cream', status:'Active'},
-      {id:'p6', name:'Sea Salt Body Scrub', brand:'scrub', sku:'SNB-SS-300', category:'Scrub', status:'Active'},
-      {id:'p7', name:'Aloe Repair Gel', brand:'lovelab', sku:'LNL-AR-150', category:'Gel', status:'Discontinued'},
-      {id:'p8', name:'Herbal Detox Tea', brand:'titan', sku:'TFT-HD-020', category:'Supplement', status:'New Product'},
+      {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active', image:''},
+      {id:'p2', name:'Charcoal Deep Cleanse Bar', brand:'biseka', sku:'BSK-CH-100', category:'Soap', status:'New Product', image:''},
+      {id:'p3', name:'Rose Glow Body Butter', brand:'lovelab', sku:'LNL-RG-200', category:'Body Care', status:'Active', image:''},
+      {id:'p4', name:'Coconut Milk Shampoo', brand:'exact', sku:'EXA-CM-250', category:'Hair Care', status:'Out of Stock', image:''},
+      {id:'p5', name:'Turmeric Night Cream', brand:'biseka', sku:'BSK-TN-050', category:'Cream', status:'Active', image:''},
+      {id:'p6', name:'Sea Salt Body Scrub', brand:'scrub', sku:'SNB-SS-300', category:'Scrub', status:'Active', image:''},
+      {id:'p7', name:'Aloe Repair Gel', brand:'lovelab', sku:'LNL-AR-150', category:'Gel', status:'Discontinued', image:''},
+      {id:'p8', name:'Herbal Detox Tea', brand:'titan', sku:'TFT-HD-020', category:'Supplement', status:'New Product', image:''},
     ];
     const now = Date.now();
     const tasks = [
@@ -522,7 +581,16 @@ const DB = {
       {id:uid('a'), userId:'u4', action:'status_change', detail:'Changed status to In Progress', ts:now-1000*60*60*2},
       {id:uid('a'), userId:'u3', action:'added_comment', detail:'Added comment on task', ts:now-1000*60*60*4},
     ];
-    return {brands, users, products, tasks, logs, notifications, auditLog};
+    const settings = {
+      companyName: 'ContentOS Agency',
+      companyLogo: '',
+      postTypes: POST_TYPES_DEFAULT.slice(),
+      taskStatuses: TASK_STATUSES_DEFAULT.slice(),
+      categories: CATEGORIES_DEFAULT.slice(),
+      notifSettings: {task:true, comment:true, complete:true, review:true, assigned:true},
+      integrations: {sheetsUrl:'', driveUrl:'', sheetsConnected:false, driveConnected:false}
+    };
+    return {brands, users, products, tasks, logs, notifications, auditLog, customEvents:[], settings};
   }
 };
 function pastDate(days){ const d=new Date(); d.setDate(d.getDate()-days); return d.toISOString().slice(0,10); }
@@ -561,9 +629,20 @@ function boot(){
   document.getElementById('user-role-tag').textContent = SESSION.role;
   document.getElementById('user-avatar').textContent = SESSION.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long', day:'2-digit', month:'short', year:'numeric'});
+  applyCompanyBranding();
   buildNav();
   renderView('dashboard');
   refreshNotifDot();
+}
+
+function applyCompanyBranding(){
+  const s = DB.data.settings || {};
+  const wrap = document.getElementById('dock-logo-wrap');
+  if(s.companyLogo){
+    wrap.innerHTML = `<img src="${s.companyLogo}" style="width:22px;height:22px;border-radius:6px;object-fit:cover;"><span>${escapeHtml(s.companyName||'ContentOS')}</span>`;
+  } else {
+    wrap.innerHTML = `<span class="dot"></span><span>${escapeHtml(s.companyName||'ContentOS')}</span>`;
+  }
 }
 
 /* NAVIGATION */
@@ -577,6 +656,7 @@ const NAV_ITEMS = [
   {id:'analytics', label:'Analytics', icon:'M4 19h16M7 15v4M12 9v10M17 5v14'},
   {id:'audit', label:'Audit Log', icon:'M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z'},
   {id:'users', label:'Users', icon:'M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75'},
+  {id:'settings', label:'Settings', icon:'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15 1.65 1.65 0 003.17 14H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.32 9c.14.36.44.66.8.8H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z'},
 ];
 function buildNav(){
   const p = perms();
@@ -599,7 +679,8 @@ function renderView(id){
   const el = document.getElementById('view');
   const renderers = {
     dashboard:renderDashboard, tasks:renderTasks, log:renderLog, calendar:renderCalendar,
-    products:renderProducts, brands:renderBrands, analytics:renderAnalytics, audit:renderAuditLog, users:renderUsers
+    products:renderProducts, brands:renderBrands, analytics:renderAnalytics, audit:renderAuditLog, users:renderUsers,
+    settings:renderSettings
   };
   el.innerHTML = '';
   (renderers[id]||renderDashboard)(el);
@@ -752,15 +833,23 @@ function emptyState(title, sub){
 /* =========================================================
    TASKS PAGE
 ========================================================= */
-let taskFilters = {brand:'', status:'', scope:'today'};
+let taskFilters = {brand:'', status:'', scope:'today', assignee:'', type:'', q:''};
+let taskViewMode = localStorage.getItem('contentos_task_view') || 'card';
 function renderTasks(el){
   const p = perms();
   el.innerHTML = `
     <div class="view-head">
       <div><div class="view-title">Tasks</div><div class="view-desc">Daily work list, organized by brand.</div></div>
-      ${p.canCreateTask ? `<button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ New task</button>` : ''}
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="view-toggle">
+          <button class="${taskViewMode==='card'?'active':''}" onclick="taskViewMode='card';localStorage.setItem('contentos_task_view','card');renderTasks(document.getElementById('view'))">Cards</button>
+          <button class="${taskViewMode==='table'?'active':''}" onclick="taskViewMode='table';localStorage.setItem('contentos_task_view','table');renderTasks(document.getElementById('view'))">Table</button>
+        </div>
+        ${p.canCreateTask ? `<button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ New task</button>` : ''}
+      </div>
     </div>
     <div class="toolbar">
+      <input class="tfield" id="filter-q" placeholder="Search tasks..." value="${escapeHtml(taskFilters.q)}" oninput="taskFilters.q=this.value;renderTasks(document.getElementById('view'))" style="min-width:180px;">
       <select class="select" id="filter-scope" onchange="taskFilters.scope=this.value;renderTasks(document.getElementById('view'))">
         <option value="today" ${taskFilters.scope==='today'?'selected':''}>Due today</option>
         <option value="upcoming" ${taskFilters.scope==='upcoming'?'selected':''}>Upcoming</option>
@@ -774,8 +863,17 @@ function renderTasks(el){
       </select>
       <select class="select" id="filter-status" onchange="taskFilters.status=this.value;renderTasks(document.getElementById('view'))">
         <option value="">Any status</option>
-        ${TASK_STATUSES.map(s=>`<option ${taskFilters.status===s?'selected':''}>${s}</option>`).join('')}
+        ${getTaskStatuses().map(s=>`<option ${taskFilters.status===s?'selected':''}>${s}</option>`).join('')}
       </select>
+      <select class="select" id="filter-type" onchange="taskFilters.type=this.value;renderTasks(document.getElementById('view'))">
+        <option value="">Any type</option>
+        ${getPostTypes().map(s=>`<option ${taskFilters.type===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <select class="select" id="filter-assignee" onchange="taskFilters.assignee=this.value;renderTasks(document.getElementById('view'))">
+        <option value="">Anyone</option>
+        ${DB.data.users.map(u=>`<option value="${u.id}" ${taskFilters.assignee===u.id?'selected':''}>${u.name}</option>`).join('')}
+      </select>
+      ${(taskFilters.brand||taskFilters.status||taskFilters.type||taskFilters.assignee||taskFilters.q) ? `<button class="btn btn-ghost btn-sm" onclick="taskFilters={brand:'',status:'',scope:taskFilters.scope,assignee:'',type:'',q:''};renderTasks(document.getElementById('view'))">Clear filters</button>` : ''}
     </div>
     <div id="task-list"></div>
   `;
@@ -788,9 +886,21 @@ function renderTasks(el){
   else if(taskFilters.scope==='done') list = list.filter(t=>t.status==='Done');
   if(taskFilters.brand) list = list.filter(t=>t.brand===taskFilters.brand);
   if(taskFilters.status) list = list.filter(t=>t.status===taskFilters.status);
+  if(taskFilters.type) list = list.filter(t=>t.type===taskFilters.type);
+  if(taskFilters.assignee) list = list.filter(t=>t.assignee===taskFilters.assignee);
+  if(taskFilters.q){
+    const q = taskFilters.q.toLowerCase();
+    list = list.filter(t=>t.title.toLowerCase().includes(q) || (t.notes||'').toLowerCase().includes(q));
+  }
 
   const wrap = el.querySelector('#task-list');
   if(!list.length){ wrap.innerHTML = emptyState('No tasks match this view','Try a different filter, or add a new task.'); return; }
+
+  if(taskViewMode==='table'){
+    wrap.innerHTML = renderTaskTable(list);
+    return;
+  }
+
   const groups = {};
   list.forEach(t=>{ (groups[t.brand] = groups[t.brand]||[]).push(t); });
   wrap.innerHTML = Object.keys(groups).map(bid=>{
@@ -800,6 +910,37 @@ function renderTasks(el){
       ${groups[bid].map(taskCard).join('')}
     </div>`;
   }).join('');
+}
+
+function renderTaskTable(list){
+  const p = perms();
+  return `<div class="card" style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>Title</th><th>Brand</th><th>Type</th><th>Product</th><th>Assignee</th><th>Date</th><th>Status</th><th>Links</th><th></th></tr></thead>
+      <tbody>
+        ${list.map(t=>{
+          const b = brandOf(t.brand);
+          const assignee = DB.data.users.find(u=>u.id===t.assignee);
+          const prod = t.product ? DB.data.products.find(x=>x.id===t.product) : null;
+          const overdue = t.status!=='Done' && t.date<todayISO();
+          return `<tr>
+            <td style="font-weight:600;max-width:220px;">${escapeHtml(t.title)}</td>
+            <td><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></td>
+            <td>${t.type}</td>
+            <td>${prod?escapeHtml(prod.name):'—'}</td>
+            <td>${assignee?escapeHtml(assignee.name):'—'}</td>
+            <td class="mono" style="font-size:12px;">${fmtDate(t.date)}</td>
+            <td><span class="pill ${statusPillClass(t.status)}">${overdue?'Overdue':t.status}</span></td>
+            <td>${(t.driveLinks||[]).length}</td>
+            <td style="display:flex;gap:6px;">
+              ${t.status!=='Done' && p.canUpload ? `<button class="btn btn-primary btn-sm" onclick="openCompleteModal('${t.id}')">Complete</button>` : ''}
+              <button class="btn btn-ghost btn-sm" onclick="openTaskDetail('${t.id}')">Details</button>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
 }
 
 function taskCard(t){
@@ -855,7 +996,7 @@ function openTaskModal(){
       <div class="form-row"><label>Task title</label><input id="nt-title" placeholder="e.g. Reel for product launch"></div>
       <div class="two-col">
         <div class="form-row"><label>Brand</label><select id="nt-brand">${BRANDS.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
-        <div class="form-row"><label>Type</label><select id="nt-type">${POST_TYPES.map(p=>`<option>${p}</option>`).join('')}</select></div>
+        <div class="form-row"><label>Type</label><select id="nt-type">${getPostTypes().map(p=>`<option>${p}</option>`).join('')}</select></div>
       </div>
       <div class="two-col">
         <div class="form-row"><label>Product</label><select id="nt-product"><option value="">No product</option>${DB.data.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div>
@@ -876,13 +1017,13 @@ function createTask(){
     id: uid('t'), brand: document.getElementById('nt-brand').value, title,
     type: document.getElementById('nt-type').value, product: document.getElementById('nt-product').value,
     assignee: document.getElementById('nt-assignee').value, addedBy: currentUser().id,
-    date: document.getElementById('nt-date').value || todayISO(), status:'Pending',
+    date: document.getElementById('nt-date').value || todayISO(), status: getTaskStatuses()[0] || 'Pending',
     notes: document.getElementById('nt-notes').value.trim(), driveLinks:[], comments:[],
     history:[{ts:Date.now(), by:currentUser().id, action:'created', detail:'Task created'}]
   };
   DB.data.tasks.unshift(t);
   const assignee = DB.data.users.find(u=>u.id===t.assignee);
-  DB.data.notifications.unshift({id:uid('n'), text:`${currentUser().name} assigned you: "${title}"`, type:'assigned', ts:Date.now(), read:false, forRole:'', forUser:t.assignee});
+  if(notifEnabled('assigned')) DB.data.notifications.unshift({id:uid('n'), text:`${currentUser().name} assigned you: "${title}"`, type:'assigned', ts:Date.now(), read:false, forRole:'', forUser:t.assignee});
   logAudit(currentUser().id, 'created_task', `Created task: ${title}`);
   DB.save(); closeModal(); renderTasks(document.getElementById('view')); refreshNotifDot();
   toast('Task created');
@@ -907,12 +1048,13 @@ function completeTask(id){
   const link = document.getElementById('ct-link').value.trim();
   if(!link){ toast('Add a drive link'); return; }
   const t = DB.data.tasks.find(x=>x.id===id);
-  t.status='Done';
+  const statuses = getTaskStatuses();
+  t.status = statuses[statuses.length-1] || 'Done';
   if(!t.driveLinks) t.driveLinks=[];
   t.driveLinks.push({id:uid('dl'), url:link, addedBy:currentUser().id, ts:Date.now()});
   DB.data.logs.unshift({id:uid('log'), taskId:t.id, brand:t.brand, product:t.product, type:t.type, completedBy: currentUser().id, date: todayISO(), driveLink:link, title:t.title});
   logHistory(t, 'completed', 'Marked as complete');
-  DB.data.notifications.unshift({id:uid('n'), text:`${currentUser().name} completed "${t.title}"`, type:'complete', ts:Date.now(), read:false, forRole:'General Manager'});
+  if(notifEnabled('complete')) DB.data.notifications.unshift({id:uid('n'), text:`${currentUser().name} completed "${t.title}"`, type:'complete', ts:Date.now(), read:false, forRole:'General Manager'});
   logAudit(currentUser().id, 'completed_task', `Completed: ${t.title}`);
   DB.save(); closeModal(); renderTasks(document.getElementById('view')); refreshNotifDot();
   toast('Task completed');
@@ -1018,10 +1160,12 @@ function addComment(taskId){
   const me = currentUser();
   t.comments.push({id:uid('c'), userId:me.id, text, ts:Date.now(), edited:false});
   logHistory(t, 'comment', 'Commented on the task');
-  const notifyIds = new Set([t.assignee, t.addedBy].filter(uidv=>uidv && uidv!==me.id));
-  notifyIds.forEach(uidv=>{
-    DB.data.notifications.unshift({id:uid('n'), text:`${me.name} commented on "${t.title}"`, type:'comment', ts:Date.now(), read:false, forRole:'', forUser:uidv});
-  });
+  if(notifEnabled('comment')){
+    const notifyIds = new Set([t.assignee, t.addedBy].filter(uidv=>uidv && uidv!==me.id));
+    notifyIds.forEach(uidv=>{
+      DB.data.notifications.unshift({id:uid('n'), text:`${me.name} commented on "${t.title}"`, type:'comment', ts:Date.now(), read:false, forRole:'', forUser:uidv});
+    });
+  }
   logAudit(me.id, 'added_comment', `Commented on task`);
   DB.save();
   renderTaskDetailModal(taskId);
@@ -1073,14 +1217,17 @@ function renderHistoryTab(t){
 /* =========================================================
    CONTENT LOG PAGE
 ========================================================= */
-let logFilters = {date:'', brand:'', product:'', type:''};
+let logFilters = {date:'', dateTo:'', brand:'', product:'', type:'', assignee:'', q:''};
 function renderLog(el){
   el.innerHTML = `
     <div class="view-head">
       <div><div class="view-title">Content Log</div><div class="view-desc">Every piece of completed work.</div></div>
     </div>
     <div class="toolbar">
-      <input class="tfield" type="date" id="lf-date" onchange="logFilters.date=this.value;renderLog(document.getElementById('view'))">
+      <input class="tfield" id="lf-q" placeholder="Search log..." value="${escapeHtml(logFilters.q)}" oninput="logFilters.q=this.value;renderLog(document.getElementById('view'))" style="min-width:160px;">
+      <input class="tfield" type="date" id="lf-date" value="${logFilters.date}" onchange="logFilters.date=this.value;renderLog(document.getElementById('view'))">
+      <span style="font-size:11.5px;color:var(--ink-soft);">to</span>
+      <input class="tfield" type="date" id="lf-dateto" value="${logFilters.dateTo}" onchange="logFilters.dateTo=this.value;renderLog(document.getElementById('view'))">
       <select class="select" id="lf-brand" onchange="logFilters.brand=this.value;renderLog(document.getElementById('view'))">
         <option value="">All brands</option>
         ${BRANDS.map(b=>`<option value="${b.id}" ${logFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
@@ -1091,17 +1238,27 @@ function renderLog(el){
       </select>
       <select class="select" id="lf-type" onchange="logFilters.type=this.value;renderLog(document.getElementById('view'))">
         <option value="">All types</option>
-        ${POST_TYPES.map(t=>`<option ${logFilters.type===t?'selected':''}>${t}</option>`).join('')}
+        ${getPostTypes().map(t=>`<option ${logFilters.type===t?'selected':''}>${t}</option>`).join('')}
       </select>
-      ${(logFilters.date||logFilters.brand||logFilters.product||logFilters.type) ? `<button class="btn btn-ghost btn-sm" onclick="logFilters={date:'',brand:'',product:'',type:''};renderLog(document.getElementById('view'))">Clear</button>`:''}
+      <select class="select" id="lf-assignee" onchange="logFilters.assignee=this.value;renderLog(document.getElementById('view'))">
+        <option value="">Anyone</option>
+        ${DB.data.users.map(u=>`<option value="${u.id}" ${logFilters.assignee===u.id?'selected':''}>${u.name}</option>`).join('')}
+      </select>
+      ${(logFilters.date||logFilters.dateTo||logFilters.brand||logFilters.product||logFilters.type||logFilters.assignee||logFilters.q) ? `<button class="btn btn-ghost btn-sm" onclick="logFilters={date:'',dateTo:'',brand:'',product:'',type:'',assignee:'',q:''};renderLog(document.getElementById('view'))">Clear</button>`:''}
     </div>
     <div class="log-grid" id="log-grid"></div>
   `;
   let list = DB.data.logs.slice();
-  if(logFilters.date) list = list.filter(l=>l.date===logFilters.date);
+  if(logFilters.date) list = list.filter(l=>l.date>=logFilters.date);
+  if(logFilters.dateTo) list = list.filter(l=>l.date<=logFilters.dateTo);
   if(logFilters.brand) list = list.filter(l=>l.brand===logFilters.brand);
   if(logFilters.product) list = list.filter(l=>l.product===logFilters.product);
   if(logFilters.type) list = list.filter(l=>l.type===logFilters.type);
+  if(logFilters.assignee) list = list.filter(l=>l.completedBy===logFilters.assignee);
+  if(logFilters.q){
+    const q = logFilters.q.toLowerCase();
+    list = list.filter(l=>l.title.toLowerCase().includes(q));
+  }
   const grid = el.querySelector('#log-grid');
   grid.innerHTML = list.length ? list.map(logCard).join('') : emptyState('No content','Try different filters.');
 }
@@ -1143,8 +1300,17 @@ function renderCalendar(el){
           <option value="poya" ${calEventFilter==='poya'?'selected':''}>Poya days</option>
           <option value="religious" ${calEventFilter==='religious'?'selected':''}>Religious</option>
           <option value="marketing" ${calEventFilter==='marketing'?'selected':''}>Marketing</option>
+          <option value="custom" ${calEventFilter==='custom'?'selected':''}>My events</option>
         </select>
+        <button class="btn btn-primary btn-sm" onclick="openCustomEventModal()">+ Add event</button>
       </div>
+    </div>
+    <div class="cal-legend">
+      <span><i style="background:var(--coral-soft);"></i>Public holiday</span>
+      <span><i style="background:#efe4f6;"></i>Poya day</span>
+      <span><i style="background:var(--blue-soft);"></i>Religious</span>
+      <span><i style="background:var(--amber-soft);"></i>Marketing</span>
+      <span><i style="background:#dff2ea;"></i>My event</span>
     </div>
     <div class="card" style="padding:16px;">
       <div class="cal-grid" style="margin-bottom:6px;">
@@ -1165,13 +1331,17 @@ function renderCalendar(el){
   body.innerHTML = cells.map(c=>{
     const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.d).padStart(2,'0')}`;
     const isToday = !c.dim && iso===todayISO();
-    const events = SL_HOLIDAYS.filter(h=>h.date===iso && (calEventFilter==='all'||h.type===calEventFilter));
+    const events = SL_HOLIDAYS.filter(h=>h.date===iso && (calEventFilter==='all'||calEventFilter===h.type));
+    const custom = (DB.data.customEvents||[]).filter(h=>h.date===iso && (calEventFilter==='all'||calEventFilter==='custom'));
     const dayTasks = DB.data.tasks.filter(t=>t.date===iso);
-    const shown = events.slice(0,2);
-    const remaining = events.length - shown.length + dayTasks.length;
-    return `<div class="cal-cell ${c.dim?'dim':''} ${isToday?'today':''}">
+    const allEvents = events.length + custom.length;
+    const shownH = calEventFilter==='custom' ? [] : events.slice(0,2);
+    const shownC = custom.slice(0, Math.max(0,2-shownH.length));
+    const remaining = allEvents - shownH.length - shownC.length + (calEventFilter==='all'?dayTasks.length:0);
+    return `<div class="cal-cell ${c.dim?'dim':''} ${isToday?'today':''}" onclick="${c.dim?'':`openDayModal('${iso}')`}">
       <div class="dnum">${c.d}</div>
-      ${shown.map(h=>`<span class="cal-tag ${holidayTypeMeta(h.type).cls}">${escapeHtml(h.name.slice(0,16))}</span>`).join('')}
+      ${shownH.map(h=>`<span class="cal-tag ${holidayTypeMeta(h.type).cls}">${escapeHtml(h.name.slice(0,16))}</span>`).join('')}
+      ${shownC.map(h=>`<span class="cal-tag cal-custom">${escapeHtml((h.title||'').slice(0,16))}</span>`).join('')}
       ${remaining>0 ? `<span style="font-size:9.5px;color:var(--ink-soft);">+${remaining} more</span>`:''}
     </div>`;
   }).join('');
@@ -1186,16 +1356,78 @@ function holidayTypeMeta(t){
   }[t] || {label:'Event', cls:'cal-holiday'};
 }
 
+function openDayModal(iso){
+  const events = SL_HOLIDAYS.filter(h=>h.date===iso);
+  const custom = (DB.data.customEvents||[]).filter(h=>h.date===iso);
+  const tasks = DB.data.tasks.filter(t=>t.date===iso);
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="modal-head"><h3>${fmtDate(iso)}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="section-title" style="margin-bottom:8px;">Calendar events</div>
+      ${events.map(h=>`<div class="drive-link-row"><div><strong>${escapeHtml(h.name)}</strong><div class="drive-link-meta">${holidayTypeMeta(h.type).label}</div></div></div>`).join('')}
+      ${custom.map(h=>`<div class="drive-link-row"><div><strong>${escapeHtml(h.title)}</strong>${h.notes?`<div class="drive-link-meta">${escapeHtml(h.notes)}</div>`:''}</div><a class="btn btn-ghost btn-sm" onclick="deleteCustomEvent('${h.id}','${iso}')">Delete</a></div>`).join('')}
+      ${(!events.length && !custom.length) ? emptyState('No events','Add a custom event below.') : ''}
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="openCustomEventModal('${iso}')">+ Add event on this day</button>
+      ${tasks.length ? `<div class="section-title" style="margin-top:18px;">Tasks due</div>${tasks.map(taskMiniRow).join('')}` : ''}
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button></div>
+  `;
+  openModal();
+}
+
+function openCustomEventModal(iso){
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="modal-head"><h3>Add custom event</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Event title</label><input id="ce-title" placeholder="e.g. Client photoshoot"></div>
+      <div class="form-row"><label>Date</label><input type="date" id="ce-date" value="${iso||todayISO()}"></div>
+      <div class="form-row"><label>Notes</label><textarea id="ce-notes" rows="2" placeholder="Optional details..."></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-primary btn-sm" onclick="createCustomEvent()">Add event</button></div>
+  `;
+  openModal();
+}
+
+function createCustomEvent(){
+  const title = document.getElementById('ce-title').value.trim();
+  const date = document.getElementById('ce-date').value;
+  if(!title || !date){ toast('Add a title and date'); return; }
+  if(!DB.data.customEvents) DB.data.customEvents = [];
+  DB.data.customEvents.push({id:uid('ce'), title, date, notes:document.getElementById('ce-notes').value.trim(), addedBy:currentUser().id});
+  logAudit(currentUser().id, 'custom_event', `Added calendar event: ${title}`);
+  DB.save(); closeModal(); renderCalendar(document.getElementById('view'));
+  toast('Event added');
+}
+
+function deleteCustomEvent(id, iso){
+  DB.data.customEvents = (DB.data.customEvents||[]).filter(x=>x.id!==id);
+  DB.save();
+  logAudit(currentUser().id, 'custom_event_deleted', `Deleted calendar event`);
+  if(iso) openDayModal(iso); else closeModal();
+  renderCalendar(document.getElementById('view'));
+  toast('Event deleted');
+}
+
 /* PRODUCTS PAGE */
-let productFilters = {brand:'', status:''};
+let productFilters = {brand:'', status:'', category:'', q:''};
+let productViewMode = localStorage.getItem('contentos_product_view') || 'table';
 function renderProducts(el){
   const p = perms();
   el.innerHTML = `
     <div class="view-head">
       <div><div class="view-title">Products</div><div class="view-desc">Catalog across all brands.</div></div>
-      ${p.canManageProducts ? `<button class="btn btn-primary btn-sm" onclick="openProductModal()">+ New</button>` : ''}
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="view-toggle">
+          <button class="${productViewMode==='table'?'active':''}" onclick="productViewMode='table';localStorage.setItem('contentos_product_view','table');renderProducts(document.getElementById('view'))">Table</button>
+          <button class="${productViewMode==='grid'?'active':''}" onclick="productViewMode='grid';localStorage.setItem('contentos_product_view','grid');renderProducts(document.getElementById('view'))">Gallery</button>
+        </div>
+        ${p.canManageProducts ? `<button class="btn btn-primary btn-sm" onclick="openProductModal()">+ New</button>` : ''}
+      </div>
     </div>
     <div class="toolbar">
+      <input class="tfield" id="pf-q" placeholder="Search products..." value="${escapeHtml(productFilters.q)}" oninput="productFilters.q=this.value;renderProducts(document.getElementById('view'))" style="min-width:180px;">
       <select class="select" onchange="productFilters.brand=this.value;renderProducts(document.getElementById('view'))">
         <option value="">All brands</option>
         ${BRANDS.map(b=>`<option value="${b.id}" ${productFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
@@ -1204,25 +1436,58 @@ function renderProducts(el){
         <option value="">Any status</option>
         ${PRODUCT_STATUSES.map(s=>`<option ${productFilters.status===s?'selected':''}>${s}</option>`).join('')}
       </select>
+      <select class="select" onchange="productFilters.category=this.value;renderProducts(document.getElementById('view'))">
+        <option value="">Any category</option>
+        ${getCategories().map(c=>`<option ${productFilters.category===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+      ${(productFilters.brand||productFilters.status||productFilters.category||productFilters.q) ? `<button class="btn btn-ghost btn-sm" onclick="productFilters={brand:'',status:'',category:'',q:''};renderProducts(document.getElementById('view'))">Clear</button>` : ''}
     </div>
-    <div class="card" style="overflow-x:auto;">
-      <table>
-        <thead><tr><th>Product</th><th>Brand</th><th>SKU</th><th>Category</th><th>Status</th><th>Content</th><th>Last</th><th></th></tr></thead>
-        <tbody id="product-rows"></tbody>
-      </table>
-    </div>
+    <div id="product-body"></div>
   `;
   let list = DB.data.products.slice();
   if(productFilters.brand) list = list.filter(x=>x.brand===productFilters.brand);
   if(productFilters.status) list = list.filter(x=>x.status===productFilters.status);
-  const rows = el.querySelector('#product-rows');
-  if(!list.length){ rows.innerHTML = `<tr><td colspan="8">${emptyState('No products','Try a different filter.')}</td></tr>`; return; }
+  if(productFilters.category) list = list.filter(x=>x.category===productFilters.category);
+  if(productFilters.q){
+    const q = productFilters.q.toLowerCase();
+    list = list.filter(x=>x.name.toLowerCase().includes(q) || (x.sku||'').toLowerCase().includes(q));
+  }
+  const bodyWrap = el.querySelector('#product-body');
+  if(!list.length){ bodyWrap.innerHTML = emptyState('No products','Try a different filter.'); return; }
+
+  if(productViewMode==='grid'){
+    bodyWrap.innerHTML = `<div class="gallery-grid">${list.map(pr=>{
+      const b = brandOf(pr.brand);
+      return `<div class="product-grid-card" onclick="openProductDashboard('${pr.id}')">
+        <div class="img-wrap">${pr.image ? `<img src="${pr.image}">` : `<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z"/></svg>`}</div>
+        <div class="body">
+          <div class="pname">${escapeHtml(pr.name)}</div>
+          <div class="pmeta"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></div>
+          <div style="margin-top:6px;"><span class="pill ${statusPillClass(pr.status)}">${pr.status}</span></div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+    return;
+  }
+
+  bodyWrap.innerHTML = `<div class="card" style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>Product</th><th>Brand</th><th>SKU</th><th>Category</th><th>Status</th><th>Content</th><th>Last</th><th></th></tr></thead>
+        <tbody id="product-rows"></tbody>
+      </table>
+    </div>`;
+  const rows = bodyWrap.querySelector('#product-rows');
   rows.innerHTML = list.map(pr=>{
     const b = brandOf(pr.brand);
     const logs = DB.data.logs.filter(l=>l.product===pr.id);
     const last = logs.sort((a,c)=>c.date.localeCompare(a.date))[0];
     return `<tr>
-      <td style="font-weight:600;"><a style="color:var(--accent);cursor:pointer;" onclick="openProductDashboard('${pr.id}')">${escapeHtml(pr.name)}</a></td>
+      <td>
+        <div class="prod-name-cell">
+          ${pr.image ? `<img class="prod-thumb" src="${pr.image}">` : `<div class="prod-thumb-placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z"/></svg></div>`}
+          <a style="color:var(--accent);cursor:pointer;font-weight:600;" onclick="openProductDashboard('${pr.id}')">${escapeHtml(pr.name)}</a>
+        </div>
+      </td>
       <td><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></td>
       <td class="mono" style="font-size:12px;">${pr.sku}</td>
       <td>${pr.category}</td>
@@ -1234,19 +1499,32 @@ function renderProducts(el){
   }).join('');
 }
 
+function readFileAsDataUrl(file, cb){
+  const reader = new FileReader();
+  reader.onload = ()=>cb(reader.result);
+  reader.readAsDataURL(file);
+}
+
 function openProductModal(id){
   const pr = id ? DB.data.products.find(x=>x.id===id) : null;
   const box = document.getElementById('modal-box');
   box.innerHTML = `
     <div class="modal-head"><h3>${pr?'Edit':'New'} product</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
+      <div class="form-row"><label>Product image</label>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <img id="pm-image-preview" class="prod-thumb-lg" src="${pr&&pr.image?pr.image:''}" style="${pr&&pr.image?'':'display:none;'}">
+          <div class="prod-thumb-placeholder" id="pm-image-placeholder" style="${pr&&pr.image?'display:none;':''}width:64px;height:64px;"></div>
+          <input type="file" accept="image/*" id="pm-image-file" onchange="handleProductImage(this)">
+        </div>
+      </div>
       <div class="form-row"><label>Product name</label><input id="pm-name" value="${pr?escapeHtml(pr.name):''}"></div>
       <div class="two-col">
         <div class="form-row"><label>Brand</label><select id="pm-brand">${BRANDS.map(b=>`<option value="${b.id}" ${pr&&pr.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select></div>
         <div class="form-row"><label>SKU</label><input id="pm-sku" value="${pr?pr.sku:''}"></div>
       </div>
       <div class="two-col">
-        <div class="form-row"><label>Category</label><input id="pm-category" value="${pr?pr.category:''}"></div>
+        <div class="form-row"><label>Category</label><select id="pm-category">${getCategories().map(c=>`<option ${pr&&pr.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
         <div class="form-row"><label>Status</label><select id="pm-status">${PRODUCT_STATUSES.map(s=>`<option ${pr&&pr.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
       </div>
     </div>
@@ -1256,13 +1534,25 @@ function openProductModal(id){
       <button class="btn btn-primary btn-sm" onclick="saveProduct(${pr?`'${pr.id}'`:'null'})">${pr?'Save':'Add'}</button>
     </div>
   `;
+  window.__pmImageData = pr&&pr.image ? pr.image : '';
   openModal();
+}
+
+function handleProductImage(input){
+  const file = input.files[0];
+  if(!file) return;
+  readFileAsDataUrl(file, (dataUrl)=>{
+    window.__pmImageData = dataUrl;
+    const img = document.getElementById('pm-image-preview');
+    img.src = dataUrl; img.style.display='';
+    document.getElementById('pm-image-placeholder').style.display='none';
+  });
 }
 
 function saveProduct(id){
   const name = document.getElementById('pm-name').value.trim();
   if(!name){ toast('Add a name'); return; }
-  const vals = {name, brand:document.getElementById('pm-brand').value, sku:document.getElementById('pm-sku').value.trim(), category:document.getElementById('pm-category').value.trim(), status:document.getElementById('pm-status').value};
+  const vals = {name, brand:document.getElementById('pm-brand').value, sku:document.getElementById('pm-sku').value.trim(), category:document.getElementById('pm-category').value, status:document.getElementById('pm-status').value, image: window.__pmImageData||''};
   if(id){ Object.assign(DB.data.products.find(x=>x.id===id), vals); }
   else{ DB.data.products.unshift({id:uid('p'), ...vals}); }
   logAudit(currentUser().id, 'product_change', id?`Updated product: ${name}`:`Created product: ${name}`);
@@ -1278,55 +1568,89 @@ function deleteProduct(id){
 }
 
 /* PRODUCT DASHBOARD */
+let productDashTab = 'overview';
 function openProductDashboard(id){
+  productDashTab = 'overview';
+  renderProductDashboardModal(id);
+  openModal();
+}
+
+function buildProductTimeline(productId){
+  const items = [];
+  DB.data.tasks.filter(t=>t.product===productId).forEach(t=>{
+    (t.history||[]).forEach(h=>{
+      items.push({ts:h.ts, label:h.detail, taskTitle:t.title, by:h.by});
+    });
+  });
+  DB.data.logs.filter(l=>l.product===productId).forEach(l=>{
+    // already captured via task history 'completed', but ensure at least one entry if no task history matched
+  });
+  return items.sort((a,b)=>b.ts-a.ts);
+}
+
+function renderProductDashboardModal(id){
   const p = DB.data.products.find(x=>x.id===id);
   if(!p) return;
   const logs = DB.data.logs.filter(l=>l.product===id);
   const b = brandOf(p.brand);
   const typeBreakdown = {};
-  POST_TYPES.forEach(t=>{ typeBreakdown[t] = logs.filter(l=>l.type===t).length; });
-  
+  getPostTypes().forEach(t=>{ typeBreakdown[t] = logs.filter(l=>l.type===t).length; });
+
   const box = document.getElementById('modal-box');
+  box.className = 'modal modal-wide';
   box.innerHTML = `
     <div class="modal-head"><h3>${escapeHtml(p.name)}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:14px;">
-        <strong>Brand:</strong> <span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span> | <strong>SKU:</strong> ${p.sku} | <strong>Category:</strong> ${p.category} | <strong>Status:</strong> <span class="pill ${statusPillClass(p.status)}">${p.status}</span>
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px;">
+        ${p.image ? `<img class="prod-thumb-lg" src="${p.image}">` : `<div class="prod-thumb-placeholder" style="width:64px;height:64px;"></div>`}
+        <div style="font-size:11.5px;color:var(--ink-soft);">
+          <strong>Brand:</strong> <span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span> | <strong>SKU:</strong> ${p.sku} | <strong>Category:</strong> ${p.category} | <strong>Status:</strong> <span class="pill ${statusPillClass(p.status)}">${p.status}</span>
+        </div>
       </div>
-      
-      <div class="section-title">Total Content: ${logs.length}</div>
-      <div class="product-kpi-grid">
-        ${POST_TYPES.map(t=>`<div class="product-kpi"><div class="label">${t}</div><div class="num">${typeBreakdown[t]}</div></div>`).join('')}
+      <div class="detail-tabs">
+        <div class="detail-tab ${productDashTab==='overview'?'active':''}" onclick="productDashTab='overview';renderProductDashboardModal('${p.id}')">Overview</div>
+        <div class="detail-tab ${productDashTab==='gallery'?'active':''}" onclick="productDashTab='gallery';renderProductDashboardModal('${p.id}')">Gallery (${logs.length})</div>
+        <div class="detail-tab ${productDashTab==='timeline'?'active':''}" onclick="productDashTab='timeline';renderProductDashboardModal('${p.id}')">Timeline</div>
       </div>
-
-      <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px;">
-        <div class="section-title">Content Gallery</div>
-        <div class="gallery-grid" id="product-gallery"></div>
-      </div>
-
-      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);">
-        Last content: ${logs.length>0 ? fmtDate(logs.sort((a,c)=>c.date.localeCompare(a.date))[0].date) : 'Never'}
-      </div>
+      <div id="product-dash-body"></div>
     </div>
     <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button></div>
   `;
-  
-  const gal = box.querySelector('#product-gallery');
-  if(logs.length){
-    gal.innerHTML = logs.map(l=>{
-      const t = DB.data.tasks.find(x=>x.id===l.taskId);
-      return `<div class="gallery-item" onclick="l.driveLink && window.open(l.driveLink,'_blank')">
-        <div class="type">${l.type}</div>
-        <div style="color:var(--ink);margin:6px 0;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(l.title)}">${escapeHtml(l.title.slice(0,20))}</div>
-        <div class="brand"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</div>
-        <div class="date">${fmtDate(l.date)}</div>
-      </div>`;
-    }).join('');
-  } else {
-    gal.innerHTML = emptyState('No content yet','Complete tasks for this product to see them here.');
-  }
 
-  openModal();
+  const dbody = box.querySelector('#product-dash-body');
+  if(productDashTab==='overview'){
+    dbody.innerHTML = `
+      <div class="section-title">Total Content: ${logs.length}</div>
+      <div class="product-kpi-grid">
+        ${getPostTypes().map(t=>`<div class="product-kpi"><div class="label">${t}</div><div class="num">${typeBreakdown[t]}</div></div>`).join('')}
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);">
+        Last content: ${logs.length>0 ? fmtDate(logs.sort((a,c)=>c.date.localeCompare(a.date))[0].date) : 'Never'}
+      </div>
+    `;
+  } else if(productDashTab==='gallery'){
+    if(logs.length){
+      dbody.innerHTML = `<div class="gallery-grid">${logs.map(l=>{
+        return `<div class="gallery-item" onclick="${l.driveLink?`window.open('${l.driveLink}','_blank')`:''}">
+          <div class="type">${l.type}</div>
+          <div style="color:var(--ink);margin:6px 0;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(l.title)}">${escapeHtml(l.title.slice(0,20))}</div>
+          <div class="brand"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</div>
+          <div class="date">${fmtDate(l.date)}</div>
+        </div>`;
+      }).join('')}</div>`;
+    } else {
+      dbody.innerHTML = emptyState('No content yet','Complete tasks for this product to see them here.');
+    }
+  } else {
+    const items = buildProductTimeline(id);
+    if(!items.length){ dbody.innerHTML = emptyState('No timeline yet','Tasks tied to this product will appear here.'); }
+    else {
+      dbody.innerHTML = `<div class="timeline">${items.map(it=>{
+        const u = DB.data.users.find(x=>x.id===it.by);
+        return `<div class="timeline-item"><strong>${u?escapeHtml(u.name):'Someone'}</strong> — ${escapeHtml(it.label)} <span style="color:var(--ink-soft);">(${escapeHtml(it.taskTitle)})</span><div class="timeline-detail">${fmtDateTime(it.ts)}</div></div>`;
+      }).join('')}</div>`;
+    }
+  }
 }
 
 /* BRANDS PAGE */
@@ -1346,7 +1670,7 @@ function renderBrands(el){
     const last = logs.sort((a,c)=>c.date.localeCompare(a.date))[0];
     return `<div class="card" style="padding:18px 20px;border-top:3px solid ${b.color};">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div class="brand-chip" style="font-size:15px;"><span class="brand-dot" style="background:${b.color};width:11px;height:11px;"></span>${escapeHtml(b.name)}</div>
+        <div class="brand-chip" style="font-size:15px;">${b.logo?`<img src="${b.logo}" style="width:18px;height:18px;border-radius:5px;object-fit:cover;">`:`<span class="brand-dot" style="background:${b.color};width:11px;height:11px;"></span>`}${escapeHtml(b.name)}</div>
         <div style="display:flex;gap:6px;">
           ${b.priority ? '<span class="pill status-active">Priority</span>' : ''}
           ${p.canManageBrands ? `<a class="btn btn-ghost btn-sm" onclick="openBrandModal('${b.id}')">Edit</a>` : ''}
@@ -1369,6 +1693,13 @@ function openBrandModal(id){
   box.innerHTML = `
     <div class="modal-head"><h3>${b?'Edit':'New'} brand</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
+      <div class="form-row"><label>Brand logo</label>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <img id="bm-logo-preview" class="logo-preview" src="${b&&b.logo?b.logo:''}" style="${b&&b.logo?'':'display:none;'}">
+          <div class="prod-thumb-placeholder" id="bm-logo-placeholder" style="${b&&b.logo?'display:none;':''}width:52px;height:52px;"></div>
+          <input type="file" accept="image/*" id="bm-logo-file" onchange="handleBrandLogo(this)">
+        </div>
+      </div>
       <div class="form-row"><label>Brand name</label><input id="bm-name" value="${b?escapeHtml(b.name):''}"></div>
       <div class="two-col">
         <div class="form-row"><label>Brand color</label><input type="color" id="bm-color" value="${b?b.color:'#2f6f5e'}" style="height:40px;padding:4px;"></div>
@@ -1381,13 +1712,25 @@ function openBrandModal(id){
       <button class="btn btn-primary btn-sm" onclick="saveBrand(${b?`'${b.id}'`:'null'})">${b?'Save':'Add'}</button>
     </div>
   `;
+  window.__bmLogoData = b&&b.logo ? b.logo : '';
   openModal();
+}
+
+function handleBrandLogo(input){
+  const file = input.files[0];
+  if(!file) return;
+  readFileAsDataUrl(file, (dataUrl)=>{
+    window.__bmLogoData = dataUrl;
+    const img = document.getElementById('bm-logo-preview');
+    img.src = dataUrl; img.style.display='';
+    document.getElementById('bm-logo-placeholder').style.display='none';
+  });
 }
 
 function saveBrand(id){
   const name = document.getElementById('bm-name').value.trim();
   if(!name){ toast('Add a name'); return; }
-  const vals = {name, color:document.getElementById('bm-color').value, priority:document.getElementById('bm-priority').value==='true'};
+  const vals = {name, color:document.getElementById('bm-color').value, priority:document.getElementById('bm-priority').value==='true', logo: window.__bmLogoData||''};
   if(id){ Object.assign(BRANDS.find(x=>x.id===id), vals); }
   else{ DB.data.brands.unshift({id:uid('brand'), ...vals}); BRANDS = DB.data.brands; }
   logAudit(currentUser().id, 'brand_change', id?`Updated brand: ${name}`:`Created brand: ${name}`);
@@ -1407,45 +1750,114 @@ function deleteBrand(id){
 }
 
 /* ANALYTICS */
-let analyticsMonth = new Date().toISOString().slice(0,7);
+let analyticsView = {period:'monthly', month:new Date().toISOString().slice(0,7), year:String(new Date().getFullYear()), brand:'', product:'', type:''};
 function renderAnalytics(el){
   el.innerHTML = `
     <div class="view-head">
       <div><div class="view-title">Analytics</div><div class="view-desc">Content production metrics.</div></div>
-      <input class="tfield" type="month" value="${analyticsMonth}" onchange="analyticsMonth=this.value;renderAnalytics(document.getElementById('view'))">
+      <div class="view-toggle">
+        <button class="${analyticsView.period==='monthly'?'active':''}" onclick="analyticsView.period='monthly';renderAnalytics(document.getElementById('view'))">Monthly</button>
+        <button class="${analyticsView.period==='weekly'?'active':''}" onclick="analyticsView.period='weekly';renderAnalytics(document.getElementById('view'))">Weekly</button>
+      </div>
+    </div>
+    <div class="toolbar">
+      ${analyticsView.period==='monthly' ? `<input class="tfield" type="month" value="${analyticsView.month}" onchange="analyticsView.month=this.value;renderAnalytics(document.getElementById('view'))">` : `<input class="tfield" type="number" style="width:90px;" value="${analyticsView.year}" onchange="analyticsView.year=this.value;renderAnalytics(document.getElementById('view'))">`}
+      <select class="select" onchange="analyticsView.brand=this.value;renderAnalytics(document.getElementById('view'))">
+        <option value="">All brands</option>
+        ${BRANDS.map(b=>`<option value="${b.id}" ${analyticsView.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+      </select>
+      <select class="select" onchange="analyticsView.product=this.value;renderAnalytics(document.getElementById('view'))">
+        <option value="">All products</option>
+        ${DB.data.products.map(p=>`<option value="${p.id}" ${analyticsView.product===p.id?'selected':''}>${p.name}</option>`).join('')}
+      </select>
+      <select class="select" onchange="analyticsView.type=this.value;renderAnalytics(document.getElementById('view'))">
+        <option value="">All content types</option>
+        ${getPostTypes().map(t=>`<option ${analyticsView.type===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      ${(analyticsView.brand||analyticsView.product||analyticsView.type) ? `<button class="btn btn-ghost btn-sm" onclick="analyticsView.brand='';analyticsView.product='';analyticsView.type='';renderAnalytics(document.getElementById('view'))">Clear</button>` : ''}
+    </div>
+    <div class="card" style="padding:18px 20px;margin-bottom:16px;">
+      <div class="section-title">Content Production — ${analyticsView.period==='monthly'?monthName(Number(analyticsView.month.split('-')[1])-1)+' '+analyticsView.month.split('-')[0]:analyticsView.year}</div>
+      <div id="an-production"></div>
     </div>
     <div class="grid-2">
       <div class="card" style="padding:18px 20px;">
-        <div class="section-title">By content type</div>
-        <div id="an-type"></div>
-      </div>
-      <div class="card" style="padding:18px 20px;">
-        <div class="section-title">By brand</div>
+        <div class="section-title">Brand Breakdown — Content per Brand</div>
         <div id="an-brand"></div>
       </div>
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Post Type Breakdown</div>
+        <div id="an-type"></div>
+      </div>
+    </div>
+    <div class="card" style="padding:18px 20px;margin-top:16px;">
+      <div class="section-title">Product Breakdown — Content per Product</div>
+      <div id="an-product"></div>
     </div>
     <div class="card" style="padding:18px 20px;margin-top:16px;">
       <div class="section-title">By creator</div>
       <div id="an-user"></div>
     </div>
   `;
-  const inMonth = DB.data.logs.filter(l=>l.date.slice(0,7)===analyticsMonth);
-  const typeWrap = el.querySelector('#an-type');
-  const max1 = Math.max(1, ...POST_TYPES.map(t=>inMonth.filter(l=>l.type===t).length));
-  typeWrap.innerHTML = POST_TYPES.map(t=>{
-    const c = inMonth.filter(l=>l.type===t).length;
-    return `<div class="bar-row"><div class="bar-label">${t}</div><div class="bar-track"><div class="bar-fill" style="width:${c/max1*100}%;background:var(--accent)"></div></div><div class="bar-val">${c}</div></div>`;
-  }).join('') || emptyState('No content this month','Try another month.');
+
+  let inRange = DB.data.logs.slice();
+  if(analyticsView.period==='monthly'){
+    inRange = inRange.filter(l=>l.date.slice(0,7)===analyticsView.month);
+  } else {
+    inRange = inRange.filter(l=>l.date.slice(0,4)===analyticsView.year);
+  }
+  if(analyticsView.brand) inRange = inRange.filter(l=>l.brand===analyticsView.brand);
+  if(analyticsView.product) inRange = inRange.filter(l=>l.product===analyticsView.product);
+  if(analyticsView.type) inRange = inRange.filter(l=>l.type===analyticsView.type);
+
+  // Production over time (weekly buckets within month, or monthly buckets within year)
+  const prodWrap = el.querySelector('#an-production');
+  let buckets = [];
+  if(analyticsView.period==='monthly'){
+    const [y,m] = analyticsView.month.split('-').map(Number);
+    const daysInMonth = new Date(y, m, 0).getDate();
+    for(let w=0; w*7<daysInMonth; w++){
+      const startD = w*7+1, endD = Math.min(daysInMonth, startD+6);
+      const label = `W${w+1} (${startD}-${endD})`;
+      const count = inRange.filter(l=>{ const d=Number(l.date.split('-')[2]); return d>=startD && d<=endD; }).length;
+      buckets.push({label, count});
+    }
+  } else {
+    for(let m=0;m<12;m++){
+      const mm = String(m+1).padStart(2,'0');
+      const count = inRange.filter(l=>l.date.slice(5,7)===mm).length;
+      buckets.push({label: monthName(m).slice(0,3), count});
+    }
+  }
+  const maxB = Math.max(1, ...buckets.map(b=>b.count));
+  prodWrap.innerHTML = buckets.map(b=>`<div class="bar-row"><div class="bar-label">${b.label}</div><div class="bar-track"><div class="bar-fill" style="width:${b.count/maxB*100}%;background:var(--accent)"></div></div><div class="bar-val">${b.count}</div></div>`).join('') || emptyState('No content','Try different filters.');
+
   const brandWrap = el.querySelector('#an-brand');
-  const max2 = Math.max(1, ...BRANDS.map(b=>inMonth.filter(l=>l.brand===b.id).length));
+  const max2 = Math.max(1, ...BRANDS.map(b=>inRange.filter(l=>l.brand===b.id).length));
   brandWrap.innerHTML = BRANDS.map(b=>{
-    const c = inMonth.filter(l=>l.brand===b.id).length;
+    const c = inRange.filter(l=>l.brand===b.id).length;
     return `<div class="bar-row"><div class="bar-label"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></div><div class="bar-track"><div class="bar-fill" style="width:${c/max2*100}%;background:${b.color}"></div></div><div class="bar-val">${c}</div></div>`;
   }).join('');
+
+  const typeWrap = el.querySelector('#an-type');
+  const max1 = Math.max(1, ...getPostTypes().map(t=>inRange.filter(l=>l.type===t).length));
+  typeWrap.innerHTML = getPostTypes().map(t=>{
+    const c = inRange.filter(l=>l.type===t).length;
+    return `<div class="bar-row"><div class="bar-label">${t}</div><div class="bar-track"><div class="bar-fill" style="width:${c/max1*100}%;background:var(--blue)"></div></div><div class="bar-val">${c}</div></div>`;
+  }).join('');
+
+  const productWrap = el.querySelector('#an-product');
+  const prodCounts = DB.data.products.map(p=>({p, count:inRange.filter(l=>l.product===p.id).length})).filter(x=>x.count>0 || !analyticsView.product).sort((a,b)=>b.count-a.count).slice(0,12);
+  const max4 = Math.max(1, ...prodCounts.map(x=>x.count));
+  productWrap.innerHTML = prodCounts.length ? prodCounts.map(({p,count})=>{
+    const b = brandOf(p.brand);
+    return `<div class="bar-row"><div class="bar-label" style="width:180px;">${escapeHtml(p.name)}</div><div class="bar-track"><div class="bar-fill" style="width:${count/max4*100}%;background:${b.color}"></div></div><div class="bar-val">${count}</div></div>`;
+  }).join('') : emptyState('No content','Try different filters.');
+
   const userWrap = el.querySelector('#an-user');
-  const max3 = Math.max(1, ...DB.data.users.map(u=>inMonth.filter(l=>l.completedBy===u.id).length));
+  const max3 = Math.max(1, ...DB.data.users.map(u=>inRange.filter(l=>l.completedBy===u.id).length));
   userWrap.innerHTML = DB.data.users.map(u=>{
-    const c = inMonth.filter(l=>l.completedBy===u.id).length;
+    const c = inRange.filter(l=>l.completedBy===u.id).length;
     return `<div class="bar-row"><div class="bar-label">${u.name}</div><div class="bar-track"><div class="bar-fill" style="width:${c/max3*100}%;background:var(--blue)"></div></div><div class="bar-val">${c}</div></div>`;
   }).join('');
 }
@@ -1555,8 +1967,239 @@ function deleteUser(id){
   toast('Removed');
 }
 
+/* =========================================================
+   SETTINGS PAGE
+========================================================= */
+let settingsTab = 'general';
+function renderSettings(el){
+  const p = perms();
+  if(!p.canManageSettings){
+    el.innerHTML = emptyState('No access','Only Admins and General Managers can view Settings.');
+    return;
+  }
+  el.innerHTML = `
+    <div class="view-head">
+      <div><div class="view-title">Settings</div><div class="view-desc">Configure your workspace.</div></div>
+    </div>
+    <div class="settings-shell">
+      <div class="settings-nav" id="settings-nav">
+        ${[
+          ['general','General'],['brands','Brands'],['categories','Categories'],
+          ['posttypes','Post Types'],['taskstatuses','Task Statuses'],
+          ['notifications','Notifications'],['google','Google Integration']
+        ].map(([id,label])=>`<div class="settings-nav-item ${settingsTab===id?'active':''}" onclick="settingsTab='${id}';renderSettings(document.getElementById('view'))">${label}</div>`).join('')}
+      </div>
+      <div id="settings-panel"></div>
+    </div>
+  `;
+  const panel = el.querySelector('#settings-panel');
+  const renderers = {
+    general: renderSettingsGeneral, brands: renderSettingsBrands, categories: renderSettingsCategories,
+    posttypes: renderSettingsPostTypes, taskstatuses: renderSettingsTaskStatuses,
+    notifications: renderSettingsNotifications, google: renderSettingsGoogle
+  };
+  (renderers[settingsTab]||renderSettingsGeneral)(panel);
+}
+
+function renderSettingsGeneral(panel){
+  const s = DB.data.settings;
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">General</div>
+      <div class="form-row"><label>Company name</label><input id="set-company-name" value="${escapeHtml(s.companyName||'')}"></div>
+      <div class="form-row"><label>Company logo</label>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <img id="set-logo-preview" class="logo-preview" src="${s.companyLogo||''}" style="${s.companyLogo?'':'display:none;'}">
+          <div class="prod-thumb-placeholder" id="set-logo-placeholder" style="${s.companyLogo?'display:none;':''}width:52px;height:52px;"></div>
+          <input type="file" accept="image/*" id="set-logo-file" onchange="handleCompanyLogo(this)">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveGeneralSettings()">Save changes</button>
+    </div>
+  `;
+  window.__setLogoData = s.companyLogo || '';
+}
+
+function handleCompanyLogo(input){
+  const file = input.files[0]; if(!file) return;
+  readFileAsDataUrl(file, (dataUrl)=>{
+    window.__setLogoData = dataUrl;
+    const img = document.getElementById('set-logo-preview');
+    img.src = dataUrl; img.style.display='';
+    document.getElementById('set-logo-placeholder').style.display='none';
+  });
+}
+
+function saveGeneralSettings(){
+  DB.data.settings.companyName = document.getElementById('set-company-name').value.trim() || 'ContentOS';
+  DB.data.settings.companyLogo = window.__setLogoData || '';
+  DB.save(); applyCompanyBranding();
+  logAudit(currentUser().id, 'settings_change', 'Updated general settings');
+  toast('Settings saved');
+}
+
+function renderSettingsBrands(panel){
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Brands</div>
+      <div class="req-tag" style="margin-bottom:12px;display:block;">Manage brand name, colors and logo. Full brand analytics live on the Brands page.</div>
+      ${BRANDS.map(b=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0ec;">
+          ${b.logo?`<img src="${b.logo}" style="width:30px;height:30px;border-radius:7px;object-fit:cover;">`:`<span class="brand-dot" style="background:${b.color};width:14px;height:14px;"></span>`}
+          <div style="flex:1;font-weight:600;font-size:13px;">${escapeHtml(b.name)}</div>
+          ${b.priority?'<span class="pill status-active">Priority</span>':''}
+          <button class="btn btn-ghost btn-sm" onclick="openBrandModal('${b.id}')">Edit</button>
+        </div>
+      `).join('')}
+      <button class="btn btn-primary btn-sm" style="margin-top:14px;" onclick="openBrandModal()">+ New brand</button>
+    </div>
+  `;
+}
+
+function renderSettingsCategories(panel){
+  const cats = getCategories();
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Product Categories</div>
+      <div class="req-tag" style="margin-bottom:10px;display:block;">Manage the categories available when adding products.</div>
+      <div>${cats.map(c=>`<span class="tag-chip">${escapeHtml(c)}<button onclick="removeCategory('${escapeHtml(c).replace(/'/g,"\\'")}')">✕</button></span>`).join('')}</div>
+      <div class="inline-add-row">
+        <input id="new-category-input" placeholder="New category name">
+        <button class="btn btn-primary btn-sm" onclick="addCategory()">Add</button>
+      </div>
+    </div>
+  `;
+}
+function addCategory(){
+  const input = document.getElementById('new-category-input');
+  const v = input.value.trim();
+  if(!v){ toast('Enter a category'); return; }
+  if(!DB.data.settings.categories) DB.data.settings.categories = CATEGORIES_DEFAULT.slice();
+  if(DB.data.settings.categories.includes(v)){ toast('Already exists'); return; }
+  DB.data.settings.categories.push(v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Category added');
+}
+function removeCategory(v){
+  DB.data.settings.categories = getCategories().filter(c=>c!==v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Category removed');
+}
+
+function renderSettingsPostTypes(panel){
+  const types = getPostTypes();
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Post Types</div>
+      <div class="req-tag" style="margin-bottom:10px;display:block;">Manage the content types used across Tasks and the Content Log (Story, Post, Video, Animation, Status, Other...).</div>
+      <div>${types.map(t=>`<span class="tag-chip">${escapeHtml(t)}<button onclick="removePostType('${escapeHtml(t).replace(/'/g,"\\'")}')">✕</button></span>`).join('')}</div>
+      <div class="inline-add-row">
+        <input id="new-posttype-input" placeholder="New post type">
+        <button class="btn btn-primary btn-sm" onclick="addPostType()">Add</button>
+      </div>
+    </div>
+  `;
+}
+function addPostType(){
+  const input = document.getElementById('new-posttype-input');
+  const v = input.value.trim();
+  if(!v){ toast('Enter a type'); return; }
+  if(!DB.data.settings.postTypes) DB.data.settings.postTypes = POST_TYPES_DEFAULT.slice();
+  if(DB.data.settings.postTypes.includes(v)){ toast('Already exists'); return; }
+  DB.data.settings.postTypes.push(v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Post type added');
+}
+function removePostType(v){
+  DB.data.settings.postTypes = getPostTypes().filter(t=>t!==v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Post type removed');
+}
+
+function renderSettingsTaskStatuses(panel){
+  const statuses = getTaskStatuses();
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Task Statuses</div>
+      <div class="req-tag" style="margin-bottom:10px;display:block;">Manage the workflow stages tasks move through, in order.</div>
+      <div>${statuses.map((t,i)=>`<span class="tag-chip">${i+1}. ${escapeHtml(t)}<button onclick="removeTaskStatus('${escapeHtml(t).replace(/'/g,"\\'")}')">✕</button></span>`).join('')}</div>
+      <div class="inline-add-row">
+        <input id="new-status-input" placeholder="New status name">
+        <button class="btn btn-primary btn-sm" onclick="addTaskStatus()">Add</button>
+      </div>
+    </div>
+  `;
+}
+function addTaskStatus(){
+  const input = document.getElementById('new-status-input');
+  const v = input.value.trim();
+  if(!v){ toast('Enter a status'); return; }
+  if(!DB.data.settings.taskStatuses) DB.data.settings.taskStatuses = TASK_STATUSES_DEFAULT.slice();
+  if(DB.data.settings.taskStatuses.includes(v)){ toast('Already exists'); return; }
+  DB.data.settings.taskStatuses.push(v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Status added');
+}
+function removeTaskStatus(v){
+  DB.data.settings.taskStatuses = getTaskStatuses().filter(t=>t!==v);
+  DB.save(); renderSettings(document.getElementById('view'));
+  toast('Status removed');
+}
+
+function renderSettingsNotifications(panel){
+  const ns = DB.data.settings.notifSettings || {};
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Notification Settings</div>
+      <div class="req-tag" style="margin-bottom:6px;display:block;">Enable or disable each notification type workspace-wide.</div>
+      ${Object.keys(NOTIF_TYPES).map(k=>`
+        <div class="toggle-row">
+          <div>${NOTIF_TYPES[k].badge} &nbsp;${NOTIF_TYPES[k].label}</div>
+          <label class="switch"><input type="checkbox" ${ns[k]!==false?'checked':''} onchange="toggleNotifSetting('${k}',this.checked)"><span class="slider"></span></label>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+function toggleNotifSetting(type, val){
+  if(!DB.data.settings.notifSettings) DB.data.settings.notifSettings = {};
+  DB.data.settings.notifSettings[type] = val;
+  DB.save();
+  toast('Notification settings updated');
+}
+
+function renderSettingsGoogle(panel){
+  const g = DB.data.settings.integrations || {};
+  panel.innerHTML = `
+    <div class="card" style="padding:20px;">
+      <div class="section-title">Google Integration</div>
+      <div class="req-tag" style="margin-bottom:12px;display:block;">Store configuration for Google Sheets and Google Drive. This is a demo — no real OAuth is performed.</div>
+      <div class="form-row"><label>Google Sheets URL</label><input id="int-sheets-url" placeholder="https://docs.google.com/spreadsheets/..." value="${escapeHtml(g.sheetsUrl||'')}"></div>
+      <div class="toggle-row"><div>Sheets connected</div><label class="switch"><input type="checkbox" ${g.sheetsConnected?'checked':''} onchange="toggleIntegration('sheetsConnected',this.checked)"><span class="slider"></span></label></div>
+      <div class="form-row" style="margin-top:14px;"><label>Google Drive folder URL</label><input id="int-drive-url" placeholder="https://drive.google.com/drive/folders/..." value="${escapeHtml(g.driveUrl||'')}"></div>
+      <div class="toggle-row"><div>Drive connected</div><label class="switch"><input type="checkbox" ${g.driveConnected?'checked':''} onchange="toggleIntegration('driveConnected',this.checked)"><span class="slider"></span></label></div>
+      <button class="btn btn-primary btn-sm" style="margin-top:14px;" onclick="saveGoogleSettings()">Save integration settings</button>
+    </div>
+  `;
+}
+function toggleIntegration(key, val){
+  if(!DB.data.settings.integrations) DB.data.settings.integrations = {};
+  DB.data.settings.integrations[key] = val;
+  DB.save();
+}
+function saveGoogleSettings(){
+  DB.data.settings.integrations.sheetsUrl = document.getElementById('int-sheets-url').value.trim();
+  DB.data.settings.integrations.driveUrl = document.getElementById('int-drive-url').value.trim();
+  DB.save();
+  logAudit(currentUser().id, 'settings_change', 'Updated Google integration settings');
+  toast('Integration settings saved');
+}
+
 /* MODAL & NOTIFICATIONS */
-function openModal(){ document.getElementById('modal-overlay').classList.add('open'); }
+function openModal(){
+  document.getElementById('modal-box').className = 'modal';
+  document.getElementById('modal-overlay').classList.add('open');
+}
 function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
 document.getElementById('modal-overlay').addEventListener('click', e=>{ if(e.target.id==='modal-overlay') closeModal(); });
 
