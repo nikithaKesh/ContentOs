@@ -4,16 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ContentOS</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
   :root{
-    --ink:#14171c; --ink-soft:#3c4249; --paper:#f1f3f0; --surface:#ffffff; --line:#dfe2dc;
-    --accent:#2f6f5e; --accent-dark:#204f42; --accent-soft:#e2ede8;
-    --amber:#e2a542; --amber-soft:#faecd6; --coral:#d1503f; --coral-soft:#f7e2de;
-    --blue:#3d6fa8; --blue-soft:#e1ebf4; --radius:10px;
+    --ink:#14171c;
+    --ink-soft:#3c4249;
+    --paper:#f1f3f0;
+    --surface:#ffffff;
+    --line:#dfe2dc;
+    --accent:#2f6f5e;
+    --accent-dark:#204f42;
+    --accent-soft:#e2ede8;
+    --amber:#e2a542;
+    --amber-soft:#faecd6;
+    --coral:#d1503f;
+    --coral-soft:#f7e2de;
+    --blue:#3d6fa8;
+    --blue-soft:#e1ebf4;
+    --radius:10px;
     --shadow: 0 1px 2px rgba(20,23,28,.04), 0 6px 20px -8px rgba(20,23,28,.12);
   }
   *{box-sizing:border-box;}
@@ -37,17 +46,16 @@
   .field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;margin-bottom:16px;background:#fbfbfa;}
   .field:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
   .btn{border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
-  .btn-primary{background:var(--accent);color:#fff;justify-content:center;}
+  .btn-primary{background:var(--accent);color:#fff;width:100%;justify-content:center;padding:11px;}
   .btn-primary:hover{background:var(--accent-dark);}
   .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
   .btn-ghost:hover{background:#f1f1ee;}
-  .btn-danger{background:var(--coral-soft);color:var(--coral);}
   .btn-sm{padding:6px 10px;font-size:12px;border-radius:7px;}
 
   /* ---------- APP SHELL ---------- */
   #app{display:none;height:100vh;}
   .shell{display:grid;grid-template-columns:220px 1fr;height:100vh;}
-  .dock{background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;transition:transform 0.3s;}
+  .dock{background:var(--ink);color:#dfe3e0;display:flex;flex-direction:column;padding:18px 12px;}
   .dock-logo{display:flex;align-items:center;gap:9px;padding:6px 10px 22px;}
   .dock-logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(47,111,94,.35);}
   .dock-logo span{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff;letter-spacing:-.02em;}
@@ -55,6 +63,7 @@
   .nav-item:hover{background:#1e2229;color:#fff;}
   .nav-item.active{background:var(--accent);color:#fff;}
   .nav-item svg{width:16px;height:16px;flex-shrink:0;}
+  .nav-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b716c;margin:16px 10px 6px;font-weight:600;}
   .dock-foot{margin-top:auto;padding:10px;border-top:1px solid #262b31;}
   .dock-user{display:flex;align-items:center;gap:8px;font-size:12.5px;}
   .avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
@@ -62,7 +71,7 @@
   .logout-link{font-size:11px;color:#8a908b;margin-top:8px;display:inline-block;}
   .logout-link:hover{color:#fff;}
 
-  .main-col{display:flex;flex-direction:column;min-width:0;position:relative;}
+  .main-col{display:flex;flex-direction:column;min-width:0;}
   .topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:14px;background:var(--surface);flex-shrink:0;}
   .search-wrap{flex:1;max-width:480px;position:relative;}
   .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#9a9d97;}
@@ -75,7 +84,6 @@
   .icon-btn svg{width:17px;height:17px;}
   .badge-dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid #fff;}
   .date-chip{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono';}
-  .menu-btn{display:none;background:none;border:none;font-size:18px;color:var(--ink-soft);cursor:pointer;}
 
   .view{flex:1;overflow-y:auto;padding:24px 28px;}
   .view-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
@@ -97,6 +105,11 @@
   .status-progress{background:var(--blue-soft);color:#264a72;}
   .status-review{background:#efe4f6;color:#5b3a80;}
   .status-done{background:var(--accent-soft);color:var(--accent-dark);}
+  .status-overdue{background:var(--coral-soft);color:#8f3323;}
+  .status-active{background:var(--accent-soft);color:var(--accent-dark);}
+  .status-new{background:var(--blue-soft);color:#264a72;}
+  .status-oos{background:var(--coral-soft);color:#8f3323;}
+  .status-disc{background:#eceae5;color:#6b6d68;}
 
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
   .select,.tfield{padding:7px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;background:#fff;color:var(--ink);}
@@ -108,27 +121,23 @@
   tr:last-child td{border-bottom:none;}
   tbody tr:hover{background:#fafaf8;}
 
-  .task-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.2s;}
-  .task-card:hover{box-shadow:var(--shadow);}
+  .task-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;}
   .task-card .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
   .task-card .title{font-weight:600;font-size:14px;}
   .task-card .meta{font-size:11.5px;color:var(--ink-soft);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap;}
+  .brand-group{margin-bottom:26px;}
+  .brand-group-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .brand-group-head .line{flex:1;height:1px;background:var(--line);}
 
-  /* Phase 2: Timelines & Comments */
-  .timeline{border-left:2px solid var(--line);margin-left:10px;padding-left:16px;}
-  .tl-item{position:relative;margin-bottom:16px;font-size:12px;}
-  .tl-item::before{content:'';position:absolute;left:-23px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);}
-  .comment-box{background:#fbfbfa;border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;font-size:13px;}
-  mark.hl { background: var(--amber-soft); color: var(--amber); padding: 0 2px; border-radius: 3px; font-weight:600; }
-  
-  .hub-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;}
-  .gallery-item{aspect-ratio:1;border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fbfbfa;cursor:pointer;transition:border-color 0.2s;}
-  .gallery-item:hover{border-color:var(--accent);}
+  .log-card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .log-embed{width:100%;aspect-ratio:16/10;background:#eef0ec;display:flex;align-items:center;justify-content:center;color:#9a9d97;font-size:12px;border-bottom:1px solid var(--line);}
+  .log-embed iframe{width:100%;height:100%;border:0;}
+  .log-body{padding:12px 14px;}
+  .log-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
 
-  .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.6);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:60;padding:6vh 20px;overflow-y:auto;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(20,23,28,.5);display:none;align-items:flex-start;justify-content:center;z-index:60;padding:6vh 20px;overflow-y:auto;}
   .modal-overlay.open{display:flex;}
   .modal{background:#fff;border-radius:14px;width:520px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);}
-  .modal-lg{width:850px;}
   .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);}
   .modal-head h3{margin:0;font-size:16px;}
   .modal-body{padding:18px 20px;max-height:65vh;overflow-y:auto;}
@@ -138,72 +147,146 @@
   .form-row{margin-bottom:14px;}
   .form-row label{font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:5px;}
   .form-row input,.form-row select,.form-row textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:7px;font-size:13.5px;background:#fbfbfa;}
+  .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
+  /* Command palette */
   #cmdk{position:fixed;inset:0;background:rgba(20,23,28,.45);z-index:80;display:none;align-items:flex-start;justify-content:center;padding-top:10vh;}
   #cmdk.open{display:flex;}
-  .cmdk-box{width:600px;max-width:90vw;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;}
+  .cmdk-box{width:560px;max-width:90vw;background:#fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;}
   .cmdk-input{width:100%;border:none;padding:16px 18px;font-size:15px;border-bottom:1px solid var(--line);}
   .cmdk-input:focus{outline:none;}
   .cmdk-results{max-height:360px;overflow-y:auto;}
   .cmdk-item{padding:11px 18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;border-bottom:1px solid #f2f2ef;}
   .cmdk-item:hover{background:var(--paper);cursor:pointer;}
+  .cmdk-tag{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
 
+  /* Notifications panel */
   #notif-panel{position:absolute;top:56px;right:20px;width:340px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:none;z-index:70;max-height:420px;overflow-y:auto;}
   #notif-panel.open{display:block;}
-  .notif-item{padding:12px 16px;border-bottom:1px solid #f2f2ef;font-size:12.5px;display:flex;gap:10px;align-items:flex-start;}
+  .notif-item{padding:12px 16px;border-bottom:1px solid #f2f2ef;font-size:12.5px;display:flex;gap:10px;}
+  .notif-item .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
+  .notif-item.read{opacity:.55;}
+  .notif-time{color:#9a9d97;font-size:10.5px;margin-top:3px;}
 
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
-  
-  /* Mobile Responsive Updates (Req 35) */
-  @media(max-width:980px){
-    .shell{display:block;height:auto;}
-    .dock{position:fixed;left:-240px;top:0;height:100vh;width:240px;box-shadow:2px 0 10px rgba(0,0,0,.2);z-index:100;}
-    .dock.open{transform:translateX(240px);}
-    .menu-btn{display:block;}
-    .grid-2,.grid-3,.hub-grid{grid-template-columns:1fr;}
-    .card{overflow-x:auto;}
-    .view{padding:16px;}
-  }
+  /* Calendar */
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .cal-dow{font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;text-align:center;padding-bottom:4px;font-weight:600;}
+  .cal-cell{background:#fff;border:1px solid var(--line);border-radius:8px;min-height:88px;padding:6px 7px;font-size:11.5px;position:relative;}
+  .cal-cell.dim{background:#f4f4f1;color:#b6b8b1;}
+  .cal-cell .dnum{font-weight:700;font-family:'Space Grotesk';font-size:13px;}
+  .cal-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+  .cal-tag{font-size:9.5px;padding:1px 5px;border-radius:5px;margin-top:3px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cal-holiday{background:var(--coral-soft);color:#8f3323;}
+  .cal-poya{background:#efe4f6;color:#5b3a80;}
+  .cal-religious{background:#e1ebf4;color:#264a72;}
+  .cal-marketing{background:var(--amber-soft);color:#8a5a12;}
+  .cal-task{background:var(--blue-soft);color:#264a72;}
+  .cal-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .cal-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .cal-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;}
+
+  /* Bars for analytics */
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .bar-label{width:120px;font-size:12px;flex-shrink:0;}
+  .bar-track{flex:1;height:10px;background:#eceae5;border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;}
+  .bar-val{width:34px;text-align:right;font-size:12px;font-family:'IBM Plex Mono';color:var(--ink-soft);}
+
+  .empty-state{text-align:center;padding:50px 20px;color:var(--ink-soft);}
+  .empty-state svg{width:38px;height:38px;margin-bottom:10px;opacity:.5;}
+  .empty-state .t{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:4px;}
+
+  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:980px){.shell{grid-template-columns:70px 1fr;} .dock-logo span,.nav-item span,.dock-user .txt{display:none;} .nav-item{justify-content:center;} .dock-logo{justify-content:center;} .grid-2,.grid-3{grid-template-columns:1fr;}}
+
+  .section-title{font-size:14px;font-weight:700;margin-bottom:12px;}
   .toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:200;display:none;align-items:center;gap:8px;}
   .toast.show{display:flex;}
+  .req-tag{font-size:10px;color:var(--ink-soft);}
+
+  /* Task detail / comments / history / drive links */
+  .drive-link-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin-bottom:7px;font-size:12.5px;background:#fbfbfa;}
+  .drive-link-row a{color:var(--accent);font-weight:600;}
+  .drive-link-meta{font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
+  .add-link-row{display:flex;gap:8px;margin-top:8px;}
+  .add-link-row input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;}
+
+  .comment-item{padding:10px 0;border-bottom:1px solid #f0f0ec;}
+  .comment-head{display:flex;justify-content:space-between;align-items:center;}
+  .comment-user{font-weight:600;font-size:12.5px;}
+  .comment-time{font-size:10.5px;color:var(--ink-soft);}
+  .comment-text{font-size:12.5px;margin-top:4px;color:var(--ink);white-space:pre-wrap;}
+  .comment-actions{display:flex;gap:10px;margin-top:5px;}
+  .comment-actions a{font-size:10.5px;color:var(--ink-soft);font-weight:600;}
+  .comment-actions a:hover{color:var(--accent);}
+  .comment-edited-tag{font-size:9.5px;color:#9a9d97;margin-left:4px;}
+  .comment-input-row{display:flex;gap:8px;margin-top:10px;}
+  .comment-input-row textarea{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;resize:vertical;min-height:38px;}
+
+  .timeline{position:relative;padding-left:16px;}
+  .timeline-item{position:relative;padding-bottom:14px;font-size:12px;}
+  .timeline-item:before{content:'';position:absolute;left:-16px;top:4px;width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .timeline-item:after{content:'';position:absolute;left:-13px;top:11px;bottom:0;width:1px;background:var(--line);}
+  .timeline-item:last-child:after{display:none;}
+  .timeline-detail{color:var(--ink-soft);font-size:11px;margin-top:1px;}
+  .detail-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+  .detail-tab{padding:7px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);border-bottom:2px solid transparent;cursor:pointer;}
+  .detail-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .search-counter-wrap{display:flex;gap:8px;margin-bottom:12px;}
+  .search-counter-wrap input{flex:1;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;}
 </style>
 </head>
 <body>
 
+<!-- ============ LOGIN ============ -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo"><span class="dot"></span><span>ContentOS</span></div>
-    <div class="login-sub">Workspace Authentication (Phase 2)</div>
-    <label class="field-label">Select User Profile</label>
-    <select class="field" id="login-user"></select>
-    <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Enter Workspace</button>
+    <div class="login-sub">Sign in to your content operations workspace.</div>
+    <label class="field-label">Your name</label>
+    <input class="field" id="login-name" placeholder="e.g. Nadeesha Perera" list="user-list">
+    <datalist id="user-list"></datalist>
+    <label class="field-label">Role</label>
+    <select class="field" id="login-role">
+      <option value="Admin">Admin — Full access</option>
+      <option value="General Manager">General Manager — Create, review, approve tasks</option>
+      <option value="Content Creator">Content Creator — View assigned tasks, upload work</option>
+      <option value="Viewer">Viewer — Read only</option>
+    </select>
+    <button class="btn btn-primary" onclick="doLogin()">Enter workspace</button>
+    <div style="text-align:center;margin-top:14px;">
+      <span class="req-tag">Demo data is stored locally in this browser.</span>
+    </div>
   </div>
 </div>
 
+<!-- ============ APP ============ -->
 <div id="app">
 <div class="shell">
-  <div class="dock" id="sidebar">
+  <!-- DOCK / SIDEBAR -->
+  <div class="dock">
     <div class="dock-logo"><span class="dot"></span><span>ContentOS</span></div>
-    <div id="nav-list" style="flex:1;overflow-y:auto;"></div>
+    <div id="nav-list"></div>
     <div class="dock-foot">
       <div class="dock-user">
         <div class="avatar" id="user-avatar">--</div>
         <div class="txt">
-          <div id="user-name-tag" style="color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;"></div>
+          <div id="user-name-tag" style="color:#fff;font-weight:600;"></div>
           <div class="role-tag" id="user-role-tag"></div>
         </div>
       </div>
-      <a class="logout-link" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign out</a>
+      <a class="logout-link" onclick="doLogout()">Sign out</a>
     </div>
   </div>
 
+  <!-- MAIN -->
   <div class="main-col">
     <div class="topbar">
-      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="global-search" placeholder="Search tasks, products, brands, logs, comments... (/)" onfocus="openCmdk()" readonly>
+        <input id="global-search" placeholder="Search tasks, brands, products, logs..." onfocus="openCmdk()" readonly>
         <span class="kbd">/</span>
       </div>
       <div class="topbar-right">
@@ -219,150 +302,233 @@
 </div>
 </div>
 
+<!-- Notifications panel -->
 <div id="notif-panel">
-  <div style="padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fbfbfa;">
-    <select id="notif-filter" class="select" style="padding:4px;font-size:11px;" onchange="renderNotifList()">
-      <option value="all">All Notifications</option>
-      <option value="Task">Tasks</option>
-      <option value="Comment">Comments</option>
-      <option value="Warning">Warnings</option>
-      <option value="System">System</option>
-    </select>
-    <a style="font-size:11px;color:var(--accent);font-weight:600;cursor:pointer;" onclick="markAllRead()">Mark all read</a>
+  <div style="padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;display:flex;justify-content:space-between;">
+    <span>Notifications</span>
+    <a style="font-size:11px;color:var(--accent);font-weight:600;" onclick="markAllRead()">Mark all read</a>
   </div>
   <div id="notif-list"></div>
 </div>
 
+<!-- Command palette -->
 <div id="cmdk" onclick="if(event.target===this)closeCmdk()">
   <div class="cmdk-box">
-    <input class="cmdk-input" id="cmdk-input" placeholder="Search across all modules..." oninput="renderCmdkResults(this.value)">
+    <input class="cmdk-input" id="cmdk-input" placeholder="Search everything in ContentOS..." oninput="renderCmdkResults(this.value)">
     <div class="cmdk-results" id="cmdk-results"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay"><div class="modal" id="modal-box"></div></div>
+<!-- Generic modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-box"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
-   ContentOS Phase 2 — Core Data & Configuration
+   ContentOS — data layer
+   NOTE: Storage is a swappable adapter. Right now it persists
+   to localStorage so the whole system runs from one file with
+   no backend. Every read/write goes through DB.* so this layer
+   can later be pointed at Google Sheets / Drive via their APIs
+   without touching any view code.
 ========================================================= */
 
-// Req 22: Advanced Permission Matrix
-const ROLES_MATRIX = {
-  'Admin': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:true, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:true}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:true, edit:true}, users:{view:true, create:true, edit:true, del:true}, audit:{view:true}, trash:{view:true, restore:true, del:true}, log:{view:true} },
-  'General Manager': { dashboard:{view:true}, tasks:{view:true, create:true, edit:true, del:false, assign:true, comment:true, complete:true}, products:{view:true, create:true, edit:true, del:false}, brands:{view:true, edit:true}, reports:{view:true, export:true}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:true, create:false, edit:false, del:false}, audit:{view:true}, trash:{view:false, restore:false, del:false}, log:{view:true} },
-  'Content Creator': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:true, complete:true}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:false, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, log:{view:true} },
-  'Viewer': { dashboard:{view:true}, tasks:{view:true, create:false, edit:false, del:false, assign:false, comment:false, complete:false}, products:{view:true, create:false, edit:false, del:false}, brands:{view:true, edit:false}, reports:{view:true, export:false}, analytics:{view:true}, settings:{view:false, edit:false}, users:{view:false, create:false, edit:false, del:false}, audit:{view:false}, trash:{view:false, restore:false, del:false}, log:{view:true} }
+let BRANDS = [];
+const POST_TYPES = ['Story','Post','Status','Video','Animation','Other'];
+const TASK_STATUSES = ['Pending','In Progress','In Review','Done'];
+const PRODUCT_STATUSES = ['New Product','Active','Out of Stock','Discontinued'];
+const ROLES = {
+  'Admin':          {label:'Admin', desc:'Full access', pages:['dashboard','tasks','log','calendar','products','brands','analytics','users'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true},
+  'General Manager':{label:'General Manager', desc:'Create, review & approve tasks', pages:['dashboard','tasks','log','calendar','products','brands','analytics','users'], canCreateTask:true, canReview:true, canApprove:true, canUpload:true, canManageUsers:true, canManageProducts:true, canManageBrands:true},
+  'Content Creator':{label:'Content Creator', desc:'View assigned tasks, upload work', pages:['dashboard','tasks','log','calendar','products','brands'], canCreateTask:false, canReview:false, canApprove:false, canUpload:true, canManageUsers:false, canManageProducts:false, canManageBrands:false},
+  'Viewer':         {label:'Viewer', desc:'Read only', pages:['dashboard','tasks','log','calendar','products','brands','analytics'], canCreateTask:false, canReview:false, canApprove:false, canUpload:false, canManageUsers:false, canManageProducts:false, canManageBrands:false},
 };
 
-const DEFAULT_SETTINGS = {
-  postTypes: ['Story','Post','Status','Video','Animation','Other'],
-  taskStatuses: ['Pending','In Progress','In Review','Done'],
-  taskPriorities: ['High', 'Normal', 'Low'],
-  productStatuses: ['New Product','Active','Out of Stock','Discontinued'],
-  productCategories: ['Serum', 'Cream', 'Body Care', 'Hair Care', 'Supplement', 'Scrub', 'Gel', 'Other'],
-  googleDrive: { rootFolderId: '', autoCreateFolders: false, brandDefaultIds:{}, prodDefaultIds:{} },
-  googleSheets: { sheetId: '', syncTasks: false, syncProducts: false },
-  notifPrefs: { Task:true, Comment:true, Warning:true, System:true }
-};
+// Sri Lanka 2026 public/bank holidays & Poya days (per Government Gazette calendar; Islamic
+// dates marked "~" are estimates pending official moon-sighting confirmation), plus the
+// marketing/shopping dates that typically drive campaign briefs for these brands.
+// type: 'public'    = gazetted public/bank holiday (office closed, plan content ahead)
+//       'poya'      = Full Moon Poya day (paid holiday, low commercial activity)
+//       'religious' = religious observance, may affect shoot/office availability
+//       'marketing' = shopping/gifting/awareness date brands typically run campaigns around
+const SL_HOLIDAYS = [
+  // ---- Gazetted public / bank holidays ----
+  {date:'2026-01-01', name:"New Year's Day", type:'public'},
+  {date:'2026-02-04', name:'Independence Day', type:'public'},
+  {date:'2026-03-18', name:'Government Holiday (public institutions)', type:'public'},
+  {date:'2026-03-25', name:'Government Holiday (public institutions)', type:'public'},
+  {date:'2026-04-03', name:'Good Friday', type:'public'},
+  {date:'2026-04-08', name:'Government Holiday (public institutions)', type:'public'},
+  {date:'2026-04-13', name:'Day Prior to Sinhala & Tamil New Year', type:'public'},
+  {date:'2026-04-14', name:'Sinhala & Tamil New Year Day', type:'public'},
+  {date:'2026-04-15', name:'Government Holiday (public institutions)', type:'public'},
+  {date:'2026-05-01', name:'May Day / Labour Day', type:'public'},
+  {date:'2026-12-25', name:'Christmas Day', type:'public'},
+
+  // ---- Full Moon Poya days (paid holiday, low commercial activity) ----
+  {date:'2026-01-03', name:'Duruthu Full Moon Poya Day', type:'poya'},
+  {date:'2026-02-01', name:'Navam Full Moon Poya Day', type:'poya'},
+  {date:'2026-03-02', name:'Madin Full Moon Poya Day', type:'poya'},
+  {date:'2026-04-01', name:'Bak Full Moon Poya Day', type:'poya'},
+  {date:'2026-05-30', name:'Vesak Full Moon Poya Day (observed)', type:'poya'},
+  {date:'2026-05-31', name:'Day Following Vesak Poya Day', type:'poya'},
+  {date:'2026-06-29', name:'Poson Full Moon Poya Day', type:'poya'},
+  {date:'2026-07-29', name:'Esala Full Moon Poya Day', type:'poya'},
+  {date:'2026-08-27', name:'Nikini Full Moon Poya Day', type:'poya'},
+  {date:'2026-09-26', name:'Binara Full Moon Poya Day', type:'poya'},
+  {date:'2026-10-25', name:'Vap Full Moon Poya Day', type:'poya'},
+  {date:'2026-11-24', name:'Ill Full Moon Poya Day', type:'poya'},
+  {date:'2026-12-23', name:'Unduvap Full Moon Poya Day', type:'poya'},
+
+  // ---- Religious observances (may affect shoot/office availability) ----
+  {date:'2026-01-15', name:'Tamil Thai Pongal Day', type:'religious'},
+  {date:'2026-02-15', name:'Mahasivarathri Day', type:'religious'},
+  {date:'2026-03-21', name:'Id-Ul-Fitr (Ramazan Festival Day)', type:'religious'},
+  {date:'2026-05-28', name:'Id-Ul-Alha (Hajji Festival Day)', type:'religious'},
+  {date:'2026-08-26', name:"Milad-Un-Nabi (Holy Prophet's Birthday)", type:'religious'},
+  {date:'2026-11-08', name:'Deepavali Festival Day', type:'religious'},
+
+  // ---- Marketing & content-planning dates ----
+  {date:'2026-01-02', name:'Back-to-school campaign season begins', type:'marketing'},
+  {date:'2026-02-14', name:"Valentine's Day", type:'marketing'},
+  {date:'2026-03-08', name:"International Women's Day", type:'marketing'},
+  {date:'2026-03-15', name:'Avurudu shopping season begins', type:'marketing'},
+  {date:'2026-04-07', name:'World Health Day', type:'marketing'},
+  {date:'2026-05-10', name:"Mother's Day", type:'marketing'},
+  {date:'2026-06-05', name:'World Environment Day', type:'marketing'},
+  {date:'2026-06-21', name:"Father's Day", type:'marketing'},
+  {date:'2026-07-24', name:'International Self-Care Day', type:'marketing'},
+  {date:'2026-10-01', name:'Deepavali shopping season begins', type:'marketing'},
+  {date:'2026-10-31', name:'Halloween', type:'marketing'},
+  {date:'2026-11-26', name:'Thanksgiving (US)', type:'marketing'},
+  {date:'2026-11-27', name:'Black Friday', type:'marketing'},
+  {date:'2026-11-30', name:'Cyber Monday', type:'marketing'},
+  {date:'2026-12-01', name:'Christmas shopping season begins', type:'marketing'},
+  {date:'2026-12-31', name:"New Year's Eve", type:'marketing'},
+];
+function holidayTypeMeta(t){
+  return {
+    public:    {label:'Public holiday', cls:'cal-holiday'},
+    poya:      {label:'Poya day',       cls:'cal-poya'},
+    religious: {label:'Religious',      cls:'cal-religious'},
+    marketing: {label:'Marketing date', cls:'cal-marketing'},
+  }[t] || {label:'Event', cls:'cal-holiday'};
+}
+
+function uid(prefix){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDateTime(ts){ if(!ts) return '—'; const d=new Date(ts); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' · '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
+function brandOf(id){ return BRANDS.find(b=>b.id===id) || {name:'Unknown',color:'#999'}; }
 
 const DB = {
-  key: 'contentos_db_v2_final',
+  key: 'contentos_db_v1',
   data: null,
-  load() {
+  load(){
     const raw = localStorage.getItem(this.key);
-    if(raw) { this.data = JSON.parse(raw); this.migrate(); } 
-    else { this.data = this.seed(); this.save(); }
-  },
-  migrate() {
-    // Upgrades V1 structure to V2
-    if(!this.data.brands) this.data.brands = [ {id:'exact',name:'Exact Extract',color:'#2f6f5e',priority:true}, {id:'biseka',name:'Biseka',color:'#3d6fa8',priority:true}, {id:'lovelab',name:'Love&Lab',color:'#d1503f',priority:true}, {id:'ola',name:'OLA Tangalle',color:'#e2a542',priority:false} ];
-    if(!this.data.settings) this.data.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-    if(!this.data.settings.taskPriorities) this.data.settings.taskPriorities = ['High','Normal','Low'];
-    if(!this.data.settings.notifPrefs) this.data.settings.notifPrefs = {Task:true,Comment:true,Warning:true,System:true};
-    if(!this.data.comments) this.data.comments = [];
-    if(!this.data.history) this.data.history = [];
-    if(!this.data.audit) this.data.audit = [];
-    if(!this.data.trash) this.data.trash = [];
-    if(!this.data.logs) this.data.logs = [];
-    
-    this.data.tasks.forEach(t => { 
-      if(t.deleted===undefined) t.deleted = false; 
-      if(!t.priority) t.priority = 'Normal';
-      if(!t.links) { t.links = t.driveLink ? [{id:uid('lnk'), name:'Main File', url:t.driveLink}] : []; delete t.driveLink; }
-    });
-    this.data.products.forEach(p => { if(p.deleted===undefined) p.deleted = false; });
+    if(raw){ this.data = JSON.parse(raw); this.migrate(); return; }
+    this.data = this.seed();
     this.save();
   },
-  save() { localStorage.setItem(this.key, JSON.stringify(this.data)); },
-  seed() {
+  migrate(){
+    // Backfill fields for data saved by earlier versions of the app.
+    if(!this.data.brands) this.data.brands = this.seed().brands;
+    (this.data.tasks||[]).forEach(t=>{
+      if(!t.comments) t.comments = [];
+      if(!t.driveLinks){
+        t.driveLinks = t.driveLink ? [{id:uid('dl'), url:t.driveLink, addedBy:t.addedBy, ts:Date.now()}] : [];
+      }
+      if(!t.history){
+        t.history = [{ts:Date.now(), by:t.addedBy, action:'created', detail:'Task created'}];
+      }
+    });
+  },
+  save(){ localStorage.setItem(this.key, JSON.stringify(this.data)); },
+  seed(){
+    const brands = [
+      {id:'exact',   name:'Exact Extract',     color:'#2f6f5e', priority:true},
+      {id:'biseka',  name:'Biseka',            color:'#3d6fa8', priority:true},
+      {id:'lovelab', name:'Love&Lab',          color:'#d1503f', priority:true},
+      {id:'ola',     name:'OLA Tangalle',      color:'#e2a542', priority:false},
+      {id:'scrub',   name:'Scrub&Butter',      color:'#7a5cae', priority:false},
+      {id:'titan',   name:'Titan Fitness',     color:'#20685e', priority:false},
+      {id:'mob',     name:'MOB',               color:'#8a6d3b', priority:false},
+      {id:'chill',   name:'Chill Tango',       color:'#3a7c9e', priority:false},
+      {id:'yatadola',name:'Yatadola Eco Villa',color:'#5c7a3a', priority:false},
+    ];
     const users = [
       {id:'u1', name:'Sanduni Fernando', role:'Admin', email:'sanduni@agency.lk'},
       {id:'u2', name:'Ruwan Jayasinghe', role:'General Manager', email:'ruwan@agency.lk'},
       {id:'u3', name:'Nadeesha Perera', role:'Content Creator', email:'nadeesha@agency.lk'},
-      {id:'u4', name:'Ishara Madushani', role:'Viewer', email:'ishara@agency.lk'}
+      {id:'u4', name:'Kavindu Silva', role:'Content Creator', email:'kavindu@agency.lk'},
+      {id:'u5', name:'Ishara Madushani', role:'Viewer', email:'ishara@agency.lk'},
     ];
-    const brands = [ {id:'exact',name:'Exact Extract',color:'#2f6f5e',priority:true}, {id:'biseka',name:'Biseka',color:'#3d6fa8',priority:true}, {id:'lovelab',name:'Love&Lab',color:'#d1503f',priority:true}, {id:'ola',name:'OLA Tangalle',color:'#e2a542',priority:false} ];
     const products = [
-      {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active', ts:Date.now()-864000000, deleted:false},
-      {id:'p2', name:'Charcoal Deep Cleanse Bar', brand:'biseka', sku:'BSK-CH-100', category:'Soap', status:'New Product', ts:Date.now()-400000000, deleted:false}
+      {id:'p1', name:'Vitamin C Face Serum', brand:'exact', sku:'EXA-VC-030', category:'Serum', status:'Active'},
+      {id:'p2', name:'Charcoal Deep Cleanse Bar', brand:'biseka', sku:'BSK-CH-100', category:'Soap', status:'New Product'},
+      {id:'p3', name:'Rose Glow Body Butter', brand:'lovelab', sku:'LNL-RG-200', category:'Body Care', status:'Active'},
+      {id:'p4', name:'Coconut Milk Shampoo', brand:'exact', sku:'EXA-CM-250', category:'Hair Care', status:'Out of Stock'},
+      {id:'p5', name:'Turmeric Night Cream', brand:'biseka', sku:'BSK-TN-050', category:'Cream', status:'Active'},
+      {id:'p6', name:'Sea Salt Body Scrub', brand:'scrub', sku:'SNB-SS-300', category:'Scrub', status:'Active'},
+      {id:'p7', name:'Aloe Repair Gel', brand:'lovelab', sku:'LNL-AR-150', category:'Gel', status:'Discontinued'},
+      {id:'p8', name:'Herbal Detox Tea', brand:'titan', sku:'TFT-HD-020', category:'Supplement', status:'New Product'},
     ];
+    const now = Date.now();
     const tasks = [
-      {id:'t1', brand:'exact', title:'Instagram Reel Launch', type:'Video', product:'p1', assignee:'u3', addedBy:'u1', priority:'High', date:todayISO(), status:'Pending', links:[], deleted:false, ts:Date.now()-80000},
-      {id:'t2', brand:'biseka', title:'Story Set - Charcoal Bar', type:'Story', product:'p2', assignee:'u3', addedBy:'u2', priority:'Normal', date:todayISO(), status:'In Progress', links:[{id:uid('lnk'), name:'Canva Source', url:'https://canva.com'}], deleted:false, ts:Date.now()-3000000}
+      {id:'t1', brand:'exact', title:'Instagram Reel — Vitamin C Serum launch', type:'Video', product:'p1', assignee:'u3', addedBy:'u2', date:todayISO(), status:'Pending', notes:'Focus on glow-up transformation, 15-20s.', driveLinks:[], comments:[], history:[{ts:now, by:'u2', action:'created', detail:'Task created'}]},
+      {id:'t2', brand:'biseka', title:'Story set — Charcoal Bar behind the scenes', type:'Story', product:'p2', assignee:'u4', addedBy:'u2', date:todayISO(), status:'In Progress', notes:'3 story frames, factory footage.', driveLinks:[], comments:[], history:[{ts:now, by:'u2', action:'created', detail:'Task created'},{ts:now, by:'u4', action:'status', detail:'Status changed to In Progress'}]},
+      {id:'t3', brand:'lovelab', title:'Carousel post — Rose Glow ingredients', type:'Post', product:'p3', assignee:'u3', addedBy:'u1', date:todayISO(), status:'In Review', notes:'', driveLinks:[{id:uid('dl'), url:'https://drive.google.com/drive/folders/demo1', addedBy:'u3', ts:now}], comments:[], history:[{ts:now, by:'u1', action:'created', detail:'Task created'}]},
+      {id:'t4', brand:'exact', title:'Brand status update — no product tie-in', type:'Status', product:'', assignee:'u4', addedBy:'u2', date:todayISO(), status:'Done', notes:'General brand awareness post.', driveLinks:[{id:uid('dl'), url:'https://drive.google.com/drive/folders/demo2', addedBy:'u4', ts:now}], comments:[], history:[{ts:now, by:'u2', action:'created', detail:'Task created'},{ts:now, by:'u4', action:'completed', detail:'Marked as complete'}]},
+      {id:'t5', brand:'scrub', title:'Animation — logo intro sting', type:'Animation', product:'', assignee:'u3', addedBy:'u1', date: pastDate(1), status:'Done', notes:'', driveLinks:[{id:uid('dl'), url:'https://drive.google.com/drive/folders/demo3', addedBy:'u3', ts:now}], comments:[], history:[{ts:now, by:'u1', action:'created', detail:'Task created'},{ts:now, by:'u3', action:'completed', detail:'Marked as complete'}]},
+      {id:'t6', brand:'ola', title:'Video — villa pool sunset walkthrough', type:'Video', product:'', assignee:'u4', addedBy:'u2', date: futureDate(1), status:'Pending', notes:'Golden hour only.', driveLinks:[], comments:[], history:[{ts:now, by:'u2', action:'created', detail:'Task created'}]},
+      {id:'t7', brand:'titan', title:'Post — Herbal Detox Tea launch teaser', type:'Post', product:'p8', assignee:'u3', addedBy:'u1', date: futureDate(2), status:'Pending', notes:'', driveLinks:[], comments:[], history:[{ts:now, by:'u1', action:'created', detail:'Task created'}]},
+      {id:'t8', brand:'biseka', title:'Story — Turmeric Night Cream routine', type:'Story', product:'p5', assignee:'u4', addedBy:'u2', date: pastDate(2), status:'Done', notes:'', driveLinks:[{id:uid('dl'), url:'https://drive.google.com/drive/folders/demo4', addedBy:'u4', ts:now}], comments:[], history:[{ts:now, by:'u2', action:'created', detail:'Task created'},{ts:now, by:'u4', action:'completed', detail:'Marked as complete'}]},
     ];
-    return { users, brands, products, tasks, logs:[], notifications:[], comments:[], history:[], audit:[], trash:[], settings:JSON.parse(JSON.stringify(DEFAULT_SETTINGS)) };
+    const logs = tasks.filter(t=>t.status==='Done').map(t=>({
+      id: uid('log'), taskId:t.id, brand:t.brand, product:t.product, type:t.type,
+      completedBy:t.assignee, date:t.date, driveLink:(t.driveLinks[0]||{}).url||'', title:t.title
+    }));
+    const notifications = [
+      {id:uid('n'), text:'Ruwan Jayasinghe assigned you a new task for Exact Extract.', ts: now-1000*60*20, read:false, forRole:'Content Creator'},
+      {id:uid('n'), text:'Task "Rose Glow ingredients" is waiting for your review.', ts: now-1000*60*60*2, read:false, forRole:'General Manager'},
+      {id:uid('n'), text:'Coconut Milk Shampoo (Exact Extract) marked Out of Stock.', ts: now-1000*60*60*6, read:true, forRole:'all'},
+      {id:uid('n'), text:'New product added: Herbal Detox Tea (Titan Fitness).', ts: now-1000*60*60*24, read:true, forRole:'all'},
+    ];
+    return {brands, users, products, tasks, logs, notifications};
   }
 };
+function pastDate(days){ const d=new Date(); d.setDate(d.getDate()-days); return d.toISOString().slice(0,10); }
+function futureDate(days){ const d=new Date(); d.setDate(d.getDate()+days); return d.toISOString().slice(0,10); }
 
-/* --- Global Helpers --- */
-function uid(prefix){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
-function todayISO(){ return new Date().toISOString().slice(0,10); }
-function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
-function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
-function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function hl(text, q) { if(!q || !text) return escapeHtml(text); return escapeHtml(text).replace(new RegExp(`(${escapeHtml(q)})`, 'gi'), '<mark class="hl">$1</mark>'); } // Req 9 Highlight
-function brandOf(id){ return DB.data.brands.find(b=>b.id===id) || {name:'Unknown', color:'#999'}; }
-function getUserName(id){ const u=DB.data.users.find(x=>x.id===id); return u ? u.name : 'System'; }
-
-let SESSION = null; 
+let SESSION = null; // {name, role}
 let currentView = 'dashboard';
 
-/* =========================================================
-   SYSTEM LOGGING & AUDIT (Req 20, 21, 3)
-========================================================= */
-function logAudit(module, action, oldVal, newVal) { 
-  DB.data.audit.unshift({ id: uid('aud'), user: SESSION.id, module, action, oldVal: JSON.stringify(oldVal), newVal: JSON.stringify(newVal), ts: Date.now() });
-}
-function logTaskHistory(taskId, action) { 
-  DB.data.history.unshift({ id: uid('hst'), taskId, user: SESSION.id, action, ts: Date.now() });
-}
-function addNotif(text, type='System', roleFilter='all') { 
-  if(DB.data.settings.notifPrefs && DB.data.settings.notifPrefs[type] === false) return; 
-  const icons = {'Comment':'<i class="fas fa-comment-dots text-blue-500"></i>', 'Warning':'<i class="fas fa-exclamation-triangle" style="color:var(--amber);"></i>', 'Task':'<i class="fas fa-tasks text-teal-600"></i>', 'System':'<i class="fas fa-cog text-gray-500"></i>'};
-  DB.data.notifications.unshift({ id: uid('ntf'), text, type, icon:icons[type]||'🔔', ts: Date.now(), read: false, forRole: roleFilter });
-  refreshNotifDot();
-}
-function softDelete(module, id, itemObj) { 
-  itemObj.deleted = true;
-  DB.data.trash.unshift({ id: uid('trsh'), module, itemId: id, itemData: JSON.stringify(itemObj), deletedBy: SESSION.id, ts: Date.now() });
-  logAudit(module, 'Moved to Trash', itemObj.name || itemObj.title, null);
-  DB.save();
-}
-
-/* =========================================================
-   AUTHENTICATION & NAVIGATION
-========================================================= */
 function doLogin(){
-  const userId = document.getElementById('login-user').value;
-  const user = DB.data.users.find(u=>u.id===userId);
-  SESSION = { id: user.id, name: user.name, role: user.role };
+  const name = document.getElementById('login-name').value.trim() || 'Guest User';
+  const role = document.getElementById('login-role').value;
+  SESSION = {name, role};
   localStorage.setItem('contentos_session', JSON.stringify(SESSION));
+  DB.load();
+  BRANDS = DB.data.brands;
+  ensureUser(name, role);
   boot();
 }
-function doLogout(){ localStorage.removeItem('contentos_session'); location.reload(); }
-function perms(){ return ROLES_MATRIX[SESSION.role] || ROLES_MATRIX['Viewer']; }
+function ensureUser(name, role){
+  const exists = DB.data.users.find(u=>u.name.toLowerCase()===name.toLowerCase());
+  if(!exists){ DB.data.users.push({id:uid('u'), name, role, email:''}); DB.save(); }
+}
+function doLogout(){
+  localStorage.removeItem('contentos_session');
+  location.reload();
+}
+function currentUser(){
+  return DB.data.users.find(u=>u.name.toLowerCase()===SESSION.name.toLowerCase()) || {name:SESSION.name, role:SESSION.role};
+}
+function perms(){ return ROLES[SESSION.role] || ROLES['Viewer']; }
 
 function boot(){
   document.getElementById('login-screen').style.display='none';
@@ -371,1068 +537,952 @@ function boot(){
   document.getElementById('user-role-tag').textContent = SESSION.role;
   document.getElementById('user-avatar').textContent = SESSION.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long', day:'2-digit', month:'short', year:'numeric'});
-  buildNav(); renderView('dashboard'); refreshNotifDot();
+  buildNav();
+  renderView('dashboard');
+  refreshNotifDot();
 }
 
+/* ---------------- NAV ---------------- */
+const NAV_ITEMS = [
+  {id:'dashboard', label:'Dashboard', icon:'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'},
+  {id:'tasks', label:'Tasks', icon:'M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11'},
+  {id:'log', label:'Content Log', icon:'M4 6h16M4 12h16M4 18h7'},
+  {id:'calendar', label:'Calendar', icon:'M8 2v4M16 2v4M3 9h18M4 5h16a1 1 0 011 1v13a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z'},
+  {id:'products', label:'Products', icon:'M20.5 7.3L12 12l-8.5-4.7M12 12v9M20.5 7.3L12 3 3.5 7.3 12 12l8.5-4.7z'},
+  {id:'brands', label:'Brands', icon:'M12 2l2.4 5.5L20 8l-4.4 3.8L17 18l-5-3.2L7 18l1.4-6.2L4 8l5.6-.5L12 2z'},
+  {id:'analytics', label:'Analytics', icon:'M4 19h16M7 15v4M12 9v10M17 5v14'},
+  {id:'users', label:'Users', icon:'M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75'},
+];
 function buildNav(){
   const p = perms();
-  const menu = [
-    {id:'dashboard', label:'Dashboard', icon:'<i class="fas fa-home"></i>', show:p.dashboard?.view},
-    {id:'tasks', label:'Task Workflow', icon:'<i class="fas fa-tasks"></i>', show:p.tasks?.view},
-    {id:'products', label:'Products Library', icon:'<i class="fas fa-box-open"></i>', show:p.products?.view},
-    {id:'log', label:'Content Logs', icon:'<i class="fas fa-history"></i>', show:p.log?.view},
-    {id:'brands', label:'Brands', icon:'<i class="fas fa-tags"></i>', show:p.brands?.view},
-    {id:'analytics', label:'Analytics', icon:'<i class="fas fa-chart-line"></i>', show:p.analytics?.view},
-    {id:'reports', label:'Export Reports', icon:'<i class="fas fa-file-export"></i>', show:p.reports?.view},
-    {id:'users', label:'Team & Users', icon:'<i class="fas fa-users"></i>', show:p.users?.view},
-    {id:'audit', label:'System Audit', icon:'<i class="fas fa-shield-alt"></i>', show:p.audit?.view},
-    {id:'trash', label:'Trash', icon:'<i class="fas fa-trash-alt"></i>', show:p.trash?.view},
-    {id:'settings', label:'Settings', icon:'<i class="fas fa-cog"></i>', show:p.settings?.view},
-  ];
-  document.getElementById('nav-list').innerHTML = menu.filter(m=>m.show).map(m=>`
-    <a class="nav-item ${currentView===m.id?'active':''}" onclick="renderView('${m.id}')">
-      <span style="width:20px; text-align:center;">${m.icon}</span> <span>${m.label}</span>
+  const wrap = document.getElementById('nav-list');
+  wrap.innerHTML = NAV_ITEMS.filter(n=>p.pages.includes(n.id)).map(n=>`
+    <a class="nav-item" data-nav="${n.id}" onclick="renderView('${n.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${n.icon}"/></svg>
+      <span>${n.label}</span>
     </a>`).join('');
 }
-function renderView(id) {
-  currentView = id; buildNav();
-  if(window.innerWidth <= 980) document.getElementById('sidebar').classList.remove('open');
-  const renders = {dashboard:renderDash, tasks:renderTasks, products:renderProducts, log:renderLogs, brands:renderBrands, analytics:renderAnalytics, settings:renderSettings, reports:renderReports, users:renderUsers, audit:renderAudit, trash:renderTrash};
-  if(renders[id]) renders[id](document.getElementById('view'));
+function setActiveNav(id){
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active', el.dataset.nav===id));
+}
+
+/* ---------------- ROUTER ---------------- */
+function renderView(id){
+  if(!perms().pages.includes(id)) id = 'dashboard';
+  currentView = id;
+  setActiveNav(id);
+  const el = document.getElementById('view');
+  const renderers = {dashboard:renderDashboard, tasks:renderTasks, log:renderLog, calendar:renderCalendar, products:renderProducts, brands:renderBrands, analytics:renderAnalytics, users:renderUsers};
+  el.innerHTML = '';
+  (renderers[id]||renderDashboard)(el);
+}
+
+/* ---------------- TOAST ---------------- */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
 }
 
 /* =========================================================
-   1. DASHBOARD & FEED (Req 8)
+   DASHBOARD
 ========================================================= */
-function renderDash(el) {
-  const activeTasks = DB.data.tasks.filter(t=>!t.deleted && t.status!=='Done');
-  const oos = DB.data.products.filter(p=>!p.deleted && p.status==='Out of Stock').length;
-  const feed = DB.data.history.slice(0, 10);
-  
+function renderDashboard(el){
+  const tasks = DB.data.tasks;
+  const pending = tasks.filter(t=>t.status!=='Done').length;
+  const doneToday = tasks.filter(t=>t.status==='Done' && t.date===todayISO()).length;
+  const overdue = tasks.filter(t=>t.status!=='Done' && t.date<todayISO()).length;
+  const products = DB.data.products;
+  const oos = products.filter(p=>p.status==='Out of Stock').length;
+  const newProd = products.filter(p=>p.status==='New Product').length;
+
+  const myTasks = tasks.filter(t=>SESSION.role==='Content Creator' ? matchesUser(t.assignee) : true)
+                        .filter(t=>t.status!=='Done').slice(0,5);
+
   el.innerHTML = `
     <div class="view-head">
-      <div><div class="view-title">Welcome back, ${SESSION.name.split(' ')[0]}</div><div class="view-desc">Here's your workspace overview for today.</div></div>
+      <div><div class="view-title">Good to see you, ${SESSION.name.split(' ')[0]}</div><div class="view-desc">Here's what's moving across all brands today.</div></div>
       <button class="btn btn-ghost btn-sm" onclick="renderView('tasks')">Go to tasks →</button>
     </div>
-    
     <div class="kpi-grid">
-      <div class="card kpi"><div class="label">Active Tasks</div><div class="num">${activeTasks.length}</div><div class="sub">across all brands</div></div>
-      <div class="card kpi"><div class="label">Completed Today</div><div class="num">${DB.data.tasks.filter(t=>t.status==='Done' && t.date===todayISO()).length}</div><div class="sub">nice work</div></div>
-      <div class="card kpi"><div class="label">Products OOS</div><div class="num" style="color:var(--coral);">${oos}</div><div class="sub">requires attention</div></div>
+      <div class="card kpi"><div class="label">Open tasks</div><div class="num">${pending}</div><div class="sub">${overdue} overdue</div></div>
+      <div class="card kpi"><div class="label">Completed today</div><div class="num">${doneToday}</div><div class="sub">across all brands</div></div>
+      <div class="card kpi"><div class="label">Out of stock</div><div class="num">${oos}</div><div class="sub">products need restock</div></div>
+      <div class="card kpi"><div class="label">New products</div><div class="num">${newProd}</div><div class="sub">awaiting first content</div></div>
     </div>
-    
-    <div class="grid-2 mb-6">
+    <div class="grid-2">
       <div class="card" style="padding:18px 20px;">
-        <div class="section-title">Brand Task Distribution</div>
-        ${DB.data.brands.map(b=>{
-          const count = activeTasks.filter(t=>t.brand===b.id).length;
-          const pct = Math.min(100, (count / Math.max(1, activeTasks.length)) * 100);
-          return `<div class="bar-row">
-            <div class="bar-label"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${b.color}"></div></div>
-            <div class="bar-val">${count}</div>
-          </div>`;
-        }).join('')}
+        <div class="section-title">${SESSION.role==='Content Creator'?'Your open tasks':'Open tasks across the team'}</div>
+        <div id="dash-tasks"></div>
       </div>
-      
       <div class="card" style="padding:18px 20px;">
-        <div class="section-title">Live Activity Feed</div>
-        <div style="max-height:220px; overflow-y:auto; padding-right:10px;">
-          ${feed.length ? feed.map(h=>`
-            <div style="display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; font-size:12.5px;">
-              <span style="width:6px; height:6px; border-radius:50%; background:var(--accent); margin-top:6px; flex-shrink:0;"></span>
-              <div style="line-height:1.4;">
-                <span style="font-weight:600; color:var(--ink);">${getUserName(h.user)}</span> <span style="color:var(--ink-soft);">${h.action}</span>
-                <div style="font-size:10px; color:#9a9d97; margin-top:2px;" class="mono text-uppercase">${timeAgo(h.ts)}</div>
-              </div>
-            </div>`).join('') : '<div style="color:var(--ink-soft); font-size:12px;">No recent activity.</div>'}
-        </div>
+        <div class="section-title">Brand content snapshot</div>
+        <div id="dash-brands"></div>
       </div>
+    </div>
+    <div class="grid-2" style="margin-top:16px;">
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Product status</div>
+        <div id="dash-products"></div>
+      </div>
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Upcoming dates</div>
+        <div id="dash-upcoming"></div>
+      </div>
+    </div>
+    <div class="card" style="padding:18px 20px;margin-top:16px;">
+      <div class="section-title">Product Content Counter</div>
+      <div class="view-desc" style="margin:-6px 0 12px;">Top 10 products by content produced. Search to look up any other product.</div>
+      <div class="search-counter-wrap">
+        <input id="pc-search" placeholder="Search any product by name or SKU..." oninput="renderProductCounter(this.value)">
+      </div>
+      <div id="dash-product-counter"></div>
     </div>
   `;
+  const tWrap = el.querySelector('#dash-tasks');
+  tWrap.innerHTML = myTasks.length ? myTasks.map(taskMiniRow).join('') : emptyState('No open tasks','Everything is caught up.');
+  const bWrap = el.querySelector('#dash-brands');
+  bWrap.innerHTML = BRANDS.slice(0,6).map(b=>{
+    const count = DB.data.logs.filter(l=>l.brand===b.id).length;
+    return `<div class="bar-row"><div class="bar-label"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,count*12)}%;background:${b.color}"></div></div><div class="bar-val">${count}</div></div>`;
+  }).join('');
+  const pWrap = el.querySelector('#dash-products');
+  const statuses = PRODUCT_STATUSES;
+  pWrap.innerHTML = statuses.map(s=>{
+    const c = products.filter(p=>p.status===s).length;
+    return `<div class="bar-row"><div class="bar-label">${s}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,c*20)}%;background:${statusColor(s)}"></div></div><div class="bar-val">${c}</div></div>`;
+  }).join('');
+  const upWrap = el.querySelector('#dash-upcoming');
+  const upcoming = SL_HOLIDAYS.filter(h=>h.date>=todayISO()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  upWrap.innerHTML = upcoming.map(h=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0ec;font-size:12.5px;"><span>${h.name}</span><span class="mono" style="color:var(--ink-soft);">${fmtDate(h.date)}</span></div>`).join('') + `<a style="display:inline-block;margin-top:8px;font-size:12px;color:var(--accent);font-weight:600;" onclick="renderView('calendar')">Open full calendar →</a>`;
+  renderProductCounter('');
 }
+function productContentCount(productId){
+  return DB.data.logs.filter(l=>l.product===productId).length;
+}
+function renderProductCounter(query){
+  const wrap = document.getElementById('dash-product-counter');
+  if(!wrap) return;
+  query = (query||'').trim().toLowerCase();
+  let list;
+  if(query){
+    list = DB.data.products.filter(p=>p.name.toLowerCase().includes(query) || (p.sku||'').toLowerCase().includes(query))
+      .map(p=>({p, count:productContentCount(p.id)}))
+      .sort((a,b)=>b.count-a.count);
+  } else {
+    list = DB.data.products.map(p=>({p, count:productContentCount(p.id)}))
+      .sort((a,b)=>b.count-a.count).slice(0,10);
+  }
+  if(!list.length){ wrap.innerHTML = emptyState('No products found','Try a different search.'); return; }
+  const max = Math.max(1, ...list.map(x=>x.count));
+  wrap.innerHTML = list.map(({p,count})=>{
+    const b = brandOf(p.brand);
+    return `<div class="bar-row"><div class="bar-label" style="width:190px;" title="${escapeHtml(p.name)}"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${escapeHtml(p.name.length>22?p.name.slice(0,22)+'…':p.name)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${count/max*100}%;background:${b.color}"></div></div><div class="bar-val">${count}</div></div>`;
+  }).join('');
+}
+function matchesUser(uidVal){
+  const u = currentUser();
+  return uidVal===u.id;
+}
+function statusColor(s){
+  return {'New Product':'#3d6fa8','Active':'#2f6f5e','Out of Stock':'#d1503f','Discontinued':'#8a8f8a',
+          'Pending':'#e2a542','In Progress':'#3d6fa8','In Review':'#8a5cbf','Done':'#2f6f5e'}[s] || '#999';
+}
+function statusPillClass(s){
+  return {'Pending':'status-pending','In Progress':'status-progress','In Review':'status-review','Done':'status-done',
+          'New Product':'status-new','Active':'status-active','Out of Stock':'status-oos','Discontinued':'status-disc'}[s] || 'status-pending';
+}
+function taskMiniRow(t){
+  const b = brandOf(t.brand); const overdue = t.status!=='Done' && t.date<todayISO();
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0f0ec;">
+    <div>
+      <div style="font-size:13px;font-weight:600;">${escapeHtml(t.title)}</div>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:2px;"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span> · ${fmtDate(t.date)}${overdue?' · <span style=\"color:var(--coral);font-weight:600;\">overdue</span>':''}</div>
+    </div>
+    <span class="pill ${statusPillClass(t.status)}">${t.status}</span>
+  </div>`;
+}
+function emptyState(title, sub){
+  return `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg><div class="t">${title}</div><div>${sub}</div></div>`;
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 /* =========================================================
-   2. TASKS & WORKFLOW (Req 1, 2, 3, 7, 14, 28)
+   TASKS PAGE
 ========================================================= */
-let taskFilter = {brand:'', status:'', type:'', month:'', priority:'', category:''};
-function renderTasks(el) {
-  const p = perms().tasks;
-  let tasks = DB.data.tasks.filter(t=>!t.deleted);
-  
-  if(taskFilter.brand) tasks = tasks.filter(t=>t.brand===taskFilter.brand);
-  if(taskFilter.status) tasks = tasks.filter(t=>t.status===taskFilter.status);
-  if(taskFilter.type) tasks = tasks.filter(t=>t.type===taskFilter.type);
-  if(taskFilter.month) tasks = tasks.filter(t=>t.date.startsWith(taskFilter.month));
-  if(taskFilter.priority) tasks = tasks.filter(t=>t.priority===taskFilter.priority);
-  if(taskFilter.category) tasks = tasks.filter(t=>{
-    const prod = DB.data.products.find(pr=>pr.id===t.product);
-    return prod && prod.category === taskFilter.category;
-  });
-
+let taskFilters = {brand:'', status:'', scope:'today'};
+function renderTasks(el){
+  const p = perms();
   el.innerHTML = `
     <div class="view-head">
-      <div><div class="view-title">Tasks & Workflow</div><div class="view-desc">Manage all active production tasks.</div></div>
-      ${p.create ? `<button class="btn btn-primary" onclick="openTaskCreateModal()">+ Create Task</button>` : ''}
+      <div><div class="view-title">Tasks</div><div class="view-desc">Daily work list, organized by brand.</div></div>
+      ${p.canCreateTask ? `<button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ New task</button>` : ''}
     </div>
-    
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <select class="select" onchange="taskFilter.brand=this.value;renderView('tasks')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${taskFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-      <select class="select" onchange="taskFilter.status=this.value;renderView('tasks')"><option value="">All Statuses</option>${DB.data.settings.taskStatuses.map(s=>`<option ${taskFilter.status===s?'selected':''}>${s}</option>`).join('')}</select>
-      <select class="select" onchange="taskFilter.type=this.value;renderView('tasks')"><option value="">All Types</option>${DB.data.settings.postTypes.map(pt=>`<option ${taskFilter.type===pt?'selected':''}>${pt}</option>`).join('')}</select>
-      <select class="select" onchange="taskFilter.priority=this.value;renderView('tasks')"><option value="">All Priorities</option>${DB.data.settings.taskPriorities.map(pr=>`<option ${taskFilter.priority===pr?'selected':''}>${pr}</option>`).join('')}</select>
-      <select class="select" onchange="taskFilter.category=this.value;renderView('tasks')"><option value="">All Categories</option>${DB.data.settings.productCategories.map(c=>`<option ${taskFilter.category===c?'selected':''}>${c}</option>`).join('')}</select>
-      <input type="month" class="tfield" value="${taskFilter.month}" onchange="taskFilter.month=this.value;renderView('tasks')">
-      ${Object.values(taskFilter).some(Boolean) ? `<button class="btn btn-ghost btn-sm" onclick="taskFilter={brand:'',status:'',type:'',month:'',priority:'',category:''};renderView('tasks')">Clear Filters</button>` : ''}
+    <div class="toolbar">
+      <select class="select" id="filter-scope" onchange="taskFilters.scope=this.value;renderTasks(document.getElementById('view'))">
+        <option value="today" ${taskFilters.scope==='today'?'selected':''}>Due today</option>
+        <option value="upcoming" ${taskFilters.scope==='upcoming'?'selected':''}>Upcoming</option>
+        <option value="overdue" ${taskFilters.scope==='overdue'?'selected':''}>Overdue</option>
+        <option value="all" ${taskFilters.scope==='all'?'selected':''}>All open</option>
+        <option value="done" ${taskFilters.scope==='done'?'selected':''}>Completed</option>
+      </select>
+      <select class="select" id="filter-brand" onchange="taskFilters.brand=this.value;renderTasks(document.getElementById('view'))">
+        <option value="">All brands</option>
+        ${BRANDS.map(b=>`<option value="${b.id}" ${taskFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+      </select>
+      <select class="select" id="filter-status" onchange="taskFilters.status=this.value;renderTasks(document.getElementById('view'))">
+        <option value="">Any status</option>
+        ${TASK_STATUSES.map(s=>`<option ${taskFilters.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
     </div>
-
-    <div class="card table-responsive">
-      <table>
-        <thead><tr><th>Task Details</th><th>Brand & Product</th><th>Status</th><th style="text-align:center;">Files</th></tr></thead>
-        <tbody>
-          ${tasks.map(t=>{
-            const latestCmt = DB.data.comments.filter(c=>c.taskId===t.id).sort((a,b)=>b.ts-a.ts)[0]; // Req 1
-            const b = brandOf(t.brand);
-            return `
-            <tr class="task-card" onclick="openTaskDetail('${t.id}')">
-              <td>
-                <div style="font-weight:600; font-size:14px; color:var(--ink);">
-                  <span style="display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; background:${t.priority==='High'?'var(--coral)':t.priority==='Low'?'var(--blue)':'var(--amber)'};" title="${t.priority} Priority"></span>
-                  ${escapeHtml(t.title)}
-                </div>
-                <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px; margin-left:18px;">${t.type} • Assigned to: ${getUserName(t.assignee)}</div>
-                ${latestCmt ? `<div style="font-size:11px; background:#f4f4f1; border-radius:4px; padding:4px 8px; margin-top:6px; margin-left:18px; max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--ink-soft); border:1px solid var(--line);"><span style="font-weight:600;">${getUserName(latestCmt.userId)}:</span> ${escapeHtml(latestCmt.text)}</div>` : ''}
-              </td>
-              <td>
-                <span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span>
-                ${t.product ? `<div style="font-size:11.5px; color:var(--ink-soft); margin-top:6px; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(DB.data.products.find(p=>p.id===t.product)?.name||'')}</div>` : ''}
-              </td>
-              <td><span class="pill ${statusPillClass(t.status)}">${t.status}</span></td>
-              <td style="text-align:center;"><span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; background:#f4f4f1; border-radius:4px; font-size:11px; font-weight:600; font-family:'IBM Plex Mono'; color:var(--ink-soft); border:1px solid var(--line);">${t.links.length}</span></td>
-            </tr>
-          `}).join('')}
-          ${tasks.length===0?'<tr><td colspan="4" style="text-align:center; padding:40px; color:var(--ink-soft);">No tasks match criteria.</td></tr>':''}
-        </tbody>
-      </table>
-    </div>
+    <div id="task-list"></div>
   `;
-}
+  let list = DB.data.tasks.slice();
+  if(SESSION.role==='Content Creator') list = list.filter(t=>matchesUser(t.assignee));
+  if(taskFilters.scope==='today') list = list.filter(t=>t.date===todayISO() && t.status!=='Done');
+  else if(taskFilters.scope==='upcoming') list = list.filter(t=>t.date>todayISO() && t.status!=='Done');
+  else if(taskFilters.scope==='overdue') list = list.filter(t=>t.date<todayISO() && t.status!=='Done');
+  else if(taskFilters.scope==='all') list = list.filter(t=>t.status!=='Done');
+  else if(taskFilters.scope==='done') list = list.filter(t=>t.status==='Done');
+  if(taskFilters.brand) list = list.filter(t=>t.brand===taskFilters.brand);
+  if(taskFilters.status) list = list.filter(t=>t.status===taskFilters.status);
 
-function openTaskCreateModal() {
+  const wrap = el.querySelector('#task-list');
+  if(!list.length){ wrap.innerHTML = emptyState('No tasks match this view','Try a different filter, or add a new task.'); return; }
+  const groups = {};
+  list.forEach(t=>{ (groups[t.brand] = groups[t.brand]||[]).push(t); });
+  wrap.innerHTML = Object.keys(groups).map(bid=>{
+    const b = brandOf(bid);
+    return `<div class="brand-group">
+      <div class="brand-group-head"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span><strong>${b.name}</strong></span><span class="line"></span><span style="font-size:11.5px;color:var(--ink-soft);">${groups[bid].length} task${groups[bid].length>1?'s':''}</span></div>
+      ${groups[bid].map(taskCard).join('')}
+    </div>`;
+  }).join('');
+}
+function taskCard(t){
+  const overdue = t.status!=='Done' && t.date<todayISO();
+  const assignee = DB.data.users.find(u=>u.id===t.assignee);
+  const addedBy = DB.data.users.find(u=>u.id===t.addedBy);
+  const canAct = ROLES[SESSION.role].canUpload && (SESSION.role!=='Content Creator' || matchesUser(t.assignee));
+  const linkCount = (t.driveLinks||[]).length;
+  const commentCount = (t.comments||[]).length;
+  return `<div class="task-card">
+    <div class="top-row">
+      <div>
+        <div class="title">${escapeHtml(t.title)}</div>
+        <div class="meta">
+          <span>${t.type}${t.product ? ' · '+ (DB.data.products.find(p=>p.id===t.product)?.name || '') : ' · no product'}</span>
+          <span>Assigned: ${assignee?assignee.name:'—'}</span>
+          <span>Added by: ${addedBy?addedBy.name:'—'}</span>
+          <span class="mono">${fmtDate(t.date)}</span>
+          ${linkCount ? `<span>${linkCount} drive link${linkCount>1?'s':''}</span>`:''}
+          ${commentCount ? `<span>${commentCount} comment${commentCount>1?'s':''}</span>`:''}
+        </div>
+      </div>
+      <span class="pill ${statusPillClass(t.status)}">${overdue?'Overdue':t.status}</span>
+    </div>
+    ${t.notes ? `<div style="font-size:12px;color:var(--ink-soft);margin-top:8px;">${escapeHtml(t.notes)}</div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      ${t.status!=='Done' && canAct ? `<button class="btn btn-primary btn-sm" onclick="openCompleteModal('${t.id}')">Mark complete</button>` : ''}
+      ${t.status!=='Done' && canAct && t.status==='Pending' ? `<button class="btn btn-ghost btn-sm" onclick="setTaskStatus('${t.id}','In Progress')">Start</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="openTaskDetail('${t.id}')">Details</button>
+    </div>
+  </div>`;
+}
+function setTaskStatus(id, status){
+  const t = DB.data.tasks.find(x=>x.id===id); t.status=status;
+  logHistory(t, 'status', `Status changed to ${status}`);
+  DB.save(); renderTasks(document.getElementById('view'));
+  toast('Task updated to '+status);
+}
+function logHistory(task, action, detail){
+  if(!task.history) task.history = [];
+  task.history.unshift({ts:Date.now(), by:currentUser().id, action, detail});
+}
+function openTaskModal(){
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-sm';
   box.innerHTML = `
-    <div class="modal-head"><h3>Create New Task</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-head"><h3>New task</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="form-row"><label>Task Title</label><input id="nt-title" placeholder="e.g. Launch Reel"></div>
+      <div class="form-row"><label>Task title</label><input id="nt-title" placeholder="e.g. Reel for product launch"></div>
       <div class="two-col">
-        <div class="form-row"><label>Brand</label><select id="nt-brand">${DB.data.brands.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
-        <div class="form-row"><label>Priority</label><select id="nt-priority">${DB.data.settings.taskPriorities.map(p=>`<option>${p}</option>`).join('')}</select></div>
+        <div class="form-row"><label>Brand</label><select id="nt-brand">${BRANDS.map(b=>`<option value="${b.id}">${b.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label>Post type</label><select id="nt-type">${POST_TYPES.map(p=>`<option>${p}</option>`).join('')}</select></div>
       </div>
-      <div class="form-row"><label>Product (Optional)</label><select id="nt-product"><option value="">-- General / No Product --</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}</select></div>
       <div class="two-col">
-        <div class="form-row"><label>Content Type</label><select id="nt-type">${DB.data.settings.postTypes.map(pt=>`<option>${pt}</option>`).join('')}</select></div>
-        <div class="form-row"><label>Assign To</label><select id="nt-assignee">${DB.data.users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label>Product (optional)</label><select id="nt-product"><option value="">No product</option>${DB.data.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label>Assign to</label><select id="nt-assignee">${DB.data.users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
       </div>
+      <div class="form-row"><label>Date</label><input type="date" id="nt-date" value="${todayISO()}"></div>
+      <div class="form-row"><label>Notes</label><textarea id="nt-notes" rows="2" placeholder="Any instructions..."></textarea></div>
     </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveNewTask()">Create Task</button>
-    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-primary btn-sm" onclick="createTask()">Create task</button></div>
   `;
   openModal();
 }
-
-function saveNewTask() {
+function createTask(){
   const title = document.getElementById('nt-title').value.trim();
-  const brand = document.getElementById('nt-brand').value;
-  const product = document.getElementById('nt-product').value;
-  const type = document.getElementById('nt-type').value;
-  const assignee = document.getElementById('nt-assignee').value;
-  const priority = document.getElementById('nt-priority').value;
-  
-  if(!title) return toast('Task title is required');
-
-  if(product) { // Req 14: Duplicate Warning
-    const dups = DB.data.tasks.filter(t=>!t.deleted && t.product===product && t.type===type);
-    if(dups.length > 0) {
-      if(!confirm(`Warning: This product already has ${dups.length} active ${type} task(s). Create anyway?`)) return;
-      addNotif(`Duplicate ${type} task created for product`, 'Warning');
-    }
-  }
-
-  const t = { id: uid('tsk'), title, brand, product, type, assignee, priority, status: 'Pending', date: todayISO(), links: [], deleted: false, addedBy: SESSION.id, ts: Date.now() };
-  DB.data.tasks.unshift(t);
-  
-  logTaskHistory(t.id, 'Task created & assigned');
-  logAudit('Tasks', 'Create', null, t.title);
-  addNotif(`New task assigned: ${title}`, 'Task', assignee);
-  
-  DB.save(); closeModal(); renderView('tasks'); toast('Task created');
-}
-
-// Req 1, 2, 3: Task Detail Hub
-let editingCommentId = null;
-function openTaskDetail(id) {
-  const t = DB.data.tasks.find(x=>x.id===id);
-  const p = perms().tasks;
-  const comments = DB.data.comments.filter(c=>c.taskId===id).sort((a,b)=>a.ts-b.ts);
-  const hist = DB.data.history.filter(h=>h.taskId===id).sort((a,b)=>b.ts-a.ts);
-  editingCommentId = null;
-  const b = brandOf(t.brand);
-  
-  const box = document.getElementById('modal-box');
-  box.className = 'modal modal-lg'; 
-  box.innerHTML = `
-    <div class="modal-head" style="align-items:flex-start;">
-      <div>
-        <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:3px 6px; border-radius:4px; display:inline-block; color:#fff; background:${b.color}; margin-bottom:6px;">${b.name}</div>
-        <span style="font-size:11px; font-weight:600; color:var(--ink-soft); margin-left:8px; text-transform:uppercase;">${t.type} • ${t.priority} Priority</span>
-        <h3 style="font-size:22px; font-weight:700; color:var(--ink); margin-top:4px;">${escapeHtml(t.title)}</h3>
-      </div>
-      <div style="display:flex; gap:8px;">
-        ${p.del ? `<button class="btn btn-danger btn-sm" onclick="deleteTask('${id}')">Trash</button>` : ''}
-        <button class="close-x" onclick="closeModal()">✕</button>
-      </div>
-    </div>
-    
-    <div class="modal-body" style="background:#f4f4f1; padding:20px;">
-      <div class="hub-grid">
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          
-          <div class="card" style="padding:16px;">
-            <label style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; display:block; margin-bottom:8px;">Workflow Status</label>
-            <select class="select" style="width:100%; margin-bottom:16px; font-weight:600;" onchange="updateTaskStatus('${id}', this.value)" ${p.edit?'':'disabled'}>
-              ${DB.data.settings.taskStatuses.map(s=>`<option ${t.status===s?'selected':''}>${s}</option>`).join('')}
-            </select>
-            
-            <div style="font-size:12.5px; display:flex; flex-direction:column; gap:10px;">
-              <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:6px;"><span style="color:var(--ink-soft);">Product</span><span style="font-weight:600; text-align:right;">${t.product ? escapeHtml(DB.data.products.find(pr=>pr.id===t.product)?.name) : 'None'}</span></div>
-              <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:6px;"><span style="color:var(--ink-soft);">Assignee</span><span style="font-weight:600;">${getUserName(t.assignee)}</span></div>
-              <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Created</span><span style="font-weight:600; font-family:'IBM Plex Mono'; font-size:11.5px;">${fmtDate(t.date)}</span></div>
-            </div>
-          </div>
-          
-          <div class="card" style="padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-              <div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase;">Drive Files (${t.links.length})</div>
-              ${p.edit ? `<button style="font-size:11px; font-weight:700; color:var(--accent); background:none; border:none;" onclick="addLinkPrompt('${id}')">+ Add File</button>` : ''}
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              ${t.links.length ? t.links.map(l=>`
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#fbfbfa; border:1px solid var(--line); padding:8px 10px; border-radius:6px;">
-                  <a href="${l.url}" target="_blank" style="font-size:12.5px; color:var(--blue); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-decoration:none;"><i class="fas fa-link" style="margin-right:6px; color:#94a3b8;"></i>${escapeHtml(l.name)}</a>
-                  ${p.edit ? `<button style="background:none; border:none; color:var(--coral); font-size:12px; margin-left:10px;" onclick="removeLink('${id}','${l.id}')">✕</button>` : ''}
-                </div>
-              `).join('') : '<div style="font-size:11px; color:var(--ink-soft); text-align:center; padding:10px; border:1px dashed var(--line); border-radius:6px; font-weight:600; text-transform:uppercase;">No files attached.</div>'}
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex; flex-direction:column; height:480px; overflow:hidden;">
-          <div style="display:flex; border-bottom:1px solid var(--line); background:#fbfbfa;">
-            <div style="flex:1; padding:14px; text-align:center; font-size:11px; font-weight:700; color:var(--accent); border-bottom:2px solid var(--accent); text-transform:uppercase; letter-spacing:0.05em; cursor:pointer;" onclick="document.getElementById('td-hist').style.display='none'; document.getElementById('td-comm').style.display='flex';">Discussion</div>
-            <div style="flex:1; padding:14px; text-align:center; font-size:11px; font-weight:700; color:var(--ink-soft); border-left:1px solid var(--line); text-transform:uppercase; letter-spacing:0.05em; cursor:pointer;" onclick="document.getElementById('td-hist').style.display='block'; document.getElementById('td-comm').style.display='none';">Activity Log</div>
-          </div>
-          
-          <div id="td-comm" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
-            <div id="td-thread" style="flex:1; overflow-y:auto; padding:20px; background:#fff; display:flex; flex-direction:column;">
-              ${comments.map(c=>`
-                <div class="comment-box">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div>
-                      <span style="font-weight:700; font-size:13px; color:var(--ink);">${getUserName(c.userId)}</span>
-                      <span style="font-size:10px; color:var(--ink-soft); margin-left:6px; font-family:'IBM Plex Mono'; text-transform:uppercase;">${DB.data.users.find(u=>u.id===c.userId)?.role||'User'}</span>
-                    </div>
-                    <div style="display:flex; gap:10px; align-items:center;">
-                      <span style="font-size:10px; color:var(--ink-soft); font-family:'IBM Plex Mono';">${timeAgo(c.ts)} ${c.edited?'(edited)':''}</span>
-                      ${c.userId===SESSION.id ? `
-                        <button style="font-size:10px; font-weight:700; color:var(--accent); background:none; border:none;" onclick="editCommentPrompt('${id}','${c.id}')">Edit</button>
-                        <button style="font-size:10px; font-weight:700; color:var(--coral); background:none; border:none;" onclick="deleteComment('${id}','${c.id}')">Del</button>` 
-                      : ''}
-                    </div>
-                  </div>
-                  <div style="font-size:13px; color:#334155; white-space:pre-wrap; line-height:1.5;">${escapeHtml(c.text)}</div>
-                </div>
-              `).join('')}
-              ${comments.length===0?'<div style="text-align:center; color:var(--ink-soft); font-size:12.5px; padding:30px; font-weight:600;">Start the conversation...</div>':''}
-            </div>
-            ${p.comment ? `
-            <div style="padding:16px; border-top:1px solid var(--line); background:#fbfbfa; display:flex; gap:10px;">
-              <textarea id="td-comment" class="tfield" style="flex:1; resize:none;" rows="1" placeholder="Type your comment..."></textarea>
-              <button id="td-cmt-btn" class="btn btn-primary" onclick="submitComment('${id}')">Send</button>
-            </div>` : ''}
-          </div>
-          
-          <div id="td-hist" style="flex:1; overflow-y:auto; padding:24px; background:#fff; display:none;">
-            <div class="timeline">
-              ${hist.map(h=>`
-                <div class="tl-item">
-                  <span style="font-weight:700; color:var(--ink); font-size:13px;">${getUserName(h.user)}</span> <span style="color:#475569; font-size:13px;">${h.action}</span>
-                  <div style="font-size:10px; color:var(--ink-soft); margin-top:4px; font-family:'IBM Plex Mono'; text-transform:uppercase;">${new Date(h.ts).toLocaleString()}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  openModal();
-  const thread = document.getElementById('td-thread');
-  if(thread) thread.scrollTop = thread.scrollHeight; 
-}
-
-function updateTaskStatus(id, newStatus) {
-  const t = DB.data.tasks.find(x=>x.id===id);
-  const old = t.status;
-  t.status = newStatus;
-  logTaskHistory(id, `Changed status to "${newStatus}"`);
-  logAudit('Tasks', 'Update Status', old, newStatus);
-  if(newStatus === 'Done') {
-    addNotif(`Task completed: ${t.title}`, 'Complete');
-    DB.data.logs.unshift({ id:uid('log'), taskId:t.id, brand:t.brand, product:t.product, type:t.type, date:todayISO(), title:t.title, links:t.links, completedBy:SESSION.id });
-  }
-  DB.save(); toast('Status updated'); renderView('tasks');
-}
-
-function addLinkPrompt(id) {
-  const name = prompt("Enter attachment name (e.g. Final Video, Caption Doc):");
-  if(!name) return;
-  const url = prompt("Paste Google Drive URL:");
-  if(!url) return;
-  const t = DB.data.tasks.find(x=>x.id===id);
-  t.links.push({id:uid('lnk'), name, url});
-  logTaskHistory(id, `Added attachment: ${name}`);
-  logAudit('Tasks', 'Add Link', null, name);
-  DB.save(); openTaskDetail(id);
-}
-function removeLink(tid, lid) {
-  if(!confirm("Remove this attachment?")) return;
-  const t = DB.data.tasks.find(x=>x.id===tid);
-  t.links = t.links.filter(l=>l.id!==lid);
-  logTaskHistory(tid, `Removed an attachment`);
-  DB.save(); openTaskDetail(tid);
-}
-
-// Comments Req 1
-function submitComment(id) {
-  const text = document.getElementById('td-comment').value.trim();
-  if(!text) return;
-  if(editingCommentId) {
-    const c = DB.data.comments.find(x=>x.id===editingCommentId);
-    c.text = text; c.edited = true; c.ts = Date.now();
-    logTaskHistory(id, 'Edited a comment');
-    editingCommentId = null;
-  } else {
-    const c = { id:uid('cmt'), taskId:id, userId:SESSION.id, text, ts:Date.now() };
-    DB.data.comments.push(c);
-    logTaskHistory(id, 'Added a comment');
-    const t = DB.data.tasks.find(x=>x.id===id);
-    addNotif(`${SESSION.name} commented: ${text.substring(0,25)}...`, 'Comment');
-  }
-  DB.save(); openTaskDetail(id);
-}
-function editCommentPrompt(tid, cid) {
-  const c = DB.data.comments.find(x=>x.id===cid);
-  document.getElementById('td-comment').value = c.text;
-  document.getElementById('td-cmt-btn').innerText = 'Save Edit';
-  editingCommentId = cid;
-}
-function deleteComment(tid, cid) {
-  if(!confirm('Delete comment permanently?')) return;
-  DB.data.comments = DB.data.comments.filter(c=>c.id!==cid);
-  logTaskHistory(tid, 'Deleted a comment');
-  DB.save(); openTaskDetail(tid);
-}
-
-function deleteTask(id) {
-  if(!confirm("Move task to trash?")) return;
-  softDelete('Tasks', id, DB.data.tasks.find(x=>x.id===id));
-  closeModal(); renderView('tasks'); toast('Task trashed');
-}
-
-/* =========================================================
-   3. PRODUCTS HUB (Req 5, 6, 11, 12, 14)
-========================================================= */
-let prodFilter = {brand:'', category:'', status:''};
-function renderProducts(el) {
-  const p = perms().products;
-  let products = DB.data.products.filter(pr=>!pr.deleted);
-  
-  if(prodFilter.brand) products = products.filter(pr=>pr.brand===prodFilter.brand);
-  if(prodFilter.category) products = products.filter(pr=>pr.category===prodFilter.category);
-  if(prodFilter.status) products = products.filter(pr=>pr.status===prodFilter.status);
-
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Products Library</div><div class="view-desc">Central catalog and content galleries.</div></div>
-      ${p.create ? `<button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>` : ''}
-    </div>
-    
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <select class="select" onchange="prodFilter.brand=this.value;renderView('products')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${prodFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-      <select class="select" onchange="prodFilter.category=this.value;renderView('products')"><option value="">All Categories</option>${DB.data.settings.productCategories.map(c=>`<option ${prodFilter.category===c?'selected':''}>${c}</option>`).join('')}</select>
-      <select class="select" onchange="prodFilter.status=this.value;renderView('products')"><option value="">All Statuses</option>${DB.data.settings.productStatuses.map(s=>`<option ${prodFilter.status===s?'selected':''}>${s}</option>`).join('')}</select>
-      ${(prodFilter.brand||prodFilter.category||prodFilter.status) ? `<button class="btn btn-ghost btn-sm" onclick="prodFilter={brand:'',category:'',status:''};renderView('products')">Clear</button>` : ''}
-    </div>
-
-    <div class="grid-3">
-      ${products.map(pr=>{
-        const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===pr.id);
-        const done = tasks.filter(t=>t.status==='Done').length;
-        const brand = brandOf(pr.brand);
-        return `
-        <div class="card" style="padding:20px; border-top:4px solid ${brand.color}; cursor:pointer; display:flex; flex-direction:column; transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='var(--shadow)'" onmouseout="this.style.boxShadow='none'" onclick="openProductDetail('${pr.id}')">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:3px 6px; border-radius:4px; color:#fff; background:${brand.color};">${brand.name}</div>
-            <span style="font-size:11px; font-family:'IBM Plex Mono'; color:var(--ink-soft); background:#f4f4f1; padding:2px 6px; border-radius:4px; border:1px solid var(--line);">${pr.sku||'NO-SKU'}</span>
-          </div>
-          <div style="font-weight:700; font-size:16px; color:var(--ink); margin-bottom:20px; flex:1;">${escapeHtml(pr.name)}</div>
-          <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-top:14px; border-top:1px solid var(--line);">
-            <div>
-              <div style="font-size:9px; color:var(--ink-soft); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Status</div>
-              <div style="font-size:12px; font-weight:600; color:${pr.status==='Active'?'var(--accent)': pr.status==='Out of Stock'?'var(--coral)':'var(--ink-soft)'};">${pr.status}</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:9px; color:var(--ink-soft); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Content</div>
-              <div style="font-size:14px; font-weight:700; color:var(--ink);">${tasks.length} <span style="font-size:11px; color:var(--ink-soft); font-weight:500;">(${done} done)</span></div>
-            </div>
-          </div>
-        </div>`;
-      }).join('')}
-      ${products.length===0?'<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--ink-soft); font-size:13px; font-weight:600; border:1px dashed var(--line); border-radius:12px;">No products found.</div>':''}
-    </div>
-  `;
-}
-
-function openProductModal(id=null) {
-  const p = id ? DB.data.products.find(x=>x.id===id) : null;
-  const box = document.getElementById('modal-box');
-  box.className = 'modal modal-sm';
-  box.innerHTML = `
-    <div class="modal-head"><h3>${p?'Edit Product':'New Product'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row"><label>Product Name</label><input id="pm-name" value="${p?escapeHtml(p.name):''}"></div>
-      <div class="two-col">
-        <div class="form-row"><label>Brand</label><select id="pm-brand">${DB.data.brands.map(b=>`<option value="${b.id}" ${p&&p.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select></div>
-        <div class="form-row"><label>SKU</label><input id="pm-sku" value="${p?p.sku:''}"></div>
-      </div>
-      <div class="two-col">
-        <div class="form-row"><label>Category</label><select id="pm-category">${DB.data.settings.productCategories.map(c=>`<option ${p&&p.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
-        <div class="form-row"><label>Status</label><select id="pm-status">${DB.data.settings.productStatuses.map(s=>`<option ${p&&p.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct(${p?`'${p.id}'`:'null'})">Save Product</button>
-    </div>
-  `;
-  openModal();
-}
-
-function saveProduct(id) {
-  const name = document.getElementById('pm-name').value.trim();
-  if(!name) return toast('Name required');
-  const data = {
-    name, brand: document.getElementById('pm-brand').value, sku: document.getElementById('pm-sku').value.trim(),
-    category: document.getElementById('pm-category').value, status: document.getElementById('pm-status').value
+  if(!title){ toast('Add a task title first'); return; }
+  const t = {
+    id: uid('t'), brand: document.getElementById('nt-brand').value, title,
+    type: document.getElementById('nt-type').value, product: document.getElementById('nt-product').value,
+    assignee: document.getElementById('nt-assignee').value, addedBy: currentUser().id,
+    date: document.getElementById('nt-date').value || todayISO(), status:'Pending',
+    notes: document.getElementById('nt-notes').value.trim(), driveLinks:[], comments:[],
+    history:[{ts:Date.now(), by:currentUser().id, action:'created', detail:'Task created'}]
   };
-  
-  if(id) {
-    const p = DB.data.products.find(x=>x.id===id);
-    logAudit('Products', 'Edit', p.name, name);
-    Object.assign(p, data);
-  } else {
-    const p = { id:uid('prd'), ts:Date.now(), deleted:false, ...data };
-    DB.data.products.unshift(p);
-    logAudit('Products', 'Create', null, name);
-    addNotif(`New Product Added: ${name}`, 'System');
-  }
-  DB.save(); closeModal(); renderView('products'); toast('Product saved');
+  DB.data.tasks.unshift(t);
+  DB.data.notifications.unshift({id:uid('n'), text:`New task assigned: "${title}" (${brandOf(t.brand).name})`, ts:Date.now(), read:false, forRole:'', forUser:t.assignee});
+  DB.save(); closeModal(); renderTasks(document.getElementById('view')); refreshNotifDot();
+  toast('Task created');
 }
-
-function openProductDetail(id) {
-  const pr = DB.data.products.find(x=>x.id===id);
-  const tasks = DB.data.tasks.filter(t=>!t.deleted && t.product===id);
-  const brand = brandOf(pr.brand);
-  const p = perms().products;
-  
-  const breakdown = {};
-  DB.data.settings.postTypes.forEach(pt => breakdown[pt] = tasks.filter(t=>t.type===pt).length);
-
+function openCompleteModal(id){
+  const t = DB.data.tasks.find(x=>x.id===id);
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-lg'; 
   box.innerHTML = `
-    <div class="modal-head" style="align-items:flex-start;">
-      <div>
-        <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:3px 6px; border-radius:4px; display:inline-block; color:#fff; background:${brand.color}; margin-bottom:6px;">${brand.name}</div>
-        <span style="font-size:11px; font-weight:600; color:var(--ink-soft); margin-left:8px; text-transform:uppercase;">${pr.category}</span>
-        <h3 style="font-size:26px; font-weight:700; color:var(--ink); margin-top:4px;">${escapeHtml(pr.name)}</h3>
-      </div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        ${p.edit ? `<button class="btn btn-ghost btn-sm" onclick="openProductModal('${id}')">Edit</button>` : ''}
-        ${p.del ? `<button class="btn btn-danger btn-sm" onclick="deleteProduct('${id}')">Trash</button>` : ''}
-        <button class="close-x" onclick="closeModal()">✕</button>
-      </div>
+    <div class="modal-head"><h3>Mark task complete</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">${escapeHtml(t.title)}</div>
+      <div class="form-row"><label>Google Drive link(s) — proof of work</label><input id="ct-link" placeholder="https://drive.google.com/..."></div>
+      <div class="req-tag">You can add more drive links later from Task Details.</div>
     </div>
-    
-    <div class="modal-body" style="background:#f4f4f1; padding:0;">
-      
-      <div style="display:flex; background:#fff; border-bottom:1px solid var(--line);">
-        <div style="flex:1; padding:20px; text-align:center; border-right:1px solid var(--line);"><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Total Content</div><div style="font-size:28px; font-weight:700; margin-top:8px;">${tasks.length}</div></div>
-        <div style="flex:1; padding:20px; text-align:center; border-right:1px solid var(--line);"><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Posts</div><div style="font-size:20px; font-weight:700; margin-top:12px;">${breakdown['Post']||0}</div></div>
-        <div style="flex:1; padding:20px; text-align:center; border-right:1px solid var(--line);"><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Video / Story</div><div style="font-size:20px; font-weight:700; margin-top:12px;">${(breakdown['Story']||0)+(breakdown['Video']||0)}</div></div>
-        <div style="flex:1; padding:20px; text-align:center;"><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Status</div><div style="font-size:13px; font-weight:700; margin-top:16px;"><span class="pill ${statusPillClass(pr.status)}">${pr.status}</span></div></div>
-      </div>
-
-      <div class="hub-grid" style="padding:24px;">
-        
-        <div style="grid-column:1/3;">
-          <h4 style="font-size:13px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; border-bottom:1px solid var(--line); padding-bottom:8px;">Content Library Preview</h4>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:16px;">
-            ${tasks.map(t=>`
-              <div class="gallery-item" onclick="openTaskDetail('${t.id}')">
-                <div style="width:10px; height:10px; border-radius:50%; background:${t.status==='Done'?'var(--accent)':'var(--amber)'}; align-self:flex-end; margin:-10px 10px 10px -10px;"></div>
-                <i class="fas fa-file-image" style="font-size:32px; color:#cbd5e1; margin-bottom:12px;"></i>
-                <div style="font-size:12px; font-weight:700; color:var(--ink); width:100%; text-align:center; padding:0 10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.type}</div>
-                <div style="font-size:10px; color:var(--ink-soft); font-family:'IBM Plex Mono'; margin-top:6px;">${fmtDate(t.date)}</div>
-              </div>
-            `).join('')}
-            ${tasks.length===0?'<div style="grid-column:1/-1; padding:30px; text-align:center; color:var(--ink-soft); font-size:12px; font-weight:600; border:1px dashed var(--line); border-radius:8px;">Library is empty.</div>':''}
-          </div>
-        </div>
-
-        <div style="grid-column:1/3; margin-top:10px;">
-          <h4 style="font-size:13px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:16px; border-bottom:1px solid var(--line); padding-bottom:8px;">Product Timeline</h4>
-          <div class="card" style="padding:20px;">
-            <div class="timeline">
-              ${tasks.length ? `<div class="tl-item"><span style="font-weight:700; font-size:13px;">Latest Content Planned</span> <div style="font-size:12px; color:var(--ink-soft); margin-top:4px;">${escapeHtml(tasks[0].title)}</div><div style="font-size:10px; color:#94a3b8; font-family:'IBM Plex Mono'; margin-top:4px;">${fmtDate(tasks[0].date)}</div></div>` : ''}
-              <div class="tl-item"><span style="font-weight:700; font-size:13px;">Product Created</span> <div style="font-size:10px; color:#94a3b8; font-family:'IBM Plex Mono'; margin-top:4px;">${new Date(pr.ts).toLocaleString()}</div></div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-primary btn-sm" onclick="completeTask('${id}')">Submit & complete</button></div>
   `;
   openModal();
 }
+function completeTask(id){
+  const link = document.getElementById('ct-link').value.trim();
+  if(!link){ toast('Add a drive link as proof'); return; }
+  const t = DB.data.tasks.find(x=>x.id===id);
+  t.status='Done';
+  if(!t.driveLinks) t.driveLinks=[];
+  t.driveLinks.push({id:uid('dl'), url:link, addedBy:currentUser().id, ts:Date.now()});
+  DB.data.logs.unshift({id:uid('log'), taskId:t.id, brand:t.brand, product:t.product, type:t.type, completedBy: currentUser().id, date: todayISO(), driveLink:link, title:t.title});
+  logHistory(t, 'completed', 'Marked as complete');
+  DB.data.notifications.unshift({id:uid('n'), text:`${currentUser().name} completed "${t.title}" for ${brandOf(t.brand).name}.`, ts:Date.now(), read:false, forRole:'General Manager'});
+  DB.save(); closeModal(); renderTasks(document.getElementById('view')); refreshNotifDot();
+  toast('Task marked complete');
+}
 
-function deleteProduct(id) {
-  if(!confirm("Move product to trash?")) return;
-  softDelete('Products', id, DB.data.products.find(x=>x.id===id));
-  closeModal(); renderView('products'); toast('Product trashed');
+/* ---------------- TASK DETAIL: drive links, comments, history ---------------- */
+let taskDetailTab = 'links';
+function openTaskDetail(id){
+  taskDetailTab = 'links';
+  renderTaskDetailModal(id);
+  openModal();
+}
+function renderTaskDetailModal(id){
+  const t = DB.data.tasks.find(x=>x.id===id);
+  if(!t) return;
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="modal-head"><h3>${escapeHtml(t.title)}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;">
+        <span class="brand-chip"><span class="brand-dot" style="background:${brandOf(t.brand).color}"></span>${brandOf(t.brand).name}</span>
+        &nbsp;·&nbsp; ${t.type} &nbsp;·&nbsp; <span class="pill ${statusPillClass(t.status)}">${t.status}</span>
+      </div>
+      <div class="detail-tabs">
+        <div class="detail-tab ${taskDetailTab==='links'?'active':''}" onclick="taskDetailTab='links';renderTaskDetailModal('${t.id}')">Drive links (${(t.driveLinks||[]).length})</div>
+        <div class="detail-tab ${taskDetailTab==='comments'?'active':''}" onclick="taskDetailTab='comments';renderTaskDetailModal('${t.id}')">Comments (${(t.comments||[]).length})</div>
+        <div class="detail-tab ${taskDetailTab==='history'?'active':''}" onclick="taskDetailTab='history';renderTaskDetailModal('${t.id}')">History</div>
+      </div>
+      <div id="detail-tab-body"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button></div>
+  `;
+  const body = box.querySelector('#detail-tab-body');
+  if(taskDetailTab==='links') body.innerHTML = renderDriveLinksTab(t);
+  else if(taskDetailTab==='comments') body.innerHTML = renderCommentsTab(t);
+  else body.innerHTML = renderHistoryTab(t);
+}
+function renderDriveLinksTab(t){
+  const links = t.driveLinks||[];
+  const canAdd = ROLES[SESSION.role].canUpload && (SESSION.role!=='Content Creator' || matchesUser(t.assignee));
+  return `
+    ${links.length ? links.map(l=>{
+      const u = DB.data.users.find(x=>x.id===l.addedBy);
+      return `<div class="drive-link-row">
+        <div><a href="${l.url}" target="_blank">${escapeHtml(l.url)}</a><div class="drive-link-meta">Added by ${u?u.name:'—'} · ${fmtDateTime(l.ts)}</div></div>
+      </div>`;
+    }).join('') : emptyState('No drive links yet','Add a Google Drive link below.')}
+    ${canAdd ? `<div class="add-link-row">
+      <input id="dl-new-url" placeholder="https://drive.google.com/...">
+      <button class="btn btn-primary btn-sm" onclick="addDriveLink('${t.id}')">+ Add link</button>
+    </div>` : ''}
+  `;
+}
+function addDriveLink(taskId){
+  const input = document.getElementById('dl-new-url');
+  const url = input.value.trim();
+  if(!url){ toast('Enter a drive link'); return; }
+  const t = DB.data.tasks.find(x=>x.id===taskId);
+  if(!t.driveLinks) t.driveLinks=[];
+  t.driveLinks.push({id:uid('dl'), url, addedBy:currentUser().id, ts:Date.now()});
+  logHistory(t, 'link', 'Added a Google Drive link');
+  DB.save();
+  renderTaskDetailModal(taskId);
+  toast('Drive link added');
+}
+function renderCommentsTab(t){
+  const comments = t.comments||[];
+  const me = currentUser();
+  return `
+    <div>
+      ${comments.length ? comments.map(c=>{
+        const u = DB.data.users.find(x=>x.id===c.userId);
+        const mine = c.userId===me.id;
+        return `<div class="comment-item">
+          <div class="comment-head">
+            <span class="comment-user">${u?escapeHtml(u.name):'Unknown'}</span>
+            <span class="comment-time">${fmtDateTime(c.ts)}</span>
+          </div>
+          <div class="comment-text" id="comment-text-${c.id}">${escapeHtml(c.text)}${c.edited?'<span class="comment-edited-tag">(edited)</span>':''}</div>
+          ${mine ? `<div class="comment-actions"><a onclick="startEditComment('${t.id}','${c.id}')">Edit</a><a onclick="deleteComment('${t.id}','${c.id}')">Delete</a></div>` : ''}
+        </div>`;
+      }).join('') : emptyState('No comments yet','Start the discussion below.')}
+    </div>
+    <div class="comment-input-row">
+      <textarea id="comment-new-text" placeholder="Write a comment..."></textarea>
+      <button class="btn btn-primary btn-sm" onclick="addComment('${t.id}')">Post</button>
+    </div>
+  `;
+}
+function addComment(taskId){
+  const ta = document.getElementById('comment-new-text');
+  const text = ta.value.trim();
+  if(!text){ toast('Write a comment first'); return; }
+  const t = DB.data.tasks.find(x=>x.id===taskId);
+  if(!t.comments) t.comments=[];
+  const me = currentUser();
+  t.comments.push({id:uid('c'), userId:me.id, text, ts:Date.now(), edited:false});
+  logHistory(t, 'comment', 'Commented on the task');
+  // Notify assignee & task creator (excluding the commenter)
+  const notifyIds = new Set([t.assignee, t.addedBy].filter(uidv=>uidv && uidv!==me.id));
+  notifyIds.forEach(uidv=>{
+    DB.data.notifications.unshift({id:uid('n'), text:`${me.name} commented on "${t.title}".`, ts:Date.now(), read:false, forRole:'', forUser:uidv});
+  });
+  DB.save();
+  renderTaskDetailModal(taskId);
+  refreshNotifDot();
+  toast('Comment posted');
+}
+function startEditComment(taskId, commentId){
+  const t = DB.data.tasks.find(x=>x.id===taskId);
+  const c = t.comments.find(x=>x.id===commentId);
+  const wrap = document.getElementById('comment-text-'+commentId);
+  wrap.innerHTML = `<textarea id="edit-comment-${commentId}" style="width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;">${escapeHtml(c.text)}</textarea>
+    <div style="margin-top:6px;display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="saveEditComment('${taskId}','${commentId}')">Save</button>
+      <button class="btn btn-ghost btn-sm" onclick="renderTaskDetailModal('${taskId}')">Cancel</button>
+    </div>`;
+}
+function saveEditComment(taskId, commentId){
+  const t = DB.data.tasks.find(x=>x.id===taskId);
+  const c = t.comments.find(x=>x.id===commentId);
+  const newText = document.getElementById('edit-comment-'+commentId).value.trim();
+  if(!newText){ toast('Comment cannot be empty'); return; }
+  c.text = newText; c.edited = true;
+  DB.save();
+  renderTaskDetailModal(taskId);
+  toast('Comment updated');
+}
+function deleteComment(taskId, commentId){
+  const t = DB.data.tasks.find(x=>x.id===taskId);
+  t.comments = t.comments.filter(x=>x.id!==commentId);
+  DB.save();
+  renderTaskDetailModal(taskId);
+  toast('Comment deleted');
+}
+function renderHistoryTab(t){
+  const hist = (t.history||[]).slice().sort((a,b)=>b.ts-a.ts);
+  if(!hist.length) return emptyState('No history yet','Activity will appear here.');
+  return `<div class="timeline">${hist.map(h=>{
+    const u = DB.data.users.find(x=>x.id===h.by);
+    return `<div class="timeline-item"><strong>${u?escapeHtml(u.name):'Someone'}</strong> — ${escapeHtml(h.detail)}<div class="timeline-detail">${fmtDateTime(h.ts)}</div></div>`;
+  }).join('')}</div>`;
 }
 
 /* =========================================================
-   4. CONTENT LOGS (Req 14 extended filters)
+   CONTENT LOG PAGE
 ========================================================= */
-let logFilter = {brand:'', type:'', month:'', product:''};
-function renderLogs(el){
-  let logs = DB.data.logs;
-  if(logFilter.brand) logs = logs.filter(l=>l.brand===logFilter.brand);
-  if(logFilter.type) logs = logs.filter(l=>l.type===logFilter.type);
-  if(logFilter.month) logs = logs.filter(l=>l.date.startsWith(logFilter.month));
-  if(logFilter.product) logs = logs.filter(l=>l.product===logFilter.product);
-
+let logFilters = {date:'', brand:'', product:'', type:''};
+function renderLog(el){
   el.innerHTML = `
     <div class="view-head">
-      <div><div class="view-title">Content Log</div><div class="view-desc">Every piece of completed, finalized work.</div></div>
+      <div><div class="view-title">Content Log</div><div class="view-desc">Every piece of work completed, with proof.</div></div>
     </div>
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <select class="select" onchange="logFilter.brand=this.value;renderView('log')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${logFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-      <select class="select" onchange="logFilter.product=this.value;renderView('log')"><option value="">All Products</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}" ${logFilter.product===p.id?'selected':''}>${escapeHtml(p.name)}</option>`).join('')}</select>
-      <select class="select" onchange="logFilter.type=this.value;renderView('log')"><option value="">All Types</option>${DB.data.settings.postTypes.map(t=>`<option ${logFilter.type===t?'selected':''}>${t}</option>`).join('')}</select>
-      <input type="month" class="tfield" value="${logFilter.month}" onchange="logFilter.month=this.value;renderView('log')">
-      ${Object.values(logFilter).some(Boolean)?`<button class="btn btn-ghost btn-sm" onclick="logFilter={brand:'',type:'',month:'',product:''};renderView('log')">Clear filters</button>`:''}
+    <div class="toolbar">
+      <input class="tfield" type="date" id="lf-date" onchange="logFilters.date=this.value;renderLog(document.getElementById('view'))">
+      <select class="select" id="lf-brand" onchange="logFilters.brand=this.value;renderLog(document.getElementById('view'))">
+        <option value="">All brands</option>
+        ${BRANDS.map(b=>`<option value="${b.id}" ${logFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+      </select>
+      <select class="select" id="lf-product" onchange="logFilters.product=this.value;renderLog(document.getElementById('view'))">
+        <option value="">All products</option>
+        ${DB.data.products.map(p=>`<option value="${p.id}" ${logFilters.product===p.id?'selected':''}>${p.name}</option>`).join('')}
+      </select>
+      <select class="select" id="lf-type" onchange="logFilters.type=this.value;renderLog(document.getElementById('view'))">
+        <option value="">All post types</option>
+        ${POST_TYPES.map(t=>`<option ${logFilters.type===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      ${(logFilters.date||logFilters.brand||logFilters.product||logFilters.type) ? `<button class="btn btn-ghost btn-sm" onclick="logFilters={date:'',brand:'',product:'',type:''};renderLog(document.getElementById('view'))">Clear filters</button>`:''}
     </div>
-    
-    <div class="card table-responsive">
+    <div class="log-grid" id="log-grid"></div>
+  `;
+  let list = DB.data.logs.slice();
+  if(logFilters.date) list = list.filter(l=>l.date===logFilters.date);
+  if(logFilters.brand) list = list.filter(l=>l.brand===logFilters.brand);
+  if(logFilters.product) list = list.filter(l=>l.product===logFilters.product);
+  if(logFilters.type) list = list.filter(l=>l.type===logFilters.type);
+  const grid = el.querySelector('#log-grid');
+  grid.innerHTML = list.length ? list.map(logCard).join('') : emptyState('No content matches these filters','Adjust the filters above to see more.');
+}
+function logCard(l){
+  const b = brandOf(l.brand);
+  const user = DB.data.users.find(u=>u.id===l.completedBy);
+  const product = DB.data.products.find(p=>p.id===l.product);
+  return `<div class="log-card">
+    <div class="log-embed">
+      ${l.driveLink ? `<a href="${l.driveLink}" target="_blank" style="color:var(--accent);font-weight:600;font-size:12.5px;">Open drive preview ↗</a>` : 'No preview'}
+    </div>
+    <div class="log-body">
+      <div style="font-weight:600;font-size:13px;margin-bottom:4px;">${escapeHtml(l.title)}</div>
+      <div style="font-size:11.5px;color:var(--ink-soft);display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span>
+        <span class="pill status-progress">${l.type}</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--ink-soft);">By ${user?user.name:'—'} · ${fmtDate(l.date)}${product?' · '+product.name:''}</div>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   CALENDAR PAGE
+========================================================= */
+let calMonth = new Date().getMonth();
+let calYear = new Date().getFullYear();
+let calEventFilter = 'all'; // all | public | poya | religious | marketing
+function renderCalendar(el){
+  el.innerHTML = `
+    <div class="view-head">
+      <div><div class="view-title">Calendar</div><div class="view-desc">Sri Lanka holidays, Poya days, religious observances, marketing dates & your scheduled content — everything that affects the work.</div></div>
+      <div class="toolbar" style="margin:0;">
+        <button class="btn btn-ghost btn-sm" onclick="calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(document.getElementById('view'))">← Prev</button>
+        <span style="font-weight:700;font-family:'Space Grotesk';min-width:150px;text-align:center;display:inline-block;">${monthName(calMonth)} ${calYear}</span>
+        <button class="btn btn-ghost btn-sm" onclick="calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(document.getElementById('view'))">Next →</button>
+        <select class="select" onchange="calEventFilter=this.value;renderCalendar(document.getElementById('view'))">
+          <option value="all" ${calEventFilter==='all'?'selected':''}>All events</option>
+          <option value="public" ${calEventFilter==='public'?'selected':''}>Public holidays</option>
+          <option value="poya" ${calEventFilter==='poya'?'selected':''}>Poya days</option>
+          <option value="religious" ${calEventFilter==='religious'?'selected':''}>Religious</option>
+          <option value="marketing" ${calEventFilter==='marketing'?'selected':''}>Marketing dates</option>
+        </select>
+      </div>
+    </div>
+    <div class="cal-legend">
+      <span><i style="background:var(--coral-soft);border:1px solid #e0a99e;"></i>Public holiday</span>
+      <span><i style="background:#efe4f6;border:1px solid #d6bfe8;"></i>Poya day</span>
+      <span><i style="background:#e1ebf4;border:1px solid #b9d0e6;"></i>Religious</span>
+      <span><i style="background:var(--amber-soft);border:1px solid #edcd8f;"></i>Marketing date</span>
+      <span><i style="background:var(--blue-soft);border:1px solid #b9d0e6;"></i>Your scheduled task</span>
+    </div>
+    <div class="card" style="padding:16px;">
+      <div class="cal-grid" style="margin-bottom:6px;">
+        ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="cal-dow">${d}</div>`).join('')}
+      </div>
+      <div class="cal-grid" id="cal-body"></div>
+    </div>
+    <div class="card" style="padding:18px 20px;margin-top:16px;">
+      <div class="section-title">Events this month</div>
+      <div id="cal-month-list"></div>
+    </div>
+  `;
+  const body = el.querySelector('#cal-body');
+  const first = new Date(calYear, calMonth, 1);
+  let startDow = first.getDay(); startDow = startDow===0?6:startDow-1; // Mon=0
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+  let cells = [];
+  for(let i=startDow-1;i>=0;i--) cells.push({d:daysInPrev-i, dim:true});
+  for(let d=1; d<=daysInMonth; d++) cells.push({d, dim:false});
+  while(cells.length % 7 !== 0) cells.push({d: cells.length - (startDow+daysInMonth) + 1, dim:true});
+  body.innerHTML = cells.map(c=>{
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.d).padStart(2,'0')}`;
+    const isToday = !c.dim && iso===todayISO();
+    const events = SL_HOLIDAYS.filter(h=>h.date===iso && (calEventFilter==='all'||h.type===calEventFilter));
+    const dayTasks = DB.data.tasks.filter(t=>t.date===iso);
+    const shown = events.slice(0,2);
+    const remaining = events.length - shown.length + dayTasks.length;
+    return `<div class="cal-cell ${c.dim?'dim':''} ${isToday?'today':''}">
+      <div class="dnum">${c.d}</div>
+      ${shown.map(h=>`<span class="cal-tag ${holidayTypeMeta(h.type).cls}" title="${escapeHtml(h.name)}">${escapeHtml(h.name)}</span>`).join('')}
+      ${dayTasks.slice(0,2).map(t=>`<span class="cal-tag cal-task" title="${escapeHtml(t.title)}">${brandOf(t.brand).name}: ${t.type}</span>`).join('')}
+      ${remaining>0 ? `<span style="font-size:9.5px;color:var(--ink-soft);">+${remaining} more</span>`:''}
+    </div>`;
+  }).join('');
+  const monthEvents = SL_HOLIDAYS.filter(h=>h.date.slice(0,7)===`${calYear}-${String(calMonth+1).padStart(2,'0')}` && (calEventFilter==='all'||h.type===calEventFilter)).sort((a,b)=>a.date.localeCompare(b.date));
+  const listWrap = el.querySelector('#cal-month-list');
+  listWrap.innerHTML = monthEvents.length ? monthEvents.map(h=>{
+    const meta = holidayTypeMeta(h.type);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0ec;font-size:12.5px;">
+      <span>${escapeHtml(h.name)}</span>
+      <span style="display:flex;gap:10px;align-items:center;"><span class="cal-tag ${meta.cls}" style="display:inline;">${meta.label}</span><span class="mono" style="color:var(--ink-soft);">${fmtDate(h.date)}</span></span>
+    </div>`;
+  }).join('') : emptyState('No events this month for this filter','Try a different filter or month.');
+}
+function monthName(m){ return ['January','February','March','April','May','June','July','August','September','October','November','December'][m]; }
+
+/* =========================================================
+   PRODUCTS PAGE
+========================================================= */
+let productFilters = {brand:'', status:''};
+function renderProducts(el){
+  const p = perms();
+  el.innerHTML = `
+    <div class="view-head">
+      <div><div class="view-title">Products</div><div class="view-desc">Catalog across all brands with content status.</div></div>
+      ${p.canManageProducts ? `<button class="btn btn-primary btn-sm" onclick="openProductModal()">+ New product</button>` : ''}
+    </div>
+    <div class="toolbar">
+      <select class="select" onchange="productFilters.brand=this.value;renderProducts(document.getElementById('view'))">
+        <option value="">All brands</option>
+        ${BRANDS.map(b=>`<option value="${b.id}" ${productFilters.brand===b.id?'selected':''}>${b.name}</option>`).join('')}
+      </select>
+      <select class="select" onchange="productFilters.status=this.value;renderProducts(document.getElementById('view'))">
+        <option value="">Any status</option>
+        ${PRODUCT_STATUSES.map(s=>`<option ${productFilters.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+    <div class="card" style="overflow-x:auto;">
       <table>
-        <thead><tr><th>Completed Item</th><th>Brand & Product</th><th>Final File</th><th>Date & User</th></tr></thead>
-        <tbody>
-          ${logs.map(l=>{
-            const b = brandOf(l.brand);
-            return `
-            <tr>
-              <td style="font-weight:600;">${escapeHtml(l.title)}<div style="font-size:11px; color:var(--ink-soft); margin-top:4px;">${l.type}</div></td>
-              <td><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span><div style="font-size:11.5px; color:var(--ink-soft); margin-top:6px;">${l.product?escapeHtml(DB.data.products.find(p=>p.id===l.product)?.name||''):'No Product'}</div></td>
-              <td>${l.links?.length ? `<a href="${l.links[0].url}" target="_blank" style="color:var(--blue); font-weight:600; font-size:12.5px; text-decoration:none;"><i class="fas fa-external-link-alt" style="margin-right:6px;"></i>View File</a>` : '<span style="color:var(--ink-soft); font-size:12px;">No link provided</span>'}</td>
-              <td><div class="mono" style="font-size:12px; margin-bottom:4px;">${fmtDate(l.date)}</div><div style="font-size:11px; color:var(--ink-soft);">By ${getUserName(l.completedBy)}</div></td>
-            </tr>
-          `}).join('')}
-          ${logs.length===0?'<tr><td colspan="4" style="padding:40px; text-align:center; color:var(--ink-soft);">No logs match filters.</td></tr>':''}
-        </tbody>
+        <thead><tr><th>Product</th><th>Brand</th><th>SKU</th><th>Category</th><th>Status</th><th>Content count</th><th>Last content</th><th></th></tr></thead>
+        <tbody id="product-rows"></tbody>
       </table>
     </div>
   `;
+  let list = DB.data.products.slice();
+  if(productFilters.brand) list = list.filter(x=>x.brand===productFilters.brand);
+  if(productFilters.status) list = list.filter(x=>x.status===productFilters.status);
+  const rows = el.querySelector('#product-rows');
+  if(!list.length){ rows.innerHTML = `<tr><td colspan="8">${emptyState('No products found','Try a different filter.')}</td></tr>`; return; }
+  rows.innerHTML = list.map(pr=>{
+    const b = brandOf(pr.brand);
+    const logs = DB.data.logs.filter(l=>l.product===pr.id);
+    const last = logs.sort((a,c)=>c.date.localeCompare(a.date))[0];
+    return `<tr>
+      <td style="font-weight:600;">${escapeHtml(pr.name)}</td>
+      <td><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></td>
+      <td class="mono" style="font-size:12px;">${pr.sku}</td>
+      <td>${pr.category}</td>
+      <td><span class="pill ${statusPillClass(pr.status)}">${pr.status}</span></td>
+      <td>${logs.length}</td>
+      <td style="font-size:12px;color:var(--ink-soft);">${last?fmtDate(last.date):'—'}</td>
+      <td>${perms().canManageProducts ? `<a class="btn btn-ghost btn-sm" onclick="openProductModal('${pr.id}')">Edit</a>` : ''}</td>
+    </tr>`;
+  }).join('');
 }
-
-/* =========================================================
-   6. ADVANCED ANALYTICS (Req 13, 14, 27)
-========================================================= */
-let anaFilter = { month: new Date().toISOString().slice(0,7), year:'', brand:'', product:'', type:'' };
-function renderAnalytics(el) {
-  let baseTasks = DB.data.tasks.filter(t=>!t.deleted && t.status==='Done');
-  
-  if(anaFilter.month) baseTasks = baseTasks.filter(t=>t.date.startsWith(anaFilter.month));
-  if(anaFilter.year) baseTasks = baseTasks.filter(t=>t.date.startsWith(anaFilter.year));
-  if(anaFilter.brand) baseTasks = baseTasks.filter(t=>t.brand===anaFilter.brand);
-  if(anaFilter.product) baseTasks = baseTasks.filter(t=>t.product===anaFilter.product);
-  if(anaFilter.type) baseTasks = baseTasks.filter(t=>t.type===anaFilter.type);
-
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Advanced Analytics</div><div class="view-desc">Measure final output distribution.</div></div>
-    </div>
-    
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <input type="month" class="tfield" value="${anaFilter.month}" onchange="anaFilter.month=this.value;anaFilter.year='';renderView('analytics')">
-      <select class="select" onchange="anaFilter.year=this.value;anaFilter.month='';renderView('analytics')"><option value="">All Years</option><option value="2026">2026</option><option value="2025">2025</option></select>
-      <select class="select" onchange="anaFilter.brand=this.value;renderView('analytics')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${anaFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-      <select class="select" onchange="anaFilter.product=this.value;renderView('analytics')"><option value="">All Products</option>${DB.data.products.filter(p=>!p.deleted).map(p=>`<option value="${p.id}" ${anaFilter.product===p.id?'selected':''}>${escapeHtml(p.name)}</option>`).join('')}</select>
-      <select class="select" onchange="anaFilter.type=this.value;renderView('analytics')"><option value="">All Types</option>${DB.data.settings.postTypes.map(t=>`<option value="${t}" ${anaFilter.type===t?'selected':''}>${t}</option>`).join('')}</select>
-      ${Object.values(anaFilter).some(Boolean) ? `<button class="btn btn-ghost btn-sm" onclick="anaFilter={month:'',year:'',brand:'',product:'',type:''};renderView('analytics')">Clear Filters</button>`:''}
-    </div>
-
-    <div class="grid-2">
-      <div class="card" style="padding:24px;">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Brand Output Volume</div>
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          ${DB.data.brands.map(b=>{
-            const count = baseTasks.filter(t=>t.brand===b.id).length;
-            const max = Math.max(1, baseTasks.length);
-            return `<div class="bar-row"><div class="bar-label" style="font-weight:600;">${b.name}</div><div class="bar-track"><div class="bar-fill" style="width:${(count/max)*100}%;background:${b.color}"></div></div><div class="bar-val">${count}</div></div>`;
-          }).join('')}
-        </div>
-      </div>
-      
-      <div class="card" style="padding:24px;">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Format Breakdown</div>
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          ${DB.data.settings.postTypes.map(pt=>{
-            const count = baseTasks.filter(t=>t.type===pt).length;
-            const max = Math.max(1, baseTasks.length);
-            return `<div class="bar-row"><div class="bar-label" style="font-weight:600;">${pt}</div><div class="bar-track"><div class="bar-fill" style="width:${(count/max)*100}%;background:var(--accent)"></div></div><div class="bar-val">${count}</div></div>`;
-          }).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/* =========================================================
-   7. SETTINGS & INTEGRATIONS (Req 4, 15, 16, 17)
-========================================================= */
-function renderSettings(el) {
-  if(!perms().settings.view) return;
-  const s = DB.data.settings;
-
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">System Settings</div><div class="view-desc">Configure parameters and integrations.</div></div>
-    </div>
-    
-    <div class="grid-2" style="margin-bottom:24px;">
-      
-      <div class="card" style="padding:24px;">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Brand Themes</div>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          ${DB.data.brands.map(b=>`
-            <div style="display:flex; align-items:center; gap:12px; padding:10px; background:#fbfbfa; border:1px solid var(--line); border-radius:8px;">
-              <div style="width:24px; height:24px; border-radius:4px; background:${b.color}; border:2px solid #fff; box-shadow:0 0 0 1px var(--line);"></div>
-              <div style="flex:1; font-weight:600; font-size:13.5px;">${b.name}</div>
-              <button class="btn btn-ghost btn-sm" onclick="openBrandModal('${b.id}')">Edit</button>
-            </div>
-          `).join('')}
-          <button class="btn btn-ghost" style="border-style:dashed; margin-top:8px;" onclick="openBrandModal()">+ Add Brand</button>
-        </div>
-      </div>
-
-      <div class="card" style="padding:24px;">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">System Lists</div>
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <div><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; margin-bottom:6px;">Post Types</div><div style="font-size:13px; padding:10px; background:#fbfbfa; border-radius:6px; border:1px solid var(--line);">${s.postTypes.join(', ')}</div></div>
-          <div><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; margin-bottom:6px;">Categories</div><div style="font-size:13px; padding:10px; background:#fbfbfa; border-radius:6px; border:1px solid var(--line);">${s.productCategories.join(', ')}</div></div>
-          <div><div style="font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; margin-bottom:6px;">Task Statuses</div><div style="font-size:13px; padding:10px; background:#fbfbfa; border-radius:6px; border:1px solid var(--line);">${s.taskStatuses.join(', ')}</div></div>
-          <button class="btn btn-primary" onclick="openListsModal()">Manage Lists</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card" style="padding:24px; border-top:4px solid var(--blue);">
-        <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fab fa-google-drive" style="color:var(--blue);"></i> Drive Integration</div>
-        <div style="display:flex; flex-direction:column; gap:14px;">
-          <div><label class="field-label">Master Root Folder ID</label><input class="tfield" style="width:100%; font-family:'IBM Plex Mono';" value="${s.googleDrive.rootFolderId}" id="set-gd-root"></div>
-          <div><label class="field-label">Brand Default Folders (JSON Map)</label><textarea class="tfield" style="width:100%; font-family:'IBM Plex Mono';" id="set-gd-brands" rows="2"></textarea></div>
-          <button class="btn btn-ghost" style="color:var(--blue); border-color:var(--blue-soft); align-self:flex-start;" onclick="saveIntegration('gd')">Save Drive Config</button>
-        </div>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:24px;">
-        <div class="card" style="padding:24px; border-top:4px solid var(--accent);">
-          <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px; display:flex; align-items:center; gap:8px;"><i class="fas fa-file-excel" style="color:var(--accent);"></i> Sheets Integration</div>
-          <div style="display:flex; flex-direction:column; gap:14px;">
-            <div><label class="field-label">Master Sheet ID</label><input class="tfield" style="width:100%; font-family:'IBM Plex Mono';" value="${s.googleSheets.sheetId}" id="set-gs"></div>
-            <button class="btn btn-ghost" style="color:var(--accent); border-color:var(--accent-soft); align-self:flex-start;" onclick="saveIntegration('gs')">Save Sheets Config</button>
-          </div>
-        </div>
-
-        <div class="card" style="padding:24px; border-top:4px solid var(--amber);">
-          <div class="section-title" style="border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:20px;">Notification Preferences</div>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            ${Object.keys(s.notifPrefs).map(k=>`
-              <label style="font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" id="pref-${k}" ${s.notifPrefs[k]?'checked':''}> Enable ${k} Alerts
-              </label>
-            `).join('')}
-            <button class="btn btn-ghost" style="color:#8a5a12; border-color:var(--amber-soft); margin-top:8px; align-self:flex-start;" onclick="saveNotifPrefs()">Save Preferences</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('set-gd-brands').value = JSON.stringify(s.googleDrive.brandDefaultIds||{});
-}
-
-function saveIntegration(type) {
-  if(type==='gd') {
-    DB.data.settings.googleDrive.rootFolderId = document.getElementById('set-gd-root').value;
-    try { DB.data.settings.googleDrive.brandDefaultIds = JSON.parse(document.getElementById('set-gd-brands').value || '{}'); } catch(e){ alert("Invalid JSON for Brand Folders"); return; }
-  }
-  if(type==='gs') DB.data.settings.googleSheets.sheetId = document.getElementById('set-gs').value;
-  DB.save(); logAudit('Settings', 'Updated Integrations', null, null); toast('Config saved');
-}
-
-function saveNotifPrefs() {
-  ['Task','Comment','Warning','System'].forEach(k=>{ DB.data.settings.notifPrefs[k] = document.getElementById(`pref-${k}`).checked; });
-  DB.save(); logAudit('Settings', 'Updated Notifications', null, null); toast('Prefs saved');
-}
-
-function openBrandModal(id=null) {
-  const b = id ? DB.data.brands.find(x=>x.id===id) : null;
+function openProductModal(id){
+  const pr = id ? DB.data.products.find(x=>x.id===id) : null;
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-sm';
   box.innerHTML = `
-    <div class="modal-head"><h3>${b?'Edit Theme':'Add Brand'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-head"><h3>${pr?'Edit product':'New product'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="form-row"><label>Brand Name</label><input id="bm-name" value="${b?escapeHtml(b.name):''}"></div>
-      <div class="form-row"><label>Primary Color</label><input type="color" id="bm-color" value="${b?b.color:'#000000'}" style="height:46px; cursor:pointer; padding:2px;"></div>
+      <div class="form-row"><label>Product name</label><input id="pm-name" value="${pr?escapeHtml(pr.name):''}"></div>
+      <div class="two-col">
+        <div class="form-row"><label>Brand</label><select id="pm-brand">${BRANDS.map(b=>`<option value="${b.id}" ${pr&&pr.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select></div>
+        <div class="form-row"><label>SKU</label><input id="pm-sku" value="${pr?pr.sku:''}"></div>
+      </div>
+      <div class="two-col">
+        <div class="form-row"><label>Category</label><input id="pm-category" value="${pr?pr.category:''}"></div>
+        <div class="form-row"><label>Status</label><select id="pm-status">${PRODUCT_STATUSES.map(s=>`<option ${pr&&pr.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      </div>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveBrand(${b?`'${b.id}'`:'null'})">Save Brand</button>
+      ${pr ? `<button class="btn btn-ghost btn-sm" style="color:var(--coral);margin-right:auto;" onclick="deleteProduct('${pr.id}')">Delete</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveProduct(${pr?`'${pr.id}'`:'null'})">${pr?'Save changes':'Add product'}</button>
     </div>
   `;
   openModal();
 }
-function saveBrand(id) {
+function saveProduct(id){
+  const name = document.getElementById('pm-name').value.trim();
+  if(!name){ toast('Add a product name'); return; }
+  const vals = {name, brand:document.getElementById('pm-brand').value, sku:document.getElementById('pm-sku').value.trim(), category:document.getElementById('pm-category').value.trim(), status:document.getElementById('pm-status').value};
+  if(id){ Object.assign(DB.data.products.find(x=>x.id===id), vals); }
+  else{ DB.data.products.unshift({id:uid('p'), ...vals}); }
+  DB.save(); closeModal(); renderProducts(document.getElementById('view'));
+  toast(id?'Product updated':'Product added');
+}
+function deleteProduct(id){
+  DB.data.products = DB.data.products.filter(x=>x.id!==id);
+  DB.save(); closeModal(); renderProducts(document.getElementById('view'));
+  toast('Product deleted');
+}
+
+/* =========================================================
+   BRANDS PAGE (with Brand Management: add / edit / delete)
+========================================================= */
+function renderBrands(el){
+  const p = perms();
+  el.innerHTML = `
+    <div class="view-head">
+      <div><div class="view-title">Brands</div><div class="view-desc">Content output per brand. Each brand has its own color theme used across the app.</div></div>
+      ${p.canManageBrands ? `<button class="btn btn-primary btn-sm" onclick="openBrandModal()">+ New brand</button>` : ''}
+    </div>
+    <div class="grid-3" id="brand-cards"></div>
+  `;
+  const wrap = el.querySelector('#brand-cards');
+  wrap.innerHTML = BRANDS.map(b=>{
+    const logs = DB.data.logs.filter(l=>l.brand===b.id);
+    const byType = t => logs.filter(l=>l.type===t).length;
+    const last = logs.sort((a,c)=>c.date.localeCompare(a.date))[0];
+    return `<div class="card" style="padding:18px 20px;border-top:3px solid ${b.color};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="brand-chip" style="font-size:15px;"><span class="brand-dot" style="background:${b.color};width:11px;height:11px;"></span>${escapeHtml(b.name)}</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          ${b.priority ? '<span class="pill status-active">Priority</span>' : ''}
+          ${p.canManageBrands ? `<a class="btn btn-ghost btn-sm" onclick="openBrandModal('${b.id}')">Edit</a>` : ''}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+        <div><div class="mono" style="font-size:11px;color:var(--ink-soft);">POSTS</div><div style="font-weight:700;font-size:18px;">${byType('Post')}</div></div>
+        <div><div class="mono" style="font-size:11px;color:var(--ink-soft);">STORIES</div><div style="font-weight:700;font-size:18px;">${byType('Story')}</div></div>
+        <div><div class="mono" style="font-size:11px;color:var(--ink-soft);">VIDEOS</div><div style="font-weight:700;font-size:18px;">${byType('Video')}</div></div>
+        <div><div class="mono" style="font-size:11px;color:var(--ink-soft);">TOTAL</div><div style="font-weight:700;font-size:18px;">${logs.length}</div></div>
+      </div>
+      <div style="font-size:11.5px;color:var(--ink-soft);margin-top:12px;border-top:1px solid var(--line);padding-top:10px;">Last content: ${last?fmtDate(last.date):'—'}</div>
+    </div>`;
+  }).join('');
+}
+function openBrandModal(id){
+  const b = id ? BRANDS.find(x=>x.id===id) : null;
+  const box = document.getElementById('modal-box');
+  box.innerHTML = `
+    <div class="modal-head"><h3>${b?'Edit brand':'New brand'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Brand name</label><input id="bm-name" value="${b?escapeHtml(b.name):''}"></div>
+      <div class="two-col">
+        <div class="form-row"><label>Brand color</label><input type="color" id="bm-color" value="${b?b.color:'#2f6f5e'}" style="height:40px;padding:4px;"></div>
+        <div class="form-row"><label>Priority account?</label><select id="bm-priority"><option value="false" ${b&&!b.priority?'selected':''}>No</option><option value="true" ${b&&b.priority?'selected':''}>Yes</option></select></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      ${b ? `<button class="btn btn-ghost btn-sm" style="color:var(--coral);margin-right:auto;" onclick="deleteBrand('${b.id}')">Delete</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveBrand(${b?`'${b.id}'`:'null'})">${b?'Save changes':'Add brand'}</button>
+    </div>
+  `;
+  openModal();
+}
+function saveBrand(id){
   const name = document.getElementById('bm-name').value.trim();
-  const color = document.getElementById('bm-color').value;
-  if(!name) return toast('Name required');
-  if(id) { const b = DB.data.brands.find(x=>x.id===id); logAudit('Settings', 'Edit Brand', b.name, name); b.name = name; b.color = color; } 
-  else { DB.data.brands.push({id:uid('bnd'), name, color}); logAudit('Settings', 'Add Brand', null, name); }
-  DB.save(); closeModal(); renderView('settings'); toast('Brand saved');
+  if(!name){ toast('Add a brand name'); return; }
+  const vals = {name, color:document.getElementById('bm-color').value, priority:document.getElementById('bm-priority').value==='true'};
+  if(id){ Object.assign(BRANDS.find(x=>x.id===id), vals); }
+  else{ DB.data.brands.unshift({id:uid('brand'), ...vals}); BRANDS = DB.data.brands; }
+  DB.save(); closeModal(); renderBrands(document.getElementById('view'));
+  toast(id?'Brand updated':'Brand added');
 }
-
-function openListsModal() {
-  const s = DB.data.settings;
-  const box = document.getElementById('modal-box');
-  box.className = 'modal modal-sm';
-  box.innerHTML = `
-    <div class="modal-head"><h3>Manage System Lists</h3><button class="close-x" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">
-      <div class="form-row"><label>Post Types (Comma Sep)</label><textarea id="lm-pt" rows="2" style="font-family:'IBM Plex Mono';">${s.postTypes.join(', ')}</textarea></div>
-      <div class="form-row"><label>Categories (Comma Sep)</label><textarea id="lm-cat" rows="2" style="font-family:'IBM Plex Mono';">${s.productCategories.join(', ')}</textarea></div>
-      <div class="form-row"><label>Task Statuses (Comma Sep)</label><textarea id="lm-stat" rows="2" style="font-family:'IBM Plex Mono';">${s.taskStatuses.join(', ')}</textarea></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-primary" onclick="saveLists()">Save Configuration</button>
-    </div>
-  `;
-  openModal();
-}
-function saveLists() {
-  DB.data.settings.postTypes = document.getElementById('lm-pt').value.split(',').map(s=>s.trim()).filter(Boolean);
-  DB.data.settings.productCategories = document.getElementById('lm-cat').value.split(',').map(s=>s.trim()).filter(Boolean);
-  DB.data.settings.taskStatuses = document.getElementById('lm-stat').value.split(',').map(s=>s.trim()).filter(Boolean);
-  DB.save(); logAudit('Settings', 'Update Lists', null, null); closeModal(); renderView('settings'); toast('Lists updated');
+function deleteBrand(id){
+  if(DB.data.tasks.some(t=>t.brand===id) || DB.data.products.some(p=>p.brand===id)){
+    if(!confirm('This brand has tasks or products linked to it. Delete anyway?')) return;
+  }
+  DB.data.brands = DB.data.brands.filter(x=>x.id!==id);
+  BRANDS = DB.data.brands;
+  DB.save(); closeModal(); renderBrands(document.getElementById('view'));
+  toast('Brand deleted');
 }
 
 /* =========================================================
-   8. USERS, REPORTS, AUDIT, TRASH
+   ANALYTICS PAGE
 ========================================================= */
-
-// USERS
-function renderUsers(el){
-  if(!perms().users.view) return;
+let analyticsMonth = new Date().toISOString().slice(0,7);
+function renderAnalytics(el){
   el.innerHTML = `
     <div class="view-head">
-      <div><div class="view-title">Team & Users</div><div class="view-desc">Manage workspace access.</div></div>
-      ${perms().users.create ? `<button class="btn btn-primary" onclick="openUserModal()">+ Add User</button>` : ''}
+      <div><div class="view-title">Analytics</div><div class="view-desc">Content production performance.</div></div>
+      <input class="tfield" type="month" value="${analyticsMonth}" onchange="analyticsMonth=this.value;renderAnalytics(document.getElementById('view'))">
     </div>
-    <div class="card table-responsive">
+    <div class="grid-2">
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Content production by type</div>
+        <div id="an-type"></div>
+      </div>
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Brand breakdown</div>
+        <div id="an-brand"></div>
+      </div>
+    </div>
+    <div class="card" style="padding:18px 20px;margin-top:16px;">
+      <div class="section-title">User breakdown</div>
+      <div id="an-user"></div>
+    </div>
+  `;
+  const inMonth = DB.data.logs.filter(l=>l.date.slice(0,7)===analyticsMonth);
+  const typeWrap = el.querySelector('#an-type');
+  const max1 = Math.max(1, ...POST_TYPES.map(t=>inMonth.filter(l=>l.type===t).length));
+  typeWrap.innerHTML = POST_TYPES.map(t=>{
+    const c = inMonth.filter(l=>l.type===t).length;
+    return `<div class="bar-row"><div class="bar-label">${t}</div><div class="bar-track"><div class="bar-fill" style="width:${c/max1*100}%;background:var(--accent)"></div></div><div class="bar-val">${c}</div></div>`;
+  }).join('') || emptyState('No content this month','Try another month.');
+  const brandWrap = el.querySelector('#an-brand');
+  const max2 = Math.max(1, ...BRANDS.map(b=>inMonth.filter(l=>l.brand===b.id).length));
+  brandWrap.innerHTML = BRANDS.map(b=>{
+    const c = inMonth.filter(l=>l.brand===b.id).length;
+    return `<div class="bar-row"><div class="bar-label"><span class="brand-chip"><span class="brand-dot" style="background:${b.color}"></span>${b.name}</span></div><div class="bar-track"><div class="bar-fill" style="width:${c/max2*100}%;background:${b.color}"></div></div><div class="bar-val">${c}</div></div>`;
+  }).join('');
+  const userWrap = el.querySelector('#an-user');
+  const max3 = Math.max(1, ...DB.data.users.map(u=>inMonth.filter(l=>l.completedBy===u.id).length));
+  userWrap.innerHTML = DB.data.users.map(u=>{
+    const c = inMonth.filter(l=>l.completedBy===u.id).length;
+    return `<div class="bar-row"><div class="bar-label">${u.name}</div><div class="bar-track"><div class="bar-fill" style="width:${c/max3*100}%;background:var(--blue)"></div></div><div class="bar-val">${c}</div></div>`;
+  }).join('');
+}
+
+/* =========================================================
+   USERS PAGE
+========================================================= */
+function renderUsers(el){
+  const p = perms();
+  el.innerHTML = `
+    <div class="view-head">
+      <div><div class="view-title">User Management</div><div class="view-desc">Team members and their access roles.</div></div>
+      ${p.canManageUsers ? `<button class="btn btn-primary btn-sm" onclick="openUserModal()">+ Add user</button>` : ''}
+    </div>
+    <div class="card" style="overflow-x:auto;">
       <table>
-        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th style="text-align:right;">Actions</th></tr></thead>
-        <tbody>
-          ${DB.data.users.map(u=>`
-            <tr>
-              <td style="font-weight:600; font-size:14px; color:var(--ink);">${escapeHtml(u.name)}</td>
-              <td><span class="pill" style="background:#f4f4f1; border:1px solid var(--line); color:var(--ink-soft);">${u.role}</span></td>
-              <td style="color:var(--ink-soft); font-family:'IBM Plex Mono'; font-size:12.5px;">${u.email||'—'}</td>
-              <td style="text-align:right;">${perms().users.edit ? `<button class="btn btn-ghost btn-sm" onclick="openUserModal('${u.id}')">Edit</button>` : ''}</td>
-            </tr>
-          `).join('')}
-        </tbody>
+        <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Access</th><th></th></tr></thead>
+        <tbody id="user-rows"></tbody>
       </table>
     </div>
   `;
+  const rows = el.querySelector('#user-rows');
+  rows.innerHTML = DB.data.users.map(u=>`
+    <tr>
+      <td style="display:flex;align-items:center;gap:9px;font-weight:600;"><span class="avatar" style="background:var(--accent);width:26px;height:26px;font-size:10px;">${u.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase()}</span>${escapeHtml(u.name)}</td>
+      <td><span class="pill status-progress">${u.role}</span></td>
+      <td style="color:var(--ink-soft);font-size:12.5px;">${u.email||'—'}</td>
+      <td style="font-size:12px;color:var(--ink-soft);">${ROLES[u.role]?.desc||''}</td>
+      <td>${perms().canManageUsers ? `<a class="btn btn-ghost btn-sm" onclick="openUserModal('${u.id}')">Edit</a>` : ''}</td>
+    </tr>`).join('');
 }
-function openUserModal(id=null){
+function openUserModal(id){
   const u = id ? DB.data.users.find(x=>x.id===id) : null;
   const box = document.getElementById('modal-box');
-  box.className = 'modal modal-sm';
   box.innerHTML = `
-    <div class="modal-head"><h3>${u?'Edit User':'New User'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-head"><h3>${u?'Edit user':'Add user'}</h3><button class="close-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="form-row"><label>Name</label><input id="um-name" value="${u?escapeHtml(u.name):''}"></div>
-      <div class="form-row"><label>Email</label><input id="um-email" value="${u?u.email:''}" style="font-family:'IBM Plex Mono';"></div>
-      <div class="form-row"><label>Role</label><select id="um-role">${Object.keys(ROLES_MATRIX).map(r=>`<option ${u&&u.role===r?'selected':''}>${r}</option>`).join('')}</select></div>
+      <div class="form-row"><label>Email</label><input id="um-email" value="${u?u.email:''}"></div>
+      <div class="form-row"><label>Role</label><select id="um-role">${Object.keys(ROLES).map(r=>`<option ${u&&u.role===r?'selected':''}>${r}</option>`).join('')}</select></div>
     </div>
     <div class="modal-foot">
-      ${u ? `<button class="btn btn-danger btn-sm" style="margin-right:auto;" onclick="deleteUser('${u.id}')">Remove</button>` : ''}
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveUser(${u?`'${u.id}'`:'null'})">Save</button>
+      ${u ? `<button class="btn btn-ghost btn-sm" style="color:var(--coral);margin-right:auto;" onclick="deleteUser('${u.id}')">Remove</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveUser(${u?`'${u.id}'`:'null'})">${u?'Save changes':'Add user'}</button>
     </div>
   `;
   openModal();
 }
 function saveUser(id){
   const name = document.getElementById('um-name').value.trim();
-  if(!name) return toast('Name required');
-  const data = {name, email:document.getElementById('um-email').value.trim(), role:document.getElementById('um-role').value};
-  if(id) { Object.assign(DB.data.users.find(x=>x.id===id), data); logAudit('Users','Edit',null,name); } 
-  else { DB.data.users.push({id:uid('usr'), ...data}); logAudit('Users','Create',null,name); }
-  DB.save(); closeModal(); renderView('users'); toast('User saved');
+  if(!name){ toast('Add a name'); return; }
+  const vals = {name, email:document.getElementById('um-email').value.trim(), role:document.getElementById('um-role').value};
+  if(id){ Object.assign(DB.data.users.find(x=>x.id===id), vals); }
+  else{ DB.data.users.unshift({id:uid('u'), ...vals}); }
+  DB.save(); closeModal(); renderUsers(document.getElementById('view'));
+  toast(id?'User updated':'User added');
 }
-function deleteUser(id) {
-  if(!confirm("Remove user?")) return;
+function deleteUser(id){
   DB.data.users = DB.data.users.filter(x=>x.id!==id);
-  DB.save(); closeModal(); renderView('users'); toast('User removed');
-}
-
-// REPORTS (Req 18)
-let repFilter = { month:'', year:'', brand:'' };
-function renderReports(el) {
-  if(!perms().reports.view) return;
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Data Exports & Reports</div><div class="view-desc">Export workspace data to CSV.</div></div>
-    </div>
-    
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <input type="month" class="tfield" value="${repFilter.month}" onchange="repFilter.month=this.value;repFilter.year='';renderView('reports')">
-      <select class="select" onchange="repFilter.year=this.value;repFilter.month='';renderView('reports')"><option value="">All Years</option><option value="2026">2026</option><option value="2025">2025</option></select>
-      <select class="select" onchange="repFilter.brand=this.value;renderView('reports')"><option value="">All Brands</option>${DB.data.brands.map(b=>`<option value="${b.id}" ${repFilter.brand===b.id?'selected':''}>${b.name}</option>`).join('')}</select>
-    </div>
-
-    <div class="card" style="max-width:600px; margin:40px auto; padding:40px; text-align:center;">
-      <i class="fas fa-file-csv" style="font-size:48px; color:var(--accent); margin-bottom:20px;"></i>
-      <h3 style="font-size:22px; font-weight:700; color:var(--ink); margin-bottom:12px;">Export Workspace Data</h3>
-      <p style="font-size:13px; color:var(--ink-soft); line-height:1.5; margin-bottom:30px;">Generate raw CSV dumps for your filtered content output, audit trails, and product database. This connects directly to the Phase 2 Google Sheets module.</p>
-      
-      <div style="display:flex; justify-content:center; gap:12px;">
-        <select class="select" style="min-width:200px;"><option>Monthly Content Log</option><option>Task Audit Report</option><option>Product Library Dump</option></select>
-        ${perms().reports.export ? `<button class="btn btn-primary" onclick="toast('Generating CSV File based on filters...')">Export CSV</button>` : ''}
-      </div>
-    </div>
-  `;
-}
-
-// AUDIT (Req 20)
-let audFilter = { user:'', module:'', date:'' };
-function renderAudit(el) {
-  if(!perms().audit.view) return;
-  
-  let audits = DB.data.audit;
-  if(audFilter.user) audits = audits.filter(a=>a.user===audFilter.user);
-  if(audFilter.module) audits = audits.filter(a=>a.module===audFilter.module);
-  if(audFilter.date) audits = audits.filter(a=>new Date(a.ts).toISOString().startsWith(audFilter.date));
-
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">System Audit Log</div><div class="view-desc">Security and system trail.</div></div>
-    </div>
-    
-    <div class="toolbar card" style="padding:10px 14px; background:#fbfbfa;">
-      <select class="select" onchange="audFilter.user=this.value;renderView('audit')"><option value="">All Users</option>${DB.data.users.map(u=>`<option value="${u.id}" ${audFilter.user===u.id?'selected':''}>${u.name}</option>`).join('')}</select>
-      <select class="select" onchange="audFilter.module=this.value;renderView('audit')"><option value="">All Modules</option><option value="Tasks">Tasks</option><option value="Products">Products</option><option value="Settings">Settings</option><option value="Users">Users</option></select>
-      <input type="date" class="tfield" value="${audFilter.date}" onchange="audFilter.date=this.value;renderView('audit')">
-      ${(audFilter.user||audFilter.module||audFilter.date)?`<button class="btn btn-ghost btn-sm" onclick="audFilter={user:'',module:'',date:''};renderView('audit')">Clear Filters</button>`:''}
-    </div>
-
-    <div class="card table-responsive">
-      <table>
-        <thead><tr><th>Time</th><th>User</th><th>Module & Action</th><th>Details</th></tr></thead>
-        <tbody>
-          ${audits.map(a=>`
-            <tr class="hover:bg-gray-50">
-              <td style="font-family:'IBM Plex Mono'; font-size:11px; color:var(--ink-soft); white-space:nowrap;">${new Date(a.ts).toLocaleString()}</td>
-              <td style="font-weight:600; color:var(--ink);">${getUserName(a.user)}</td>
-              <td><span style="font-weight:700;">${a.module}</span> <span class="pill" style="background:#f4f4f1; margin-left:8px; border:1px solid var(--line); color:var(--ink-soft); font-size:10px;">${a.action}</span></td>
-              <td style="font-size:12px; color:var(--ink-soft); max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><span style="font-weight:600;">VAL:</span> ${escapeHtml(a.newVal?a.newVal:a.oldVal||'--')}</td>
-            </tr>
-          `).join('')}
-          ${audits.length===0?'<tr><td colspan="4" style="text-align:center; padding:40px; color:var(--ink-soft);">No audit logs match.</td></tr>':''}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// TRASH (Req 21)
-function renderTrash(el) {
-  const p = perms().trash;
-  if(!p.view) return;
-  el.innerHTML = `
-    <div class="view-head">
-      <div><div class="view-title">Trash & Recovery</div><div class="view-desc">Soft deleted records.</div></div>
-      ${p.del ? `<button class="btn btn-danger" onclick="emptyTrash()">Empty Trash</button>` : ''}
-    </div>
-    <div class="card table-responsive">
-      <table>
-        <thead><tr><th>Deleted Time</th><th>Data Type</th><th>Deleted By</th><th style="text-align:right;">Actions</th></tr></thead>
-        <tbody>
-          ${DB.data.trash.map(tr=>`
-            <tr class="hover:bg-gray-50">
-              <td style="font-family:'IBM Plex Mono'; font-size:11px; color:var(--ink-soft);">${new Date(tr.ts).toLocaleString()}</td>
-              <td style="font-weight:700; color:var(--ink);">${tr.module}</td>
-              <td style="color:var(--ink-soft); font-weight:600;">${getUserName(tr.deletedBy)}</td>
-              <td style="text-align:right;">
-                ${p.restore ? `<button style="background:none; border:none; color:var(--accent); font-weight:700; font-size:12px; margin-right:12px;" onclick="restoreItem('${tr.id}')">Restore</button>` : ''}
-                ${p.del ? `<button style="background:none; border:none; color:var(--coral); font-weight:700; font-size:12px;" onclick="permanentDelete('${tr.id}')">Delete</button>` : ''}
-              </td>
-            </tr>
-          `).join('')}
-          ${DB.data.trash.length===0?'<tr><td colspan="4" style="text-align:center; padding:40px; color:var(--ink-soft); border-style:dashed;">Trash is empty.</td></tr>':''}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-function restoreItem(id) {
-  const tr = DB.data.trash.find(x=>x.id===id);
-  if(tr.module === 'Tasks') { const t=DB.data.tasks.find(x=>x.id===tr.itemId); if(t) t.deleted=false; }
-  if(tr.module === 'Products') { const p=DB.data.products.find(x=>x.id===tr.itemId); if(p) p.deleted=false; }
-  DB.data.trash = DB.data.trash.filter(x=>x.id!==id);
-  logAudit(tr.module, 'Restored', null, tr.itemId);
-  DB.save(); renderView('trash'); toast('Item restored');
-}
-function permanentDelete(id) {
-  if(!confirm("Permanently delete? Cannot be undone.")) return;
-  DB.data.trash = DB.data.trash.filter(x=>x.id!==id);
-  DB.save(); renderView('trash'); toast('Permanently deleted');
-}
-function emptyTrash() {
-  if(!confirm("Empty all trash?")) return;
-  DB.data.trash = []; DB.save(); renderView('trash'); toast('Trash emptied');
+  DB.save(); closeModal(); renderUsers(document.getElementById('view'));
+  toast('User removed');
 }
 
 /* =========================================================
-   COMMAND PALETTE (CMDK) - Req 9 Unified Search with Highlighting
+   MODAL HELPERS
+========================================================= */
+function openModal(){ document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+document.getElementById('modal-overlay').addEventListener('click', e=>{ if(e.target.id==='modal-overlay') closeModal(); });
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+function toggleNotif(){
+  const panel = document.getElementById('notif-panel');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')) renderNotifList();
+}
+function notifAppliesToMe(n){
+  const me = currentUser();
+  if(n.forUser) return n.forUser===me.id;
+  return n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin';
+}
+function renderNotifList(){
+  const list = DB.data.notifications.filter(notifAppliesToMe);
+  const wrap = document.getElementById('notif-list');
+  wrap.innerHTML = list.length ? list.map(n=>`
+    <div class="notif-item ${n.read?'read':''}">
+      <span class="dot"></span>
+      <div><div>${escapeHtml(n.text)}</div><div class="notif-time">${timeAgo(n.ts)}</div></div>
+    </div>`).join('') : `<div style="padding:24px;text-align:center;color:var(--ink-soft);font-size:12.5px;">No notifications yet.</div>`;
+}
+function markAllRead(){
+  DB.data.notifications.forEach(n=>n.read=true); DB.save(); renderNotifList(); refreshNotifDot();
+}
+function refreshNotifDot(){
+  const list = DB.data.notifications.filter(n=>notifAppliesToMe(n) && !n.read);
+  document.getElementById('notif-dot').style.display = list.length ? 'block':'none';
+}
+document.addEventListener('click', (e)=>{
+  const panel = document.getElementById('notif-panel');
+  if(panel.classList.contains('open') && !panel.contains(e.target) && !e.target.closest('.icon-btn')) panel.classList.remove('open');
+});
+
+/* =========================================================
+   COMMAND PALETTE / GLOBAL SEARCH
 ========================================================= */
 function openCmdk(){
-  document.getElementById('cmdk').classList.remove('hidden');
   document.getElementById('cmdk').classList.add('open');
+  document.getElementById('cmdk-input').value='';
   setTimeout(()=>document.getElementById('cmdk-input').focus(),30);
   renderCmdkResults('');
 }
-function closeCmdk(){ 
-  document.getElementById('cmdk').classList.remove('open'); 
-}
+function closeCmdk(){ document.getElementById('cmdk').classList.remove('open'); }
 document.addEventListener('keydown', e=>{
   if(e.key==='/' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){ e.preventDefault(); if(SESSION) openCmdk(); }
-  if(e.key==='Escape') { closeCmdk(); closeModal(); }
+  if(e.key==='Escape') closeCmdk();
 });
-
 function renderCmdkResults(q){
   q = q.toLowerCase().trim();
   const results = [];
-  
-  DB.data.tasks.filter(t=>!t.deleted).forEach(t=>{ if(!q || t.title.toLowerCase().includes(q)) results.push({tag:'Task', label:t.title, sub:t.type, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(t.id);}}); });
-  DB.data.products.filter(p=>!p.deleted).forEach(p=>{ if(!q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)) results.push({tag:'Product', label:p.name, sub:p.sku, action:()=>{closeCmdk();renderView('products');openProductDetail(p.id);}}); });
-  DB.data.brands.forEach(b=>{ if(!q || b.name.toLowerCase().includes(q)) results.push({tag:'Brand', label:b.name, sub:'Dashboard View', action:()=>{closeCmdk();renderView('brands');}}); });
-  DB.data.users.forEach(u=>{ if(!q || u.name.toLowerCase().includes(q)) results.push({tag:'User', label:u.name, sub:u.role, action:()=>{closeCmdk();renderView('users');}}); });
-  
-  // Search Comments
-  DB.data.comments.forEach(c=>{ if(q && c.text.toLowerCase().includes(q)) {
-    const parentTask = DB.data.tasks.find(t=>t.id===c.taskId);
-    if(parentTask && !parentTask.deleted) results.push({tag:'Comment', label:c.text.substring(0,40)+'...', sub:`In: ${parentTask.title}`, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(c.taskId);}});
-  }});
-  
-  // Search Drive Links
-  DB.data.tasks.filter(t=>!t.deleted).forEach(t=>{
-    t.links.forEach(l=>{ if(q && l.name.toLowerCase().includes(q)) results.push({tag:'File Link', label:l.name, sub:`In: ${t.title}`, action:()=>{closeCmdk();renderView('tasks');openTaskDetail(t.id);}}); });
-  });
-  
+  DB.data.tasks.forEach(t=>{ if(!q || t.title.toLowerCase().includes(q) || brandOf(t.brand).name.toLowerCase().includes(q)) results.push({tag:'Task', label:t.title, sub:brandOf(t.brand).name+' · '+t.status, action:()=>{closeCmdk();renderView('tasks');}}); });
+  DB.data.products.forEach(p=>{ if(!q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)) results.push({tag:'Product', label:p.name, sub:brandOf(p.brand).name+' · '+p.status, action:()=>{closeCmdk();renderView('products');}}); });
+  BRANDS.forEach(b=>{ if(!q || b.name.toLowerCase().includes(q)) results.push({tag:'Brand', label:b.name, sub:'View brand dashboard', action:()=>{closeCmdk();renderView('brands');}}); });
+  DB.data.logs.forEach(l=>{ if(q && (l.title.toLowerCase().includes(q))) results.push({tag:'Log', label:l.title, sub:brandOf(l.brand).name+' · '+fmtDate(l.date), action:()=>{closeCmdk();renderView('log');}}); });
   const wrap = document.getElementById('cmdk-results');
-  wrap.innerHTML = results.slice(0,12).map((r,i)=>`
-    <div class="cmdk-item" onclick="window.__cmdkAction(${i})">
-      <div>
-        <div style="font-weight:700; font-size:14px; color:var(--ink);">${hl(r.label, q)}</div>
-        <div style="font-size:11px; color:var(--ink-soft); margin-top:4px;">${r.sub}</div>
-      </div>
-      <div class="cmdk-tag" style="background:#f4f4f1; border:1px solid var(--line); padding:4px 8px; border-radius:4px;">${r.tag}</div>
-    </div>
-  `).join('') || `<div style="padding:30px; text-align:center; font-size:12.5px; color:var(--ink-soft); font-weight:600;">No matching records found.</div>`;
-  
+  wrap.innerHTML = results.slice(0,20).map((r,i)=>`<div class="cmdk-item" onclick="window.__cmdkAction(${i})"><div><div>${escapeHtml(r.label)}</div><div class="cmdk-tag">${r.sub}</div></div><div class="cmdk-tag">${r.tag}</div></div>`).join('') || `<div style="padding:20px;text-align:center;color:var(--ink-soft);font-size:12.5px;">No results.</div>`;
   window.__cmdkResults = results;
   window.__cmdkAction = (i)=>{ window.__cmdkResults[i].action(); };
 }
 
 /* =========================================================
-   NOTIFICATIONS UTILS
-========================================================= */
-function toggleNotif(){ document.getElementById('notif-panel').classList.toggle('open'); renderNotifList(); }
-function markAllRead() {
-  DB.data.notifications.forEach(n=>n.read=true);
-  DB.save(); document.getElementById('notif-panel').classList.remove('open');
-  refreshNotifDot(); toast('Notifications cleared');
-}
-function renderNotifList() {
-  const filterVal = document.getElementById('notif-filter') ? document.getElementById('notif-filter').value : 'all';
-  const unread = DB.data.notifications.filter(n=>!n.read && (n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin'));
-  document.getElementById('notif-dot').style.display = unread.length ? 'block' : 'none';
-  
-  let list = DB.data.notifications.filter(n=>(n.forRole==='all' || n.forRole===SESSION.role || SESSION.role==='Admin'));
-  if(filterVal !== 'all') list = list.filter(n=>n.type===filterVal);
-  
-  const wrap = document.getElementById('notif-list');
-  wrap.innerHTML = list.slice(0,20).map(n=>`
-    <div class="notif-item ${n.read?'read':''}">
-      <div class="n-icon">${n.icon||'🔔'}</div>
-      <div>
-        <div style="font-weight:600; color:var(--ink); line-height:1.4;">${escapeHtml(n.text)}</div>
-        <div class="notif-time mono text-uppercase">${timeAgo(n.ts)}</div>
-      </div>
-    </div>
-  `).join('') || `<div style="padding:30px; text-align:center; font-size:11px; color:var(--ink-soft); font-weight:700; text-transform:uppercase;">Inbox is zero.</div>`;
-}
-function refreshNotifDot() { renderNotifList(); }
-
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
-
-/* =========================================================
-   INIT
+   BOOT / SESSION RESTORE
 ========================================================= */
 (function init(){
-  DB.load();
-  const select = document.getElementById('login-user');
-  select.innerHTML = DB.data.users.map(u=>`<option value="${u.id}">${u.name} (${u.role})</option>`).join('');
-  
   const raw = localStorage.getItem('contentos_session');
+  DB.load();
+  BRANDS = DB.data.brands;
+  const nameList = document.getElementById('user-list');
+  nameList.innerHTML = DB.data.users.map(u=>`<option value="${u.name}">`).join('');
+  document.getElementById('login-name').addEventListener('input', function(){
+    const match = DB.data.users.find(u=>u.name.toLowerCase()===this.value.trim().toLowerCase());
+    if(match) document.getElementById('login-role').value = match.role;
+  });
   if(raw){ SESSION = JSON.parse(raw); boot(); }
 })();
 </script>
