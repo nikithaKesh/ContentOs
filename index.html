@@ -517,6 +517,13 @@ function fmtDateTime(ts){ if(!ts) return '—'; const d=new Date(ts); return d.t
 function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+'m ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
 function brandOf(id){ return BRANDS.find(b=>b.id===id) || {name:'Unknown',color:'#999'}; }
 function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const AVATAR_PALETTE = ['#2f6f5e','#3d6fa8','#d1503f','#e2a542','#8a5cbf','#3f8f7a','#c2555f','#4b74d1','#b5842a','#5c8a3a'];
+function avatarColor(seed){
+  seed = String(seed||'');
+  let h = 0;
+  for(let i=0;i<seed.length;i++){ h = (h*31 + seed.charCodeAt(i)) >>> 0; }
+  return AVATAR_PALETTE[h % AVATAR_PALETTE.length];
+}
 function getPostTypes(){ return (DB.data.settings && DB.data.settings.postTypes) || POST_TYPES_DEFAULT; }
 function getTaskStatuses(){ return (DB.data.settings && DB.data.settings.taskStatuses) || TASK_STATUSES_DEFAULT; }
 function getCategories(){ return (DB.data.settings && DB.data.settings.categories) || CATEGORIES_DEFAULT; }
@@ -761,6 +768,7 @@ function boot(){
   document.getElementById('user-name-tag').textContent = SESSION.name;
   document.getElementById('user-role-tag').textContent = SESSION.role;
   document.getElementById('user-avatar').textContent = SESSION.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('user-avatar').style.background = avatarColor(SESSION.id||SESSION.name);
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long', day:'2-digit', month:'short', year:'numeric'});
   applyCompanyBranding();
   buildNav();
@@ -1648,7 +1656,13 @@ function openProductModal(id){
         <div style="display:flex;gap:12px;align-items:center;">
           <img id="pm-image-preview" class="prod-thumb-lg" src="${pr&&pr.image?pr.image:''}" style="${pr&&pr.image?'':'display:none;'}">
           <div class="prod-thumb-placeholder" id="pm-image-placeholder" style="${pr&&pr.image?'display:none;':''}width:64px;height:64px;"></div>
-          <input type="file" accept="image/*" id="pm-image-file" onchange="handleProductImage(this)">
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+            <input type="file" accept="image/*" id="pm-image-file" onchange="handleProductImage(this)">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:var(--ink-soft);">or paste a link</span>
+              <input class="tfield" id="pm-image-url" placeholder="https://..." value="${pr&&pr.image&&pr.image.startsWith('http')?pr.image:''}" oninput="handleProductImageUrl(this.value)" style="flex:1;">
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-row"><label>Product name</label><input id="pm-name" value="${pr?escapeHtml(pr.name):''}"></div>
@@ -1676,10 +1690,28 @@ function handleProductImage(input){
   if(!file) return;
   readFileAsDataUrl(file, (dataUrl)=>{
     window.__pmImageData = dataUrl;
+    const urlField = document.getElementById('pm-image-url');
+    if(urlField) urlField.value = '';
     const img = document.getElementById('pm-image-preview');
     img.src = dataUrl; img.style.display='';
     document.getElementById('pm-image-placeholder').style.display='none';
   });
+}
+function handleProductImageUrl(url){
+  url = url.trim();
+  const fileField = document.getElementById('pm-image-file');
+  const img = document.getElementById('pm-image-preview');
+  const placeholder = document.getElementById('pm-image-placeholder');
+  if(!url){
+    window.__pmImageData = '';
+    img.style.display='none'; placeholder.style.display='';
+    return;
+  }
+  if(fileField) fileField.value = '';
+  window.__pmImageData = url;
+  img.src = url; img.style.display='';
+  img.onerror = ()=>{ img.style.display='none'; placeholder.style.display=''; };
+  img.onload = ()=>{ placeholder.style.display='none'; };
 }
 
 function saveProduct(id){
@@ -2056,7 +2088,7 @@ function renderUsers(el){
   const rows = el.querySelector('#user-rows');
   rows.innerHTML = DB.data.users.map(u=>`
     <tr>
-      <td style="display:flex;align-items:center;gap:9px;font-weight:600;"><span class="avatar" style="background:var(--accent);width:26px;height:26px;font-size:10px;">${u.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase()}</span>${escapeHtml(u.name)}</td>
+      <td style="display:flex;align-items:center;gap:9px;font-weight:600;"><span class="avatar" style="background:${avatarColor(u.id||u.name)};width:26px;height:26px;font-size:10px;">${u.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase()}</span>${escapeHtml(u.name)}</td>
       <td><span class="pill status-progress">${u.role}</span></td>
       <td style="color:var(--ink-soft);font-size:12.5px;">${u.email||'—'}</td>
       <td style="font-size:12px;color:var(--ink-soft);">${ROLES[u.role]?.desc||''}</td>
